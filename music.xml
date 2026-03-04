@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<music>
+  <song>
+    <title>Midnight City Pulse</title>
+    <artist>Neon Dreams</artist>
+    <albumArt>https://shoonia.github.io/1x1/favicon.png</albumArt>
+    <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3</url>
+  </song>
+  <song>
+    <title>Golden Era Beats</title>
+    <artist>The Vinyl Project</artist>
+    <albumArt>https://shoonia.github.io/1x1/favicon.png</albumArt>
+    <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3</url>
+  </song>
+  <song>
+    <title>Digital Rain</title>
+    <artist>Binary Solo</artist>
+    <albumArt></albumArt>
+    <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3</url>
+  </song>
+  <song>
+    <title>Skyline Horizon</title>
+    <artist>Cloud Chasers</artist>
+    <albumArt>https://shoonia.github.io/1x1/favicon.png</albumArt>
+    <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3</url>
+  </song>
+</music>
