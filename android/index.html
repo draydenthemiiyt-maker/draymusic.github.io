@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>DrayMusic</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="google.css" rel="stylesheet">
+</head>
+<body class="native-app">
+    <img id="body-bg" src="gradient.gif" aria-hidden="true">
+
+    <header class="app-header">
+        <h1>DrayMusic</h1>
+        <div class="search-pill">
+            <span class="material-symbols-rounded">search</span>
+            <input type="text" id="searchInput" placeholder="Search songs or artists...">
+        </div>
+    </header>
+
+    <main id="songList" class="scroll-area">
+    </main>
+
+    <section class="mini-player">
+        <div class="progress-wrapper">
+            <input type="range" id="seekBar" value="0" step="0.1">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="player-controls-row">
+            <div class="track-info" id="openFullPlayer">
+                <img id="currentArt" src="placeholder.png">
+                <div class="text-group">
+                    <h4 id="currentTitle">Not Playing</h4>
+                    <p id="currentArtist">Select a song</p>
+                </div>
+            </div>
+
+            <div class="action-btns">
+                <button id="btnLoop" class="icon-btn"><span class="material-symbols-rounded">repeat</span></button>
+                <button id="btnPrev" class="icon-btn"><span class="material-symbols-rounded">skip_previous</span></button>
+                <button id="btnPlayPause" class="main-play-btn"><span class="material-symbols-rounded">play_arrow</span></button>
+                <button id="btnNext" class="icon-btn"><span class="material-symbols-rounded">skip_next</span></button>
+            </div>
+        </div>
+    </section>
+
+    <audio id="audioElement"></audio>
+    <script src="app.js"></script>
+</body>
+</html>

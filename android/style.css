@@ -1,0 +1,278 @@
+:root {
+    --bg: #000000;
+    --surface: #121212;
+    --accent: #d0bcff;
+    --on-surface: #e6e1e5;
+    --text-dim: #938f99;
+}
+
+* {
+    box-sizing: border-box;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+body.native-app {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+    background-color: var(--bg);
+    color: var(--on-surface);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#body-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    filter: blur(125px);
+    opacity: 0.3;
+    transform: scale(1.05);
+    pointer-events: none;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.app-header {
+    padding: 20px 20px;
+}
+
+    .app-header h1 {
+        font-size: 32px;
+        margin: 0 0 15px 0;
+        font-weight: 700;
+    }
+
+.search-pill {
+    background: rgb(255 255 255 / 10%);
+    backdrop-filter: blur(20px);
+    border-radius: 28px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+    .search-pill input {
+        background: transparent;
+        border: none;
+        color: white;
+        font-size: 16px;
+        outline: none;
+        width: 100%;
+    }
+
+.scroll-area {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0 16px 120px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.song-card {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    gap: 15px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 0.5s ease-out forwards;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
+}
+
+    .song-card[style*="animation-delay"] {
+        transform: translateY(0);
+    }
+
+    .song-card img {
+        width: 52px;
+        height: 52px;
+        border-radius: 8px;
+        object-fit: cover;
+        background: rgb(255 255 255 / 10%);
+        backdrop-filter: blur(20px);
+    }
+
+    .song-card .info h4 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+    }
+
+    .song-card .info p {
+        margin: 4px 0 0;
+        color: var(--text-dim);
+        font-size: 14px;
+    }
+
+.mini-player {
+    position: fixed;
+    bottom: 20px;
+    left: 10px;
+    right: 10px;
+    background: rgb(255 255 255 / 10%);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+}
+
+/* --- Improved Seek Bar Hitbox --- */
+.progress-wrapper {
+    position: relative;
+    width: 100%;
+    height: 4px; /* Slightly thicker base */
+    background: #333;
+    transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 20; /* Ensure it stays above the player background */
+}
+
+    /* Only expand the height when seeking to avoid blocking buttons */
+    .progress-wrapper.seeking {
+        height: 12px;
+    }
+
+#seekBar {
+    position: absolute;
+    top: -10px; /* Reduced from -20px to avoid overlapping buttons */
+    left: 0;
+    width: 100%;
+    height: 24px; /* Reduced resting height */
+    opacity: 0;
+    z-index: 30;
+    margin: 0;
+    cursor: pointer;
+    touch-action: none;
+}
+
+    /* Expand the hitbox ONLY while the user is already touching it */
+    #seekBar:active,
+    .progress-wrapper.seeking #seekBar {
+        height: 60px;
+        top: -25px;
+    }
+
+.progress-fill {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+/* 1. Ensure the row fills space and aligns items */
+.player-controls-row {
+    padding: 12px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px; /* Gap between text and buttons */
+}
+
+/* 2. Make track info take all remaining space */
+.track-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1; /* This is the key change */
+    min-width: 0; /* Critical for text truncation to work in flexbox */
+}
+
+    .track-info img {
+        width: 44px;
+        height: 44px;
+        border-radius: 6px;
+        background: rgb(255 255 255 / 10%);
+        backdrop-filter: blur(20px);
+    }
+
+/* 3. Ensure text-group doesn't expand */
+.text-group {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+    .text-group h4 {
+        margin: 0;
+        font-size: 14px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+
+    .text-group p {
+        margin: 2px 0 0;
+        font-size: 12px;
+        color: var(--text-dim);
+    }
+
+/* 4. Keep buttons from shrinking */
+.action-btns {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    flex-shrink: 0;
+    background: rgb(255 255 255 / 10%);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 3px;
+}
+
+.icon-btn, .main-play-btn {
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 8px;
+}
+
+.main-play-btn {
+    background: var(--accent);
+    color: #381e72;
+    border: none;
+    border-radius: 12px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+    .icon-btn:active, .main-play-btn:active {
+        transform: scale(0.8) !important;
+    }
+
+.song-card:active {
+    transform: scale(0.95) !important;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.search-pill:focus-within {
+    transform: scale(0.98);
+}
+
+#btnLoop.active {
+    color: var(--accent);
+    background: rgba(208, 188, 255, 0.1);
+    border-radius: 50%;
+}
