@@ -1,0 +1,180 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>About</title>
+    <link href="//Microsoft.WinJS.2.0/css/ui-dark.css" rel="stylesheet" />
+    <script src="//Microsoft.WinJS.2.0/js/base.js"></script>
+    <script src="//Microsoft.WinJS.2.0/js/ui.js"></script>
+
+    <style>
+        /* KEEPING YOUR WORKING SCROLLBAR FIX */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: auto !important;
+            overflow-y: visible !important;
+        }
+
+        body {
+            padding: 40px;
+            padding-bottom: 100px;
+            font-family: "Segoe UI", sans-serif;
+            background-color: transparent;
+            color: #fff;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 1200px; 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        /* --- Text Styles --- */
+        .page-header {
+            font-size: 42pt;
+            font-weight: 200;
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+
+        .about-text {
+            font-size: 16pt;
+            font-weight: 300;
+            line-height: 1.6;
+            color: #ddd;
+            max-width: 800px;
+            margin-bottom: 30px;
+        }
+
+        .link-bar {
+            font-size: 14pt;
+            margin-bottom: 50px;
+        }
+
+        .link-bar a {
+            text-decoration: none;
+            color: #0080FF; /* Highlighted color for Linktree */
+            display: inline-block;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .link-bar a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        .link-bar a:active {
+            transform: scale(0.96) !important;
+            transition: transform 0.05s;
+        }
+
+        /* --- Image Grid --- */
+        .photo-grid {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .photo-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .photo-container:active {
+            transform: scale(0.96);
+        }
+
+        .photo-grid img {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: block;
+        }
+
+        /* --- Footer --- */
+        .footer-links {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        .footer-links .link-bar a {
+            color: #fff; /* Footer links back to white */
+        }
+
+        .separator {
+            margin: 0 10px;
+            color: #888;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 10pt;
+            color: #888;
+            opacity: 0.7;
+        }
+
+        /* Portrait Mode Fixes */
+        @media screen and (max-width: 800px), screen and (orientation: portrait) {
+            body { padding: 40px 20px; }
+            .page-wrapper { align-items: center; text-align: center; }
+            .about-text { font-size: 14pt; }
+            .photo-grid { justify-content: center; }
+            .photo-grid img { width: 140px; height: 140px; }
+            .footer-links, .copyright { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <div class="page-header">About Chris</div>
+        
+        <div class="about-text">
+            Chris R. Lillo is a rock and heavy metal artist from Chile, known for his energetic style and ability to blend powerful melodies with deep lyrics. Immersed in the music scene since the age of 13, Chris draws inspiration from rock classics and contemporary metal icons, creating a unique sound that captivates fans of both genres.
+            <br><br>
+            Chris's dedication to authenticity and artistic expression is reflected in every note he plays and every word he sings.
+        </div>
+
+        <div class="link-bar">
+            <a href="https://linktr.ee/chrisrlillo" target="_blank">Linktree</a>
+        </div>
+
+        <div class="photo-grid">
+            <div class="photo-container"><img src="ms-appx-web:///images/aboutphotos/1.jpg" alt="Chris Photo 1" /></div>
+            <div class="photo-container"><img src="ms-appx-web:///images/aboutphotos/2.jpg" alt="Chris Photo 2" /></div>
+            <div class="photo-container"><img src="ms-appx-web:///images/aboutphotos/3.jpg" alt="Chris Photo 3" /></div>
+            <div class="photo-container"><img src="ms-appx-web:///images/aboutphotos/4.jpg" alt="Chris Photo 4" /></div>
+            <div class="photo-container"><img src="ms-appx-web:///images/aboutphotos/5.jpg" alt="Chris Photo 5" /></div>
+        </div>
+
+        <div class="footer-links">
+            <div class="link-bar">
+                <a href="https://chrisrlillo.bandcamp.com" target="_blank">Bandcamp</a>
+                <span class="separator">&bull;</span>
+                <a href="https://www.youtube.com/channel/UCuyJDal7T1UhCr-zmQ42orw" target="_blank">YouTube</a>
+                <span class="separator">&bull;</span>
+                <a href="https://www.patreon.com/chrisbrutalagresion" target="_blank">Patreon</a>
+                <span class="separator">&bull;</span>
+                <a href="https://streamlabs.com/chrisbrutalagresion/tip" target="_blank">Streamlabs</a>
+            </div>
+            <div class="copyright">
+                &copy; 2026 Chris R. Lillo & DraydenYT
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

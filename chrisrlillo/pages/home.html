@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Home</title>
+    <link href="//Microsoft.WinJS.2.0/css/ui-dark.css" rel="stylesheet" />
+    <script src="//Microsoft.WinJS.2.0/js/base.js"></script>
+    <script src="//Microsoft.WinJS.2.0/js/ui.js"></script>
+
+    <style>
+        /* KEEPING YOUR WORKING SCROLLBAR FIX */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: auto !important;
+            overflow-y: visible !important;
+        }
+
+        body {
+            padding: 40px;
+            padding-bottom: 100px;
+            font-family: "Segoe UI", sans-serif;
+            background-color: transparent;
+            color: #fff;
+            box-sizing: border-box;
+        }
+
+        /* --- UI Elements --- */
+        .hero-container {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 60px;
+        }
+
+        .profile-pic {
+            width: 300px;
+            height: 300px;
+            object-fit: cover;
+            margin-right: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .artist-name {
+            font-size: 42pt;
+            font-weight: 200;
+            line-height: 1.1;
+            margin-bottom: 5px;
+        }
+
+        .artist-title {
+            font-size: 18pt;
+            font-weight: 400;
+            color: #0080FF;
+            margin-bottom: 25px;
+        }
+
+        .link-bar {
+            font-size: 14pt;
+        }
+
+        .link-bar a {
+            text-decoration: none;
+            color: #fff;
+            display: inline-block;
+        }
+
+        .link-bar a:hover {
+            opacity: 0.6;
+            text-decoration: underline;
+        }
+
+        /* METRO PULSE/SINK ANIMATION */
+        .link-bar a, .release-card, .video-container {
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
+        }
+
+        .link-bar a:active, .release-card:active, .video-container:active {
+            transform: scale(0.96) !important;
+            transition: transform 0.05s;
+        }
+
+        .separator {
+            margin: 0 10px;
+            color: #888;
+        }
+
+        .section-title {
+            font-size: 22pt;
+            font-weight: 200;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+
+        .release-card {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            width: 550px;
+            max-width: 100%;
+            box-sizing: border-box;
+            text-decoration: none;
+            color: inherit;
+            margin-bottom: 20px;
+        }
+
+        .release-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .player-box {
+            width: 150px;
+            height: 150px;
+            margin-right: 30px;
+            flex-shrink: 0;
+            background-image: url('ms-appx-web:///images/loveorhate.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .release-info h2 {
+            font-size: 24pt;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .release-info p {
+            font-size: 14pt;
+            color: #888;
+            margin: 5px 0 0 0;
+        }
+
+        .video-grid {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .video-container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            width: 420px;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        iframe {
+            border: none;
+            width: 400px;
+            max-width: 100%;
+            height: 225px;
+            display: block;
+        }
+
+        /* FOOTER STYLING */
+        .footer-links {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 10pt;
+            color: #888;
+            opacity: 0.7;
+        }
+
+        /* Portrait Mode Fixes */
+        @media screen and (max-width: 800px), screen and (orientation: portrait) {
+            body { padding: 40px 20px; }
+            .hero-container { flex-direction: column; align-items: center; text-align: center; }
+            .profile-pic { margin-right: 0; margin-bottom: 20px; width: 250px; height: 250px; }
+            .info-container { align-items: center; }
+            .release-card { width: 100%; flex-direction: column; text-align: center; }
+            .player-box { margin-right: 0; margin-bottom: 15px; }
+            .video-grid { flex-direction: column; align-items: center; }
+            .footer-links, .copyright { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hero-container">
+        <img src="ms-appx-web:///images/homephoto1.png" class="profile-pic" alt="Chris R. Lillo" />
+        <div class="info-container">
+            <div class="artist-name">Chris R. Lillo</div>
+            <div class="artist-title">Independent Musician</div>
+            <div class="link-bar">
+                <a href="https://chrisrlillo.bandcamp.com" target="_blank">Bandcamp</a>
+                <span class="separator">&bull;</span>
+                <a href="https://www.youtube.com/channel/UCuyJDal7T1UhCr-zmQ42orw" target="_blank">YouTube</a>
+                <span class="separator">&bull;</span>
+                <a href="https://www.patreon.com/chrisbrutalagresion" target="_blank">Patreon</a>
+                <span class="separator">&bull;</span>
+                <a href="https://streamlabs.com/chrisbrutalagresion/tip" target="_blank">Streamlabs</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">Latest Release</div>
+
+    <a class="release-card" href="https://chrisrlillo.bandcamp.com/album/love-hate" target="_blank">
+        <div class="player-box"></div>
+        <div class="release-info">
+            <h2>Love & Hate</h2>
+            <p>October 17, 2025</p>
+        </div>
+    </a>
+
+    <div class="section-title">Featured Videos</div>
+
+    <div class="video-grid">
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/LgQMOLyq5PI" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/WOMQjEYZdOg" allowfullscreen></iframe>
+        </div>
+        <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/a019_bXDqSI" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <div class="footer-links">
+        <div class="link-bar">
+            <a href="https://chrisrlillo.bandcamp.com" target="_blank">Bandcamp</a>
+            <span class="separator">&bull;</span>
+            <a href="https://www.youtube.com/channel/UCuyJDal7T1UhCr-zmQ42orw" target="_blank">YouTube</a>
+            <span class="separator">&bull;</span>
+            <a href="https://www.patreon.com/chrisbrutalagresion" target="_blank">Patreon</a>
+            <span class="separator">&bull;</span>
+            <a href="https://streamlabs.com/chrisbrutalagresion/tip" target="_blank">Streamlabs</a>
+        </div>
+        <div class="copyright">
+            &copy; 2026 Chris R. Lillo & DraydenYT
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,237 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Discography</title>
+    <link href="//Microsoft.WinJS.2.0/css/ui-dark.css" rel="stylesheet" />
+    <script src="//Microsoft.WinJS.2.0/js/base.js"></script>
+    <script src="//Microsoft.WinJS.2.0/js/ui.js"></script>
+
+    <style>
+        /* KEEPING YOUR WORKING SCROLLBAR FIX */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: auto !important;
+            overflow-y: visible !important;
+        }
+
+        body {
+            padding: 40px;
+            padding-bottom: 100px;
+            font-family: "Segoe UI", sans-serif;
+            background-color: transparent;
+            color: #fff;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 1200px; 
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        /* --- Header Styles --- */
+        .page-header {
+            font-size: 42pt;
+            font-weight: 200;
+            line-height: 1.1;
+            margin-bottom: 40px;
+        }
+
+        .year-header {
+            font-size: 26pt;
+            font-weight: 200;
+            color: #0080FF;
+            margin-top: 40px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 128, 255, 0.3);
+            width: 100%;
+            padding-bottom: 5px;
+        }
+
+        .era-title {
+            font-size: 20pt;
+            font-weight: 600;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        /* --- Content Blocks --- */
+        .disco-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            margin-bottom: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
+        }
+
+        .disco-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .item-title {
+            font-size: 18pt;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .item-description {
+            font-size: 13pt;
+            line-height: 1.5;
+            color: #ccc;
+        }
+
+        /* IN-TEXT LINK STYLING */
+        .inline-link {
+            color: #0080FF;
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+
+        .inline-link:hover {
+            text-decoration: underline;
+            opacity: 0.8;
+        }
+
+        .inline-link:active {
+            transform: scale(0.98);
+        }
+
+        /* --- Footer --- */
+        .footer-links {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        .link-bar {
+            font-size: 14pt;
+        }
+
+        .link-bar a {
+            text-decoration: none;
+            color: #fff;
+            display: inline-block;
+            transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .link-bar a:hover {
+            opacity: 0.6;
+            text-decoration: underline;
+        }
+
+        .link-bar a:active, .disco-item:active {
+            transform: scale(0.96) !important;
+            transition: transform 0.05s;
+        }
+
+        .separator {
+            margin: 0 10px;
+            color: #888;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 10pt;
+            color: #888;
+            opacity: 0.7;
+        }
+
+        /* Portrait Mode Fixes */
+        @media screen and (max-width: 800px), screen and (orientation: portrait) {
+            body { padding: 40px 20px; }
+            .page-wrapper { align-items: center; text-align: center; }
+            .year-header { text-align: center; }
+            .footer-links, .copyright { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <div class="page-header">Discography</div>
+
+        <div class="year-header">2023</div>
+        <div class="era-title">The Beginning</div>
+        
+        <div class="disco-item">
+            <span class="item-title">"Don't Be Scared" (acoustic single)</span>
+            <span class="item-description">An emotional and sincere acoustic song narrating a heartbreaking story.</span>
+        </div>
+
+        <div class="disco-item">
+            <span class="item-title">"White Balcony" (rock single)</span>
+            <span class="item-description">
+                A powerful rock song with energetic vocals and deeply emotional lyrics, accompanied by a well-received 
+                <a href="https://www.youtube.com/watch?v=HTPZQIacj4g" target="_blank" class="inline-link">80s-style live music video</a>. 
+                (<a href="https://chrisrlillo.bandcamp.com/track/white-balcony" target="_blank" class="inline-link">available on Bandcamp</a>)
+            </span>
+        </div>
+
+        <div class="year-header">2024</div>
+        <div class="era-title">The EP Illusions</div>
+
+        <div class="disco-item">
+            <span class="item-title">EP Release</span>
+            <span class="item-description">
+                Showcasing Chris's musical versatility, the EP includes three new songs, two alternate versions with orchestral arrangements, and an instrumental. 
+                (<a href="https://chrisrlillo.bandcamp.com/album/illusions" target="_blank" class="inline-link">available on Bandcamp</a>)
+            </span>
+        </div>
+
+        <div class="disco-item">
+            <span class="item-title">
+                <a href="videos.html" class="inline-link">Music Videos</a>
+            </span>
+            <span class="item-description">Each song is complemented by meticulously produced music videos that enhance the listening experience with impactful visual narratives.</span>
+        </div>
+
+        <div class="year-header">2025</div>
+        <div class="era-title">"Ghostly Touch"</div>
+
+        <div class="disco-item">
+            <span class="item-title">Single</span>
+            <span class="item-description">
+                Released on January 6, 2025. 
+                (<a href="https://chrisrlillo.bandcamp.com/album/illusions" target="_blank" class="inline-link">available on Bandcamp</a>)
+            </span>
+        </div>
+
+        <div class="disco-item">
+            <span class="item-title">
+                <a href="videos.html" class="inline-link">Music Video</a>
+            </span>
+            <span class="item-description">
+                The <a href="https://www.youtube.com/watch?v=qUcKszsf89E" target="_blank" class="inline-link">music video for "Ghostly Touch"</a> 
+                was filmed at the Santo Tomás Center in Talca with a professional team, delivering a deeply emotional audiovisual experience. It continues Chris's tradition of combining melodic rock with introspective lyrics.
+            </span>
+        </div>
+
+        <div class="footer-links">
+            <div class="link-bar">
+                <a href="https://chrisrlillo.bandcamp.com" target="_blank">Bandcamp</a>
+                <span class="separator">&bull;</span>
+                <a href="https://www.youtube.com/channel/UCuyJDal7T1UhCr-zmQ42orw" target="_blank">YouTube</a>
+                <span class="separator">&bull;</span>
+                <a href="https://www.patreon.com/chrisbrutalagresion" target="_blank">Patreon</a>
+                <span class="separator">&bull;</span>
+                <a href="https://streamlabs.com/chrisbrutalagresion/tip" target="_blank">Streamlabs</a>
+            </div>
+            <div class="copyright">
+                &copy; 2026 Chris R. Lillo & DraydenYT
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

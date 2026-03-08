@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Contact</title>
+    <link href="//Microsoft.WinJS.2.0/css/ui-dark.css" rel="stylesheet" />
+    <script src="//Microsoft.WinJS.2.0/js/base.js"></script>
+    <script src="//Microsoft.WinJS.2.0/js/ui.js"></script>
+
+    <style>
+        /* SCROLLBAR & LAYOUT FIX */
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: auto !important;
+            overflow-y: visible !important;
+        }
+
+        body {
+            padding: 40px;
+            padding-bottom: 100px;
+            font-family: "Segoe UI", sans-serif;
+            background-color: transparent;
+            color: #fff;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .page-wrapper {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .page-header {
+            font-size: 42pt;
+            font-weight: 200;
+            line-height: 1.1;
+            margin-bottom: 40px;
+        }
+
+        /* --- Form Styles --- */
+        .contact-form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .required-indicator {
+            font-size: 10pt;
+            color: #0080FF;
+            margin-bottom: -10px;
+        }
+
+        input[type="text"], textarea {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 15px;
+            font-size: 14pt;
+            font-family: "Segoe UI", sans-serif;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: #0080FF;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        textarea {
+            height: 250px;
+            resize: vertical;
+        }
+
+        .consent-container {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .consent-text {
+            font-size: 11pt;
+            line-height: 1.4;
+            color: #ccc;
+        }
+
+        .business-note {
+            font-size: 12pt;
+            color: #888;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* --- Button Styles --- */
+        #submitBtn {
+            padding: 15px 40px;
+            font-size: 14pt;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-top: 20px;
+            align-self: flex-start;
+        }
+
+        .btn-enabled {
+            background-color: #0080FF;
+            color: white;
+        }
+
+        .btn-enabled:hover {
+            background-color: #00a2ff;
+            transform: scale(1.02);
+        }
+
+        .btn-disabled {
+            background-color: #444 !important;
+            color: #888 !important;
+            cursor: not-allowed !important;
+            opacity: 0.6;
+        }
+
+        /* --- Footer --- */
+        .footer-links {
+            margin-top: 80px;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        .copyright {
+            margin-top: 20px;
+            font-size: 10pt;
+            color: #888;
+            opacity: 0.7;
+        }
+
+        @media screen and (max-width: 800px) {
+            .page-header { font-size: 32pt; }
+            #submitBtn { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-wrapper">
+        <div class="page-header">Contact</div>
+
+        <div class="contact-form">
+            <input type="text" id="userName" placeholder="Name *" />
+            
+            <textarea id="userMessage" placeholder="Message"></textarea>
+
+            <label class="consent-container">
+                <input type="checkbox" id="consentCheck" style="width: 20px; height: 20px;" />
+                <span class="consent-text">
+                    I hereby agree that this data will be stored and processed for the purpose of establishing contact. 
+                    I am aware that I can revoke my consent at any time.
+                </span>
+            </label>
+
+            <div class="required-indicator">* Indicates required fields</div>
+            
+            <button id="submitBtn" class="btn-disabled" disabled>Submit</button>
+            
+            <div class="business-note">For business inquiries, please fill out the form and submit.</div>
+        </div>
+
+        <div class="footer-links">
+            <div class="link-bar" style="font-size: 14pt;">
+                <a href="https://chrisrlillo.bandcamp.com" target="_blank" style="color:white; text-decoration:none;">Bandcamp</a>
+                <span style="margin: 0 10px; color: #888;">&bull;</span>
+                <a href="https://www.youtube.com/channel/UCuyJDal7T1UhCr-zmQ42orw" target="_blank" style="color:white; text-decoration:none;">YouTube</a>
+                <span style="margin: 0 10px; color: #888;">&bull;</span>
+                <a href="https://www.patreon.com/chrisbrutalagresion" target="_blank" style="color:white; text-decoration:none;">Patreon</a>
+                <span style="margin: 0 10px; color: #888;">&bull;</span>
+                <a href="https://streamlabs.com/chrisbrutalagresion/tip" target="_blank" style="color:white; text-decoration:none;">Streamlabs</a>
+            </div>
+            <div class="copyright">
+                &copy; 2026 Chris R. Lillo & DraydenYT
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            "use strict";
+
+            const consentCheck = document.getElementById("consentCheck");
+            const submitBtn = document.getElementById("submitBtn");
+            const userName = document.getElementById("userName");
+            const userMessage = document.getElementById("userMessage");
+
+            consentCheck.addEventListener("change", function () {
+                if (this.checked) {
+                    submitBtn.classList.remove("btn-disabled");
+                    submitBtn.classList.add("btn-enabled");
+                    submitBtn.disabled = false;
+                } else {
+                    submitBtn.classList.add("btn-disabled");
+                    submitBtn.classList.remove("btn-enabled");
+                    submitBtn.disabled = true;
+                }
+            });
+
+            submitBtn.addEventListener("click", function () {
+                const nameValue = userName.value.trim();
+                // Fallback if they leave name empty despite the asterisk
+                const name = encodeURIComponent(nameValue || "Contact Form Submission");
+                const message = encodeURIComponent(userMessage.value);
+                const email = "business.chrisrlillo@gmail.com"; 
+
+                window.location.href = "mailto:" + email + "?subject=" + name + "&body=" + message;
+            });
+        })();
+    </script>
+</body>
+</html>

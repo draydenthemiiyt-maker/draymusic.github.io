@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>YouTube Channel Viewer</title>
+  <style>
+    /* Background set to transparent */
+    body, html {
+      margin: 0;
+      padding: 0;
+      background-color: transparent !important;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    .container {
+      padding: 1rem;
+      max-width: 1000px;
+      margin: auto;
+      background-color: transparent;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    #video-grid {
+      display: block;
+      text-align: center;
+      background-color: transparent;
+    }
+
+    .video-card {
+      display: inline-block;
+      vertical-align: top;
+      width: 100%;
+      max-width: 450px;
+      margin: 10px;
+      opacity: 0;
+      -ms-transform: translateY(20px);
+      transform: translateY(20px);
+      animation: fadeUp 0.6s ease-out forwards;
+      animation-delay: 0.5s; 
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        -ms-transform: translateY(0);
+        transform: translateY(0);
+      }
+    }
+
+    .iframe-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; 
+      height: 0;
+      background: rgba(255, 255, 255, 0.05); /* Subtle placeholder */
+      border-radius: 8px;
+    }
+
+    .iframe-wrapper iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 8px;
+    }
+
+    .loading-text {
+        text-align: center;
+        padding: 20px;
+        font-size: 14pt;
+        color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="channel-title"></h1>
+    <div id="video-grid">
+        <div class="loading-text">Loading latest videos...</div>
+    </div>
+  </div>
+
+  <script>
+    var API_KEY = 'AIzaSyD9-Zah-rzZvWvLMNAMCrNwRN-u3kAB2N0';
+    var CHANNEL_ID = 'UCuyJDal7T1UhCr-zmQ42orw';
+    var MAX_RESULTS = 25;
+
+    var videoGrid = document.getElementById('video-grid');
+
+    function fetchVideos() {
+      var url = 'https://www.googleapis.com/youtube/v3/search?key=' + API_KEY + 
+                '&channelId=' + CHANNEL_ID + 
+                '&part=snippet,id&order=date&maxResults=' + MAX_RESULTS;
+
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText);
+            renderVideos(data.items);
+          } else {
+            videoGrid.innerHTML = '<p style="color: #ff4444;">Failed to load videos.</p>';
+          }
+        }
+      };
+      
+      xhr.send();
+    }
+
+    function renderVideos(items) {
+      videoGrid.innerHTML = ''; 
+      
+      for (var i = 0; i < items.length; i++) {
+        var item = items[i];
+        
+        if (item.id.kind === 'youtube#video') {
+          var videoId = item.id.videoId;
+          
+          var wrapper = document.createElement('div');
+          wrapper.className = 'video-card';
+
+          var ratioBox = document.createElement('div');
+          ratioBox.className = 'iframe-wrapper';
+
+          var iframe = document.createElement('iframe');
+          iframe.setAttribute('src', 'https://www.youtube.com/embed/' + videoId);
+          iframe.setAttribute('frameborder', '0');
+          iframe.setAttribute('allowfullscreen', 'true');
+          
+          ratioBox.appendChild(iframe);
+          wrapper.appendChild(ratioBox);
+          videoGrid.appendChild(wrapper);
+        }
+      }
+    }
+
+    fetchVideos();
+  </script>
+</body>
+</html>
