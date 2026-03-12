@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      background: #000;
+      width: 100%;
+      height: 100%;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <iframe id="ytplayer" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+  <script>
+    const API_KEY = "1c45d89b-0dbb-440b-acc6-b8faf39d56cd";
+
+    function getParam(name) {
+        const currUrl = window.location.search;
+        const res = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(currUrl);
+        if (res === null) return null;
+        return decodeURIComponent(res[1].replace(/\+/g, " "));
+    }
+
+    const videoId = getParam("id");
+    const providedKey = getParam("key");
+    const autoFlag = getParam("auto"); // 1 = autoplay, anything else = no autoplay
+
+    const player = document.getElementById("ytplayer");
+
+    if (providedKey !== API_KEY) {
+        player.remove();
+        return;
+    }
+
+    if (videoId) {
+        const autoplay = autoFlag === "1" ? "1" : "0";
+
+        const embedUrl =
+            "https://www.youtube.com/embed/" + videoId +
+            "?autoplay=" + autoplay +
+            "&loop=1&playlist=" + videoId +
+            "&rel=0&modestbranding=1";
+
+        player.src = embedUrl;
+    }
+  </script>
+</body>
+</html>
