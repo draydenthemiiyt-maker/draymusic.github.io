@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>idiot...</title>
+
+  <!-- Discord Embed Data -->
+  <meta property="og:title" content="idiot" />
+  <meta property="og:description" content="you are an idiot!" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://draydenthemiiyt-maker.github.io/draymusic.github.io/index.html" />
+  <meta property="og:image" content="https://draydenthemiiyt-maker.github.io/draymusic.github.io/idiot.gif" />
+  <meta name="theme-color" content="#5865F2">
+  <style>
+body {
+  font-family: Arial, sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Fake popup window */
+.popup {
+  position: absolute;
+  width: 300px;
+  background: #c0c0c0;
+  border: 2px solid black;
+  box-shadow: 4px 4px 0px black;
+  font-family: Tahoma, sans-serif;
+}
+
+.popup-header {
+  background: #000080;
+  color: white;
+  padding: 4px;
+  font-size: 14px;
+}
+
+.popup-content {
+  background: white;
+  padding: 10px;
+  text-align: center;
+}
+</style>
+</head>
+
+<body>
+
+  <hl>Woah!</hl>
+  <p>You just reached a page that shouldn't even exist.</p>
+  <p>you are an idiot!</p>
+<button onclick="startChaos()">start the chaos!</button>
+
+<audio id="idiotMusic" loop>
+  <source src="idiot.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let popups = [];
+let animation;
+let musicStarted = false;
+let chaosInterval;
+
+function spawnPopup() {
+  const popup = document.createElement("div");
+  popup.className = "popup";
+
+  let x = Math.random() * (window.innerWidth - 320);
+  let y = Math.random() * (window.innerHeight - 300);
+
+  let dx = (Math.random() - 0.5) * 6;
+  let dy = (Math.random() - 0.5) * 6;
+
+  popup.style.left = x + "px";
+  popup.style.top = y + "px";
+
+  popup.innerHTML = `
+    <div class="popup-header">you are an idiot!</div>
+    <div class="popup-content">
+      <img src="idiot.gif" style="width:150px; margin-top:8px;">
+    </div>
+  `;
+
+  document.body.appendChild(popup);
+
+  popups.push({el: popup, x, y, dx, dy});
+}
+
+function movePopups() {
+  popups.forEach(p => {
+    p.x += p.dx;
+    p.y += p.dy;
+
+    if (p.x <= 0 || p.x >= window.innerWidth - 300) p.dx *= -1;
+    if (p.y <= 0 || p.y >= window.innerHeight - 200) p.dy *= -1;
+
+    p.el.style.left = p.x + "px";
+    p.el.style.top = p.y + "px";
+  });
+
+  animation = requestAnimationFrame(movePopups);
+}
+
+function startChaos() {
+  if (!musicStarted) {
+    document.getElementById("idiotMusic").play();
+    musicStarted = true;
+  }
+
+  chaosInterval = setInterval(() => {
+    const count = Math.floor(Math.random() * 6) + 3;
+    for (let i = 0; i < count; i++) spawnPopup();
+  }, Math.random() * 500 + 300);
+
+  if (!animation) animation = requestAnimationFrame(movePopups);
+}
+</script>
+
+</body>
+</html>
