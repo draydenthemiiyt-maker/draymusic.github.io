@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Submit App</title>
+    <style>
+        html, body {
+            height: 100%; margin: 0; background: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #000;
+        }
+        .upload-container { padding: 40px; max-width: 600px; margin: 0 auto; }
+        h1 { font-weight: 300; font-size: 32px; margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; position: relative; }
+        label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 14px; }
+        label.required:after { content: " *"; color: #e81123; }
+        input[type="text"], textarea {
+            width: 100%; padding: 10px; border: 1px solid #ccc;
+            box-sizing: border-box; font-family: inherit;
+        }
+        input:disabled { background-color: #f2f2f2; cursor: not-allowed; opacity: 0.6; }
+        .char-count { font-size: 11px; color: #666; text-align: right; margin-top: 4px; }
+        textarea { height: 100px; resize: vertical; }
+        .switch-group { display: block; background: #f9f9f9; padding: 15px; margin-bottom: 10px; overflow: hidden; }
+        .switch-label { float: left; line-height: 22px; }
+        .switch { position: relative; display: inline-block; width: 45px; height: 22px; float: right; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; border-radius: 22px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; border-radius: 50%; }
+        input:checked + .slider { background-color: #0078D7; }
+        input:checked + .slider:before { left: 26px; }
+        .btn-submit { background: #0078D7; color: white; border: none; padding: 12px 30px; font-weight: 600; cursor: pointer; width: 100%; margin-top: 20px; }
+        .btn-submit:disabled { background: #cccccc; color: #666666; cursor: not-allowed; }
+        #status { text-align: center; margin-top: 15px; font-size: 14px; }
+        
+        .screenshots-section { border: 1px solid #eee; padding: 15px; margin-bottom: 20px; background: #fafafa; }
+        .screenshots-section h3 { margin-top: 0; font-size: 16px; font-weight: 600; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div class="upload-container">
+        <h1>Submit your App</h1>
+        
+        <div class="form-group">
+            <label class="required">App Name (Max 80)</label>
+            <input type="text" id="appName" maxlength="80">
+            <div id="nameCount" class="char-count">0 / 80</div>
+        </div>
+
+        <div class="form-group">
+            <label class="required">Publisher Name (Max 80)</label>
+            <input type="text" id="appPub" maxlength="80">
+            <div id="pubCount" class="char-count">0 / 80</div>
+        </div>
+
+        <div class="form-group">
+            <label class="required">Version (Format: 0.0.0.0)</label>
+            <input type="text" id="appVer" placeholder="1.0.0.0">
+        </div>
+
+        <div class="form-group">
+            <label class="required">Icon URL (.png, .ico, .bmp, .jpg, .jpeg)</label>
+            <input type="text" id="appIcon" placeholder="https://example.com/icon.png">
+        </div>
+
+        <div class="form-group">
+            <label class="required">Package URL (.appx, .appxbundle)</label>
+            <input type="text" id="appPkg" placeholder="https://example.com/app.appx">
+        </div>
+
+        <div class="form-group">
+            <label>Description (Max 500 - Optional)</label>
+            <textarea id="appDesc" maxlength="500"></textarea>
+            <div id="descCount" class="char-count">0 / 500</div>
+        </div>
+
+        <div class="screenshots-section">
+            <h3>Screenshots/Videos (Optional)</h3>
+            <div class="form-group">
+                <label>Screenshot 1/YouTube Video URL</label>
+                <input type="text" id="appScreenshot1" placeholder="https://example.com/ss1.png or https://www.youtube.com/watch?v=XkoG4KHu-aY">
+            </div>
+            <div class="form-group">
+                <label>Screenshot 2 URL</label>
+                <input type="text" id="appScreenshot2" placeholder="https://example.com/ss2.png" disabled>
+            </div>
+            <div class="form-group">
+                <label>Screenshot 3 URL</label>
+                <input type="text" id="appScreenshot3" placeholder="https://example.com/ss3.png" disabled>
+            </div>
+            <div class="form-group">
+                <label>Screenshot 4 URL</label>
+                <input type="text" id="appScreenshot4" placeholder="https://example.com/ss4.png" disabled>
+            </div>
+            <div class="form-group">
+                <label>Screenshot 5 URL</label>
+                <input type="text" id="appScreenshot5" placeholder="https://example.com/ss5.png" disabled>
+            </div>
+        </div>
+
+        <div class="switch-group">
+            <span class="switch-label">PC Compatible</span>
+            <label class="switch">
+                <input type="checkbox" id="pcCapable" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="switch-group">
+            <span class="switch-label">Mobile Compatible</span>
+            <label class="switch">
+                <input type="checkbox" id="mobileCapable" checked>
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <button class="btn-submit" id="submitBtn" disabled>Submit App</button>
+        <div id="status"></div>
+    </div>
+
+    <script src="config.js"></script>
+    <script type="text/javascript">
+(function () {
+    const FILE_PATH = "apppending.xml";
+    const submitBtn = document.getElementById("submitBtn");
+    const nameInput = document.getElementById("appName");
+    const pubInput = document.getElementById("appPub");
+    const descInput = document.getElementById("appDesc");
+    const verInput = document.getElementById("appVer");
+    const iconInput = document.getElementById("appIcon");
+    const pkgInput = document.getElementById("appPkg");
+    const pcCheck = document.getElementById("pcCapable");
+    const mobileCheck = document.getElementById("mobileCapable");
+    const status = document.getElementById("status");
+    
+    const screenshotInputs = [
+        document.getElementById("appScreenshot1"),
+        document.getElementById("appScreenshot2"),
+        document.getElementById("appScreenshot3"),
+        document.getElementById("appScreenshot4"),
+        document.getElementById("appScreenshot5")
+    ];
+
+    const versionPattern = /^\d+\.\d+\.\d+\.\d+$/;
+    const imagePattern = /^https?:\/\/.*\.(png|ico|bmp|jpg|jpeg)$/i;
+    const pkgPattern = /^https?:\/\/.*\.(appx|appxbundle)$/i;
+
+    // HELPER: Replaces & with &amp; for valid XML
+    function escapeXml(str) {
+        return str.replace(/&/g, '&amp;');
+    }
+
+    function isYouTube(url) {
+        return /youtu\.be\/|youtube\.com\/watch|youtube\.com\/embed/.test(url);
+    }
+    
+    function generateIdFromName(name) {
+        return name.toLowerCase().replace(/[^a-z0-9]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
+    }
+
+    function updateScreenshotInputs() {
+        for (let i = 0; i < screenshotInputs.length - 1; i++) {
+            const currentBox = screenshotInputs[i];
+            const nextBox = screenshotInputs[i + 1];
+            const val = currentBox.value.trim();
+
+            let isCurrentValid;
+            if (i === 0) {
+                isCurrentValid = val !== "" && (imagePattern.test(val) || isYouTube(val));
+            } else {
+                isCurrentValid = val !== "" && imagePattern.test(val);
+            }
+
+            if (isCurrentValid) {
+                nextBox.disabled = false;
+            } else {
+                nextBox.disabled = true;
+                nextBox.value = ""; 
+            }
+        }
+    }
+
+    function validateForm() {
+        updateScreenshotInputs();
+        const isNameValid = nameInput.value.trim().length > 0;
+        const isPubValid = pubInput.value.trim().length > 0;
+        const isVerValid = versionPattern.test(verInput.value.trim());
+        const isIconValid = imagePattern.test(iconInput.value.trim());
+        const isPkgValid = pkgPattern.test(pkgInput.value.trim());
+        const isCompatValid = pcCheck.checked || mobileCheck.checked;
+
+        let areScreenshotsValid = true;
+        screenshotInputs.forEach((input, index) => {
+            const val = input.value.trim();
+            if (!val) return;
+            if (index === 0) {
+                if (!(imagePattern.test(val) || isYouTube(val))) areScreenshotsValid = false;
+            } else {
+                if (!imagePattern.test(val)) areScreenshotsValid = false;
+            }
+        });
+
+        submitBtn.disabled = !(isNameValid && isPubValid && isVerValid && isIconValid && isPkgValid && isCompatValid && areScreenshotsValid);
+    }
+
+    [nameInput, pubInput, verInput, iconInput, pkgInput, pcCheck, mobileCheck, ...screenshotInputs].forEach(el => {
+        el.addEventListener('input', validateForm);
+    });
+
+    nameInput.onkeyup = () => { document.getElementById("nameCount").innerText = nameInput.value.length + " / 30"; };
+    pubInput.onkeyup = () => { document.getElementById("pubCount").innerText = pubInput.value.length + " / 30"; };
+    descInput.onkeyup = () => { document.getElementById("descCount").innerText = descInput.value.length + " / 300"; };
+
+    async function commitToGithub(name, xmlSnippet) {
+        const token = typeof GITHUB_TOKEN !== 'undefined' ? GITHUB_TOKEN : null;
+        const owner = typeof GITHUB_OWNER !== 'undefined' ? GITHUB_OWNER : null;
+        const repo = typeof GITHUB_REPO !== 'undefined' ? GITHUB_REPO : null;
+
+        if (!token || !owner || !repo) return false;
+
+        const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${FILE_PATH}`;
+        const appId = generateIdFromName(name);
+        
+        try {
+            const response = await fetch(apiUrl, { headers: { "Authorization": `token ${token}` } });
+            if (!response.ok) throw new Error("File not found");
+            
+            const fileData = await response.json();
+            let currentContent = decodeURIComponent(escape(atob(fileData.content)));
+            
+            const appRegex = new RegExp(`<app id="${appId}">[\\s\\S]*?<\\/app>`, 'g');
+            let updatedContent = appRegex.test(currentContent) 
+                ? currentContent.replace(appRegex, xmlSnippet) 
+                : currentContent.replace('</apps>', `    ${xmlSnippet}\n  </apps>`);
+            
+            const updateResponse = await fetch(apiUrl, {
+                method: "PUT",
+                headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: `Submit App: ${name}`,
+                    content: btoa(unescape(encodeURIComponent(updatedContent))),
+                    sha: fileData.sha
+                })
+            });
+            return updateResponse.ok;
+        } catch (error) { return false; }
+    }
+
+submitBtn.onclick = async function () {
+    submitBtn.disabled = true;
+    const rawName = nameInput.value.trim();
+    const appId = generateIdFromName(rawName);
+    status.innerText = "Submitting...";
+
+    // Build screenshot array
+    const screenshots = screenshotInputs
+        .map(input => input.value.trim())
+        .filter(v => v !== "");
+
+    // Build payload for PHP
+    const payload = {
+        name: rawName,
+        publisher: pubInput.value.trim(),
+        version: verInput.value.trim(),
+        icon: iconInput.value.trim(),
+        package: pkgInput.value.trim(),
+        description: descInput.value.trim(),
+        pcCapable: pcCheck.checked,
+        mobileCapable: mobileCheck.checked,
+        screenshots: screenshots
+    };
+
+    // Send to PHP backend
+    const response = await fetch("http://drayai81isbacknotfor8storescripts.42web.io/upload.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+        status.innerText = "Success! Pending review.";
+        status.style.color = "#107c10";
+
+        // CLEAR FORM ON SUCCESS
+        nameInput.value = "";
+        pubInput.value = "";
+        verInput.value = "";
+        iconInput.value = "";
+        pkgInput.value = "";
+        descInput.value = "";
+        screenshotInputs.forEach(input => input.value = "");
+
+        // Reset Char Counters
+        document.getElementById("nameCount").innerText = "0 / 30";
+        document.getElementById("pubCount").innerText = "0 / 30";
+        document.getElementById("descCount").innerText = "0 / 300";
+
+        // Re-validate to disable the button
+        validateForm();
+
+    } else {
+        status.innerText = "Upload failed.";
+        status.style.color = "#e81123";
+        submitBtn.disabled = false;
+    }
+};
+})();
+    </script>
+</body>
+</html>
