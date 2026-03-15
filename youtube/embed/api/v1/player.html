@@ -15,40 +15,40 @@
   </style>
 </head>
 <body>
-  <iframe id="ytplayer" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe id="ytplayer" allow="autoplay; encrypted-media"></iframe>
+<script>
+  const API_KEY = "1c45d89b-0dbb-440b-acc6-b8faf39d56cd";
 
-  <script>
-    const API_KEY = "1c45d89b-0dbb-440b-acc6-b8faf39d56cd";
+  function getParam(name) {
+      const currUrl = window.location.search;
+      const res = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(currUrl);
+      if (res === null) return null;
+      return decodeURIComponent(res[1].replace(/\+/g, " "));
+  }
 
-    function getParam(name) {
-        const currUrl = window.location.search;
-        const res = new RegExp("[\\?&]" + name + "=([^&#]*)").exec(currUrl);
-        if (res === null) return null;
-        return decodeURIComponent(res[1].replace(/\+/g, " "));
-    }
+  const videoId = getParam("id");
+  const providedKey = getParam("key");
+  const autoFlag = getParam("auto");
 
-    const videoId = getParam("id");
-    const providedKey = getParam("key");
-    const autoFlag = getParam("auto"); // 1 = autoplay, anything else = no autoplay
+  const player = document.getElementById("ytplayer");
 
-    const player = document.getElementById("ytplayer");
+  if (providedKey !== API_KEY) {
+      player.remove();
+  }
 
-    if (providedKey !== API_KEY) {
-        player.remove();
-    }
+  if (videoId) {
+      const autoplay = autoFlag === "1" ? "1" : "0";
 
-    if (videoId) {
-        const autoplay = autoFlag === "1" ? "1" : "0";
+      const embedUrl =
+          "https://www.youtube.com/embed/" + videoId +
+          "?autoplay=" + autoplay +
+          "&loop=1&playlist=" + videoId +
+          "&rel=0&modestbranding=1" +
+          "&app=desktop";
 
-        const embedUrl =
-            "https://www.youtube.com/embed/" + videoId +
-            "?autoplay=" + autoplay +
-            "&loop=1&playlist=" + videoId +
-            "&rel=0&modestbranding=1&app=desktop";
-
-        player.src = embedUrl;
-    }
-  </script>
+      player.src = embedUrl;
+  }
+</script>
 </body>
 </html>
 
