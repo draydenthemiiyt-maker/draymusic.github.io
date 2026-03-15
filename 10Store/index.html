@@ -270,7 +270,7 @@ submitBtn.onclick = async function () {
     };
 
     // Send to PHP backend
-    const response = await fetch("http://drayai81isbacknotfor8storescripts.42web.io/upload.php", {
+    const response = await fetch("https://drayai81isbacknotfor8storescripts.42web.io/upload.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
