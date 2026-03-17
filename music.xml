@@ -96,23 +96,29 @@
     <albumArt></albumArt>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/windows.mp3</url>
   </song>
-    <song>
+  <song>
     <title>MayDay</title>
     <artist>thefatrat and laura Brehm</artist>
     <albumArt></albumArt>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/803971_TheFatRat---MAYDAY-feat-La.mp3</url>
   </song>
-    <song>
+  <song>
     <title>Windows 95</title>
     <artist>Bloom</artist>
     <albumArt></albumArt>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/pb_theme_midi.mp3</url>
   </song>
-    <song>
+  <song>
     <title>Windows 95 (HQ)</title>
     <artist>Bloom</artist>
     <albumArt></albumArt>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/pb_theme_midi_low.mp3</url>
+  </song>
+  <song>
+    <title>Infinite Amethyst</title>
+    <artist>Minecraft Bedrock Soundtrack</artist>
+    <albumArt>https://i.pinimg.com/originals/2b/9f/b9/2b9fb9043dc5fa89a89ccc23b88427b2.png</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/infinite_amethyst.ogg</url>
   </song>
 </music>
 
