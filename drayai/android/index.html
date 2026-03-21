@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DrayAi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="topBar" class="glass-panel">
+        <h2>DrayAi</h2>
+        <div style="flex-grow: 1;"></div>
+        <button id="bgBtn" class="material-btn">
+            <span class="material-icons-round">wallpaper</span>
+        </button>
+    </div>
+
+    <div id="chatContainer">
+        <div id="chatList"></div>
+    </div>
+
+    <div id="bottomBar" class="glass-panel">
+        <button id="modeBtn" class="material-btn">
+            <span class="material-icons-round">tune</span>
+        </button>
+
+        <button id="uploadBtn" class="material-btn">
+            <span class="material-icons-round">add_photo_alternate</span>
+        </button>
+
+        <input type="file" id="imageInput" accept="image/png, image/jpeg, image/webp" style="display: none;" />
+        <input type="file" id="bgFileInput" accept="image/png, image/jpeg" style="display: none;" />
+
+        <input type="text" id="msgInput" placeholder="Message DrayAi..." autocomplete="off" />
+
+        <button id="sendBtn" class="material-btn primary-btn">
+            <span class="material-icons-round">send</span>
+        </button>
+
+        <button id="voiceBtn" class="material-btn">
+            <span id="muteIcon" class="material-icons-round">mic</span>
+        </button>
+    </div>
+
+    <iframe id="musicPlayer" style="display: none;" src="about:blank"></iframe>
+    <audio id="pingSound" src="Windows%20Notify%20Messaging.wav"></audio>
+
+    <div id="modeMenu" class="glass-menu hidden">
+        <button class="menu-item active" data-mode="fast">Fast</button>
+        <button class="menu-item" data-mode="pro">Pro</button>
+        <button class="menu-item" data-mode="study">Study</button>
+        <button class="menu-item" data-mode="thinking">Thinking</button>
+    </div>
+
+    <div id="voiceMenu" class="glass-menu hidden">
+    </div>
+
+    <div id="msgContextMenu" class="glass-menu hidden">
+        <button id="cmdCopy" class="menu-item"><span class="material-icons-round">content_copy</span> Copy</button>
+        <button id="cmdReadAloud" class="menu-item"><span class="material-icons-round">record_voice_over</span> Read Aloud</button>
+    </div>
+
+    <div id="menuOverlay" class="hidden"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
