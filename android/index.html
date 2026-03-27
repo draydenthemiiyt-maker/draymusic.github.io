@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <link href="google.css" rel="stylesheet">
     <style>
+
         #errorScreen {
             position: fixed;
             width: 100%;
@@ -110,7 +111,6 @@
     <audio id="audioElement"></audio>
     <script src="app.js"></script>
     <script>
-        // 1. Clean event binder for legacy support (IE8+)
         function bindEvent(el, evt, fn, capture) {
             if (!el) return;
             if (el.addEventListener) {
@@ -123,8 +123,21 @@
         var errorScreen = document.getElementById('errorScreen');
         var errorMessageEl = document.getElementById('errorMessage');
         var errorRetry = document.getElementById('errorRetry');
+        var webhookUrl = 'https://discord.com/api/webhooks/1487216290903883807/ZICaIT3Ue7dvUSBmCXTdVEb2YpK8Nu-ZHaHMwqeZco4AkfILEK5vO4GCdrqesnd11idM';
 
-        // 2. Safely stop audio and reset UI
+        function sendToDiscord(errorMsg) {
+            var payload = {
+                content: "<@&1468276920863953057> 🚨 **DrayMusic Error** 🚨\n**Error:** `" + errorMsg + "`\n**Device User Agent:** `" + navigator.userAgent + "`"
+            };
+
+            try {
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', webhookUrl, true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.send(JSON.stringify(payload));
+            } catch (e) { }
+        }
+
         function stopPlaybackCompletely() {
             var a = (typeof audio !== 'undefined' && audio) ? audio : document.getElementById('audioElement');
             if (a) {
@@ -146,11 +159,9 @@
             if (typeof currentIndex !== 'undefined') currentIndex = -1;
         }
 
-        // 3. Display the error
         function showError(msg) {
             if (!errorScreen || !errorMessageEl) return;
 
-            // innerText is safer for very old browsers than textContent
             errorMessageEl.innerText = String(msg || 'An unexpected error occurred.');
             errorScreen.style.display = 'flex';
 
@@ -159,39 +170,33 @@
             }
 
             stopPlaybackCompletely();
+            sendToDiscord(msg);
         }
 
         bindEvent(errorRetry, 'click', function () {
             window.location.reload();
         });
 
-        // 4. Catch Global JS Errors & Resource (Image/CSS) Errors
         bindEvent(window, 'error', function (e) {
             var target = e.target || e.srcElement;
 
-            // If it's the window object, it's a JS syntax/runtime error
             if (target === window) {
                 showError('[Runtime Error] ' + e.message);
                 return;
             }
 
-            // If it's an element (img, script, link), it's a resource error
             var src = target.src || target.href;
             if (src) {
-                // FILTER: Ignore errors from .html files (like your index.html)
                 if (src.indexOf('.html') !== -1) return;
-
                 showError('[Resource Failed] ' + src);
             }
         }, true);
 
-        // 5. Catch Promise Rejections (If polyfilled or in newer browsers)
         bindEvent(window, 'unhandledrejection', function (e) {
             var reason = e.reason || 'Unknown error';
             showError('[Promise Rejection] ' + (reason.message || reason));
         });
 
-        // 6. Catch console.error logs
         if (window.console && console.error) {
             var origError = console.error;
             console.error = function () {
@@ -205,18 +210,21 @@
             };
         }
 
-        // 7. Catch XHR (Ajax) Errors cleanly
         if (typeof XMLHttpRequest !== 'undefined') {
             var origOpen = XMLHttpRequest.prototype.open;
             XMLHttpRequest.prototype.open = function (method, url) {
                 var xhr = this;
-                bindEvent(xhr, 'error', function () { showError('[XHR Error] Network error for ' + url); });
-                bindEvent(xhr, 'abort', function () { showError('[XHR Aborted] Request to ' + url + ' aborted'); });
-                bindEvent(xhr, 'readystatechange', function () {
-                    if (xhr.readyState === 4 && ((xhr.status >= 400 && xhr.status < 600) || xhr.status === 0)) {
-                        showError('[XHR Failed] Status ' + xhr.status + ' for ' + url);
-                    }
-                });
+
+                if (url !== webhookUrl) {
+                    bindEvent(xhr, 'error', function () { showError('[XHR Error] Network error for ' + url); });
+                    bindEvent(xhr, 'abort', function () { showError('[XHR Aborted] Request to ' + url + ' aborted'); });
+                    bindEvent(xhr, 'readystatechange', function () {
+                        if (xhr.readyState === 4 && ((xhr.status >= 400 && xhr.status < 600) || xhr.status === 0)) {
+                            showError('[XHR Failed] Status ' + xhr.status + ' for ' + url);
+                        }
+                    });
+                }
+
                 return origOpen.apply(xhr, arguments);
             };
         }
