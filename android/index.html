@@ -9,76 +9,63 @@
     <link rel="stylesheet" href="style.css">
     <link href="google.css" rel="stylesheet">
     <style>
-#errorScreen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8));
-  z-index: 9999;
-  color: #fff;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  padding: 24px;
-  box-sizing: border-box;
-  pointer-events: auto;
-}
 
-#errorScreen[hidden] {
-  display: none;
-}
+        #errorScreen {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #640000;
+            font-family: 'Segoe UI';
+        }
 
-.error-inner {
-  max-width: 720px;
-  width: 100%;
-  background: rgba(20,20,20,0.95);
-  border-radius: 12px;
-  padding: 28px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  text-align: center;
-}
+            #errorScreen[hidden] {
+                display: none;
+            }
 
-.error-title {
-  margin: 0 0 8px;
-  font-size: 1.6rem;
-  font-weight: 700;
-}
+        .error-inner {
+            text-align: center;
+        }
 
-.error-message {
-  margin: 0 0 18px;
-  color: #ddd;
-  line-height: 1.4;
-  word-break: break-word;
-}
+        .error-title {
+            margin: 0 0 8px;
+            color: #fff;
+            font-size: 1.6rem;
+        }
 
-.error-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 8px;
-}
+        .error-message {
+            margin: 0 0 18px;
+            color: #fff;
+            line-height: 1.4;
+        }
 
-.btn {
-  background: #1db954;
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
+        .error-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 8px;
+        }
 
-.btn-secondary {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.12);
-  color: #fff;
-}
+        .btn {
+            background: transparent;
+            color: #fff;
+            border: 2px solid #fff;
+            padding: 10px 16px;
+        }
+
+            .btn:hover {
+                background: #ffffff30;
+            }
+
+            .btn:active {
+                background: #fff;
+                color: #000;
+            }
     </style>
 </head>
 <body class="native-app">
     <img id="body-bg" src="gradient.gif" aria-hidden="true">
-
     <header class="app-header">
         <h1>DrayMusic</h1>
         <div class="search-pill">
@@ -86,16 +73,13 @@
             <input type="text" id="searchInput" placeholder="Search songs or artists...">
         </div>
     </header>
-
     <main id="songList" class="scroll-area">
     </main>
-
     <section class="mini-player">
         <div class="progress-wrapper">
             <input type="range" id="seekBar" value="0" step="0.1">
             <div class="progress-fill" id="progressFill"></div>
         </div>
-
         <div class="player-controls-row">
             <div class="track-info" id="openFullPlayer">
                 <img id="currentArt" src="placeholder.png">
@@ -104,7 +88,6 @@
                     <p id="currentArtist">Select a song</p>
                 </div>
             </div>
-
             <div class="action-btns">
                 <button id="btnLoop" class="icon-btn"><span class="material-symbols-rounded">repeat</span></button>
                 <button id="btnPrev" class="icon-btn"><span class="material-symbols-rounded">skip_previous</span></button>
@@ -113,226 +96,219 @@
             </div>
         </div>
     </section>
-
-<div id="errorScreen" aria-live="assertive" role="alert" hidden>
-  <div class="error-inner">
-    <h2 class="error-title">Something went wrong</h2>
-    <p id="errorMessage" class="error-message">An unexpected error occurred.</p>
-    <div class="error-actions">
-      <button id="errorRetry" class="btn">Retry</button>
-      <button id="errorDismiss" class="btn btn-secondary">Dismiss</button>
+    <div id="errorScreen" aria-live="assertive" role="alert" hidden>
+        <div class="error-inner">
+            <h2 class="error-title">Something went wrong</h2>
+            <p id="errorMessage" class="error-message">An unexpected error occurred.</p>
+            <div class="error-actions">
+                <button id="errorRetry" class="btn">Reload</button>
+            </div>
+        </div>
     </div>
-  </div>
-</div>
-
     <audio id="audioElement"></audio>
     <script src="app.js"></script>
     <script>
-/* Error overlay and playback stop helpers (legacy-friendly, keeps original layout & names) */
+        var errorScreen = document.getElementById('errorScreen');
+        var errorMessageEl = document.getElementById('errorMessage');
+        var errorRetry = document.getElementById('errorRetry');
+        var errorDismiss = document.getElementById('errorDismiss');
 
-/* Replace modern declarations with var for old browsers */
-var errorScreen = document.getElementById('errorScreen');
-var errorMessageEl = document.getElementById('errorMessage');
-var errorRetry = document.getElementById('errorRetry');
-var errorDismiss = document.getElementById('errorDismiss');
-
-/* Helper: cross-browser addEvent (keeps addEventListener usage when available) */
-function _on(el, evt, fn) {
-  if (!el) return;
-  if (el.addEventListener) el.addEventListener(evt, fn, false);
-  else if (el.attachEvent) el.attachEvent('on' + evt, fn);
-  else el['on' + evt] = fn;
-}
-
-/* Helper: safe text setter for old browsers */
-function _setText(el, text) {
-  if (!el) return;
-  if (typeof el.textContent !== 'undefined') el.textContent = text;
-  else el.innerText = text;
-}
-
-/* Keep the original function name and behavior but use legacy-safe code */
-function stopPlaybackCompletely() {
-  try {
-    /* Prefer global audio variable if your app defines it; otherwise find element */
-    var a = (typeof audio !== 'undefined' && audio) ? audio : document.getElementById('audioElement');
-
-    if (a) {
-      try {
-        if (typeof a.pause === 'function') a.pause();
-      } catch (e) {}
-
-      /* clear source to stop network activity (compatible fallbacks) */
-      try {
-        if (typeof a.removeAttribute === 'function') {
-          a.removeAttribute('src');
-        } else {
-          a.src = '';
+        function _on(el, evt, fn) {
+            if (!el) return;
+            if (el.addEventListener) el.addEventListener(evt, fn, false);
+            else if (el.attachEvent) el.attachEvent('on' + evt, fn);
+            else el['on' + evt] = fn;
         }
-      } catch (e) {
-        try { a.src = ''; } catch (e2) {}
-      }
 
-      try {
-        if (typeof a.load === 'function') a.load();
-      } catch (e) {}
-    }
+        /* Helper: safe text setter for old browsers */
+        function _setText(el, text) {
+            if (!el) return;
+            if (typeof el.textContent !== 'undefined') el.textContent = text;
+            else el.innerText = text;
+        }
 
-    /* reset UI state */
-    var playBtn = document.getElementById('btnPlayPause');
-    var titleEl = document.getElementById('currentTitle');
-    var artistEl = document.getElementById('currentArtist');
-    var artEl = document.getElementById('currentArt');
-
-    if (playBtn) {
-      try { playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>'; } catch (e) {}
-    }
-    if (titleEl) _setText(titleEl, 'Not Playing');
-    if (artistEl) _setText(artistEl, 'Select a song');
-    if (artEl) {
-      try { artEl.src = 'placeholder.png'; } catch (e) {}
-    }
-
-    /* clear media session metadata if present (try/catch for old browsers) */
-    try {
-      if (typeof navigator !== 'undefined' && navigator.mediaSession && typeof navigator.mediaSession.metadata !== 'undefined') {
-        try { navigator.mediaSession.metadata = null; } catch (e) {}
-      }
-    } catch (e) {}
-
-    /* mark index invalid if present */
-    try { if (typeof currentIndex !== 'undefined') currentIndex = -1; } catch (e) {}
-
-  } catch (e) {
-    try { if (console && console.warn) console.warn('Error while stopping playback', e); } catch (e2) {}
-  }
-}
-
-/* Keep same signature but avoid default param syntax */
-function showErrorOverlay(message, options) {
-  options = options || {};
-  if (!errorScreen || !errorMessageEl) return;
-  try {
-    _setText(errorMessageEl, String(message || 'An unexpected error occurred.'));
-
-    /* remove hidden attribute in a compatible way */
-    try {
-      if (errorScreen.removeAttribute) errorScreen.removeAttribute('hidden');
-      else errorScreen.style.display = 'flex';
-    } catch (e) {
-      try { errorScreen.style.display = 'flex'; } catch (e2) {}
-    }
-
-    /* stop playback immediately */
-    stopPlaybackCompletely();
-
-    /* Optionally log to console (still keep original behavior) */
-    if (!options.silent) {
-      try { if (console && console.error) console.error('App error shown to user:', message); } catch (e) {}
-    }
-  } catch (e) {}
-}
-
-function hideErrorOverlay() {
-  if (!errorScreen) return;
-  try {
-    if (errorScreen.setAttribute) errorScreen.setAttribute('hidden', '');
-    else errorScreen.style.display = 'none';
-  } catch (e) {
-    try { errorScreen.style.display = 'none'; } catch (e2) {}
-  }
-}
-
-/* Wire up retry and dismiss using cross-browser event helper */
-if (errorRetry) {
-  _on(errorRetry, 'click', function () {
-    hideErrorOverlay();
-    try {
-      /* Try to call loadMusic if available; handle both sync and promise-returning functions */
-      if (typeof loadMusic === 'function') {
-        try {
-          var res = loadMusic();
-          if (res && typeof res.then === 'function') {
+        /* Keep the original function name and behavior but use legacy-safe code */
+        function stopPlaybackCompletely() {
             try {
-              res.then(function () {}, function () { try { window.location.reload(); } catch (e) {} });
-            } catch (e) { try { window.location.reload(); } catch (e2) {} }
-          }
-        } catch (e) {
-          try { window.location.reload(); } catch (e2) {}
+                /* Prefer global audio variable if your app defines it; otherwise find element */
+                var a = (typeof audio !== 'undefined' && audio) ? audio : document.getElementById('audioElement');
+
+                if (a) {
+                    try {
+                        if (typeof a.pause === 'function') a.pause();
+                    } catch (e) { }
+
+                    /* clear source to stop network activity (compatible fallbacks) */
+                    try {
+                        if (typeof a.removeAttribute === 'function') {
+                            a.removeAttribute('src');
+                        } else {
+                            a.src = '';
+                        }
+                    } catch (e) {
+                        try { a.src = ''; } catch (e2) { }
+                    }
+
+                    try {
+                        if (typeof a.load === 'function') a.load();
+                    } catch (e) { }
+                }
+
+                /* reset UI state */
+                var playBtn = document.getElementById('btnPlayPause');
+                var titleEl = document.getElementById('currentTitle');
+                var artistEl = document.getElementById('currentArtist');
+                var artEl = document.getElementById('currentArt');
+
+                if (playBtn) {
+                    try { playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>'; } catch (e) { }
+                }
+                if (titleEl) _setText(titleEl, 'Not Playing');
+                if (artistEl) _setText(artistEl, 'Select a song');
+                if (artEl) {
+                    try { artEl.src = 'placeholder.png'; } catch (e) { }
+                }
+
+                /* clear media session metadata if present (try/catch for old browsers) */
+                try {
+                    if (typeof navigator !== 'undefined' && navigator.mediaSession && typeof navigator.mediaSession.metadata !== 'undefined') {
+                        try { navigator.mediaSession.metadata = null; } catch (e) { }
+                    }
+                } catch (e) { }
+
+                /* mark index invalid if present */
+                try { if (typeof currentIndex !== 'undefined') currentIndex = -1; } catch (e) { }
+
+            } catch (e) {
+                try { if (console && console.warn) console.warn('Error while stopping playback', e); } catch (e2) { }
+            }
         }
-      } else {
-        try { window.location.reload(); } catch (e) {}
-      }
-    } catch (e) {
-      try { window.location.reload(); } catch (e2) {}
-    }
-  });
-}
 
-if (errorDismiss) {
-  _on(errorDismiss, 'click', function () {
-    hideErrorOverlay();
-  });
-}
+        /* Keep same signature but avoid default param syntax */
+        function showErrorOverlay(message, options) {
+            options = options || {};
+            if (!errorScreen || !errorMessageEl) return;
+            try {
+                _setText(errorMessageEl, String(message || 'An unexpected error occurred.'));
 
-/* Global error handlers */
-/* Use window.onerror for maximum compatibility */
-if (typeof window !== 'undefined') {
-  window.onerror = function (msg, src, lineNo, colNo, err) {
-    try {
-      var message = (msg && typeof msg === 'string') ? msg : String(msg);
-      var composed = 'Runtime error: ' + message;
-      if (src) composed += ' (' + src + (lineNo ? ':' + lineNo : '') + ')';
-      showErrorOverlay(composed);
-    } catch (e) {}
-    /* return false to allow default browser handling as well */
-    return false;
-  };
+                /* remove hidden attribute in a compatible way */
+                try {
+                    if (errorScreen.removeAttribute) errorScreen.removeAttribute('hidden');
+                    else errorScreen.style.display = 'flex';
+                } catch (e) {
+                    try { errorScreen.style.display = 'flex'; } catch (e2) { }
+                }
 
-  /* If the browser supports addEventListener, attach unhandledrejection (modern browsers only) */
-  if (window.addEventListener) {
-    try {
-      window.addEventListener('unhandledrejection', function (ev) {
-        try {
-          var reason = (ev && ev.reason) ? ev.reason : 'Promise rejected';
-          var text;
-          if (typeof reason === 'string') text = reason;
-          else if (reason && reason.message) text = reason.message;
-          else {
-            try { text = JSON.stringify(reason); } catch (e) { text = String(reason); }
-          }
-          showErrorOverlay('Unhandled promise rejection: ' + text);
-        } catch (e) {}
-      }, false);
-    } catch (e) {}
-  }
-}
+                /* stop playback immediately */
+                stopPlaybackCompletely();
 
-/* Optional: intercept console.error so logged errors also show overlay */
-/* Keep original behavior but avoid modern syntax */
-(function wrapConsoleError() {
-  try {
-    if (!window.console || typeof console.error !== 'function') return;
-    var orig = console.error;
-    console.error = function () {
-      try {
-        /* Build message from arguments in an old-browser-safe way */
-        var parts = [];
-        for (var i = 0; i < arguments.length; i++) {
-          var a = arguments[i];
-          if (typeof a === 'string') parts.push(a);
-          else if (a && a.message) parts.push(a.message);
-          else {
-            try { parts.push(JSON.stringify(a)); } catch (e) { parts.push(String(a)); }
-          }
+                /* Optionally log to console (still keep original behavior) */
+                if (!options.silent) {
+                    try { if (console && console.error) console.error('App error shown to user:', message); } catch (e) { }
+                }
+            } catch (e) { }
         }
-        var msg = parts.join(' ');
-        try { showErrorOverlay(msg, { silent: true }); } catch (e) {}
-      } catch (e) {}
-      try { orig.apply(console, arguments); } catch (e) {}
-    };
-  } catch (e) {}
-})();
+
+        function hideErrorOverlay() {
+            if (!errorScreen) return;
+            try {
+                if (errorScreen.setAttribute) errorScreen.setAttribute('hidden', '');
+                else errorScreen.style.display = 'none';
+            } catch (e) {
+                try { errorScreen.style.display = 'none'; } catch (e2) { }
+            }
+        }
+
+        /* Wire up retry and dismiss using cross-browser event helper */
+        if (errorRetry) {
+            _on(errorRetry, 'click', function () {
+                hideErrorOverlay();
+                try {
+                    /* Try to call loadMusic if available; handle both sync and promise-returning functions */
+                    if (typeof loadMusic === 'function') {
+                        try {
+                            var res = loadMusic();
+                            if (res && typeof res.then === 'function') {
+                                try {
+                                    res.then(function () { }, function () { try { window.location.reload(); } catch (e) { } });
+                                } catch (e) { try { window.location.reload(); } catch (e2) { } }
+                            }
+                        } catch (e) {
+                            try { window.location.reload(); } catch (e2) { }
+                        }
+                    } else {
+                        try { window.location.reload(); } catch (e) { }
+                    }
+                } catch (e) {
+                    try { window.location.reload(); } catch (e2) { }
+                }
+            });
+        }
+
+        if (errorDismiss) {
+            _on(errorDismiss, 'click', function () {
+                hideErrorOverlay();
+            });
+        }
+
+        /* Global error handlers */
+        /* Use window.onerror for maximum compatibility */
+        if (typeof window !== 'undefined') {
+            window.onerror = function (msg, src, lineNo, colNo, err) {
+                try {
+                    var message = (msg && typeof msg === 'string') ? msg : String(msg);
+                    var composed = 'Runtime error: ' + message;
+                    if (src) composed += ' (' + src + (lineNo ? ':' + lineNo : '') + ')';
+                    showErrorOverlay(composed);
+                } catch (e) { }
+                /* return false to allow default browser handling as well */
+                return false;
+            };
+
+            /* If the browser supports addEventListener, attach unhandledrejection (modern browsers only) */
+            if (window.addEventListener) {
+                try {
+                    window.addEventListener('unhandledrejection', function (ev) {
+                        try {
+                            var reason = (ev && ev.reason) ? ev.reason : 'Promise rejected';
+                            var text;
+                            if (typeof reason === 'string') text = reason;
+                            else if (reason && reason.message) text = reason.message;
+                            else {
+                                try { text = JSON.stringify(reason); } catch (e) { text = String(reason); }
+                            }
+                            showErrorOverlay('Unhandled promise rejection: ' + text);
+                        } catch (e) { }
+                    }, false);
+                } catch (e) { }
+            }
+        }
+
+        /* Optional: intercept console.error so logged errors also show overlay */
+        /* Keep original behavior but avoid modern syntax */
+        (function wrapConsoleError() {
+            try {
+                if (!window.console || typeof console.error !== 'function') return;
+                var orig = console.error;
+                console.error = function () {
+                    try {
+                        /* Build message from arguments in an old-browser-safe way */
+                        var parts = [];
+                        for (var i = 0; i < arguments.length; i++) {
+                            var a = arguments[i];
+                            if (typeof a === 'string') parts.push(a);
+                            else if (a && a.message) parts.push(a.message);
+                            else {
+                                try { parts.push(JSON.stringify(a)); } catch (e) { parts.push(String(a)); }
+                            }
+                        }
+                        var msg = parts.join(' ');
+                        try { showErrorOverlay(msg, { silent: true }); } catch (e) { }
+                    } catch (e) { }
+                    try { orig.apply(console, arguments); } catch (e) { }
+                };
+            } catch (e) { }
+        })();
     </script>
 </body>
 </html>
