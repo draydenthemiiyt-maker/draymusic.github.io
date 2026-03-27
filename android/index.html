@@ -109,89 +109,102 @@
     <audio id="audioElement"></audio>
     <script src="app.js"></script>
     <script>
-        const getEl = id => document.getElementById(id);
-        const errorScreen = getEl('errorScreen');
-        const errorMessageEl = getEl('errorMessage');
-        const errorRetry = getEl('errorRetry');
+        // 1. Clean event binder for legacy support (IE8+)
+        function bindEvent(el, evt, fn, capture) {
+            if (!el) return;
+            if (el.addEventListener) {
+                el.addEventListener(evt, fn, !!capture);
+            } else if (el.attachEvent) {
+                el.attachEvent('on' + evt, fn);
+            }
+        }
 
-        // Safely stop audio and reset UI
+        var errorScreen = document.getElementById('errorScreen');
+        var errorMessageEl = document.getElementById('errorMessage');
+        var errorRetry = document.getElementById('errorRetry');
+
+        // 2. Safely stop audio and reset UI
         function stopPlaybackCompletely() {
-            const a = (typeof audio !== 'undefined' && audio) ? audio : getEl('audioElement');
+            var a = (typeof audio !== 'undefined' && audio) ? audio : document.getElementById('audioElement');
             if (a) {
-                a.pause ?.();
+                if (a.pause) a.pause();
                 a.src = '';
-                a.load ?.();
+                if (a.load) a.load();
             }
 
-            const playBtn = getEl('btnPlayPause');
-            if (playBtn) playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
+            var playBtn = document.getElementById('btnPlayPause');
+            var title = document.getElementById('currentTitle');
+            var artist = document.getElementById('currentArtist');
+            var art = document.getElementById('currentArt');
 
-            const title = getEl('currentTitle'), artist = getEl('currentArtist'), art = getEl('currentArt');
-            if (title) title.textContent = 'Not Playing';
-            if (artist) artist.textContent = 'Select a song';
+            if (playBtn) playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
+            if (title) title.innerText = 'Not Playing';
+            if (artist) artist.innerText = 'Select a song';
             if (art) art.src = 'placeholder.png';
 
             if (typeof currentIndex !== 'undefined') currentIndex = -1;
-            if (navigator.mediaSession) navigator.mediaSession.metadata = null;
         }
 
-        // Display the error
+        // 3. Display the error
         function showError(msg) {
             if (!errorScreen || !errorMessageEl) return;
-            errorMessageEl.textContent = String(msg || 'An unexpected error occurred.');
+
+            // innerText is safer for very old browsers than textContent
+            errorMessageEl.innerText = String(msg || 'An unexpected error occurred.');
             errorScreen.style.display = 'flex';
-            errorScreen.removeAttribute('hidden');
+
+            if (errorScreen.removeAttribute) {
+                errorScreen.removeAttribute('hidden');
+            }
+
             stopPlaybackCompletely();
         }
 
-        // Dismiss / Retry
-        errorRetry ?.addEventListener('click', () => window.location.reload());
-
-        // 1. Catch JS Runtime Errors AND Resource Load Errors (Images, CSS, etc.)
-        window.addEventListener('error', (e) => {
-            const isResource = e.target && (e.target.src || e.target.href);
-            const msg = isResource ? `Resource failed to load: ${e.target.src || e.target.href}` : e.message;
-            showError(`[Runtime/Resource] ${msg}`);
-        }, true); // The 'true' enables capture phase, required to catch resource errors
-
-        // 2. Catch Unhandled Promises
-        window.addEventListener('unhandledrejection', (e) => {
-            showError(`[Promise Rejection] ${e.reason ?.message || e.reason || 'Unknown error'}`);
+        bindEvent(errorRetry, 'click', function () {
+            window.location.reload();
         });
 
-        // 3. Catch console.error logs
-        const origError = console.error;
-        console.error = (...args) => {
-            const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ');
-            showError(`[Console Error] ${msg}`);
-            origError.apply(console, args);
-        };
+        // 4. Catch Global JS Errors & Resource (Image/CSS) Errors
+        bindEvent(window, 'error', function (e) {
+            var target = e.target || e.srcElement;
+            var isResource = target && (target.src || target.href);
+            var msg = isResource ? ('Resource failed: ' + (target.src || target.href)) : e.message;
+            showError('[Error] ' + msg);
+        }, true); // The 'true' is vital here to catch failing images
 
-        // 4. Catch XHR (Ajax) Errors
-        const origOpen = XMLHttpRequest.prototype.open;
-        XMLHttpRequest.prototype.open = function (method, url) {
-            this.addEventListener('error', () => showError(`[XHR Error] Network error for ${url}`));
-            this.addEventListener('abort', () => showError(`[XHR Aborted] Request to ${url} aborted`));
-            this.addEventListener('readystatechange', () => {
-                if (this.readyState === 4 && ((this.status >= 400 && this.status < 600) || this.status === 0)) {
-                    showError(`[XHR Failed] Status ${this.status} for ${url}`);
-                }
-            });
-            return origOpen.apply(this, arguments);
-        };
+        // 5. Catch Promise Rejections (If polyfilled or in newer browsers)
+        bindEvent(window, 'unhandledrejection', function (e) {
+            var reason = e.reason || 'Unknown error';
+            showError('[Promise Rejection] ' + (reason.message || reason));
+        });
 
-        // 5. Catch Fetch API Errors (Modern Networking)
-        if (window.fetch) {
-            const origFetch = window.fetch;
-            window.fetch = async (...args) => {
-                try {
-                    const res = await origFetch(...args);
-                    if (!res.ok) showError(`[Fetch Failed] Status ${res.status} for ${args[0]}`);
-                    return res;
-                } catch (err) {
-                    showError(`[Fetch Network Error] ${err.message}`);
-                    throw err;
+        // 6. Catch console.error logs
+        if (window.console && console.error) {
+            var origError = console.error;
+            console.error = function () {
+                var parts = [];
+                for (var i = 0; i < arguments.length; i++) {
+                    var arg = arguments[i];
+                    parts.push(typeof arg === 'object' ? JSON.stringify(arg) : String(arg));
                 }
+                showError('[Console Error] ' + parts.join(' '));
+                if (origError.apply) origError.apply(console, arguments);
+            };
+        }
+
+        // 7. Catch XHR (Ajax) Errors cleanly
+        if (typeof XMLHttpRequest !== 'undefined') {
+            var origOpen = XMLHttpRequest.prototype.open;
+            XMLHttpRequest.prototype.open = function (method, url) {
+                var xhr = this;
+                bindEvent(xhr, 'error', function () { showError('[XHR Error] Network error for ' + url); });
+                bindEvent(xhr, 'abort', function () { showError('[XHR Aborted] Request to ' + url + ' aborted'); });
+                bindEvent(xhr, 'readystatechange', function () {
+                    if (xhr.readyState === 4 && ((xhr.status >= 400 && xhr.status < 600) || xhr.status === 0)) {
+                        showError('[XHR Failed] Status ' + xhr.status + ' for ' + url);
+                    }
+                });
+                return origOpen.apply(xhr, arguments);
             };
         }
     </script>
