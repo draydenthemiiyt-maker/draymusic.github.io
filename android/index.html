@@ -11,6 +11,8 @@
     <style>
         #errorScreen {
             position: fixed;
+            width: 100%;
+            height: 100%;
             inset: 0;
             display: flex;
             align-items: center;
@@ -123,13 +125,11 @@
             } catch (e) { try { el.innerText = text; } catch (e2) { } }
         }
 
-        /* UI elements (adjust IDs if needed) */
         var errorScreen = document.getElementById('errorScreen');
         var errorMessageEl = document.getElementById('errorMessage');
         var errorRetry = document.getElementById('errorRetry');
         var errorDismiss = document.getElementById('errorDismiss');
 
-        /* Stop playback function (keeps behavior from your original) */
         function stopPlaybackCompletely() {
             try {
                 var a = (typeof audio !== 'undefined' && audio) ? audio : document.getElementById('audioElement');
@@ -155,7 +155,6 @@
             } catch (e) { try { if (console && console.warn) console.warn('stopPlayback error', e); } catch (e2) { } }
         }
 
-        /* Show / hide overlay */
         function showErrorOverlay(message, options) {
             options = options || {};
             if (!errorScreen || !errorMessageEl) return;
@@ -179,7 +178,6 @@
             } catch (e) { try { errorScreen.style.display = 'none'; } catch (e2) { } }
         }
 
-        /* Retry / Dismiss wiring */
         if (errorRetry) _on(errorRetry, 'click', function () {
             hideErrorOverlay();
             try {
@@ -195,7 +193,6 @@
         });
         if (errorDismiss) _on(errorDismiss, 'click', hideErrorOverlay);
 
-        /* Central reporting function */
         function reportError(kind, message, extra) {
             try {
                 var composed = '[' + kind + '] ' + (message || 'Unknown error');
@@ -206,7 +203,6 @@
             } catch (e) { }
         }
 
-        /* 1) Runtime errors via window.onerror (works in IE8) */
         if (typeof window !== 'undefined') {
             try {
                 window.onerror = function (msg, url, lineNo, colNo, err) {
@@ -216,12 +212,11 @@
                         var loc = (lineNo ? (':' + lineNo) : '');
                         reportError('Runtime error', m + ' (' + src + loc + ')', err || null);
                     } catch (e) { }
-                    return false; /* allow default handling too */
+                    return false;
                 };
             } catch (e) { }
         }
 
-        /* 2) Wrap console.error so logged errors also surface */
         (function wrapConsoleError() {
             try {
                 if (!window.console) window.console = {};
@@ -238,14 +233,13 @@
                             }
                         }
                         var msg = parts.join(' ');
-                        reportError('Console error', msg);
+                        reportError(msg);
                     } catch (e) { }
                     try { orig.apply(console, arguments); } catch (e) { }
                 };
             } catch (e) { }
         })();
 
-        /* 3) Detect XHR / network errors by wrapping XMLHttpRequest */
         (function wrapXHR() {
             try {
                 if (typeof XMLHttpRequest === 'undefined') return;
@@ -286,9 +280,6 @@
             } catch (e) { }
         })();
 
-        /* 4) Resource load errors for images and other elements
-           - Attach onerror to existing images
-           - Monitor DOM additions (best-effort for old browsers by polling) */
         (function watchResources() {
             try {
                 function attachImgHandlers() {
@@ -308,12 +299,10 @@
                     } catch (e) { }
                 }
                 attachImgHandlers();
-                /* Poll for new images every 2 seconds (IE8 has no MutationObserver) */
                 try { setInterval(attachImgHandlers, 2000); } catch (e) { }
             } catch (e) { }
         })();
 
-        /* 5) Unhandled promise rejections if supported (modern browsers only) */
         try {
             if (window.addEventListener) {
                 window.addEventListener('unhandledrejection', function (ev) {
