@@ -1,234 +1,225 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" type="image/png" href="icon.png">
-    <title>DrayMusic</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="google.css" rel="stylesheet">
-    <style>
-#errorScreen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8));
-  z-index: 9999;
-  color: #fff;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  padding: 24px;
-  box-sizing: border-box;
-  pointer-events: auto;
-}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="icon" type="image/png" href="icon.png">
+  <title>DrayMusic</title>
 
-#errorScreen[hidden] {
-  display: none;
-}
+  <!-- External styles -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="google.css">
 
-.error-inner {
-  max-width: 720px;
-  width: 100%;
-  background: rgba(20,20,20,0.95);
-  border-radius: 12px;
-  padding: 28px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-  text-align: center;
-}
+  <!-- Minimal inline styles for the error overlay (move to style.css if preferred) -->
+  <style>
+    /* Fullscreen error overlay */
+    #errorScreen {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8));
+      z-index: 9999;
+      color: #fff;
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+      padding: 24px;
+      box-sizing: border-box;
+      pointer-events: auto;
+    }
+    #errorScreen[hidden] { display: none; }
 
-.error-title {
-  margin: 0 0 8px;
-  font-size: 1.6rem;
-  font-weight: 700;
-}
+    .error-inner {
+      max-width: 720px;
+      width: 100%;
+      background: rgba(20,20,20,0.95);
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      text-align: center;
+    }
 
-.error-message {
-  margin: 0 0 18px;
-  color: #ddd;
-  line-height: 1.4;
-  word-break: break-word;
-}
+    .error-title { margin: 0 0 8px; font-size: 1.6rem; font-weight: 700; }
+    .error-message { margin: 0 0 18px; color: #ddd; line-height: 1.4; word-break: break-word; }
+    .error-actions { display: flex; gap: 12px; justify-content: center; margin-top: 8px; }
 
-.error-actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 8px;
-}
-
-.btn {
-  background: #1db954;
-  color: #fff;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-.btn-secondary {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.12);
-  color: #fff;
-}
-    </style>
+    .btn {
+      background: #1db954;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #fff;
+    }
+  </style>
 </head>
+
 <body class="native-app">
-    <img id="body-bg" src="gradient.gif" aria-hidden="true">
+  <img id="body-bg" src="gradient.gif" aria-hidden="true" alt="background">
 
-    <header class="app-header">
-        <h1>DrayMusic</h1>
-        <div class="search-pill">
-            <span class="material-symbols-rounded">search</span>
-            <input type="text" id="searchInput" placeholder="Search songs or artists...">
+  <header class="app-header">
+    <h1>DrayMusic</h1>
+    <div class="search-pill">
+      <span class="material-symbols-rounded" aria-hidden="true">search</span>
+      <input type="text" id="searchInput" placeholder="Search songs or artists..." aria-label="Search songs or artists">
+    </div>
+  </header>
+
+  <main id="songList" class="scroll-area" aria-live="polite"></main>
+
+  <section class="mini-player" aria-label="Mini player">
+    <div class="progress-wrapper">
+      <input type="range" id="seekBar" value="0" step="0.1" aria-label="Seek bar">
+      <div class="progress-fill" id="progressFill" aria-hidden="true"></div>
+    </div>
+
+    <div class="player-controls-row">
+      <button id="openFullPlayer" class="track-info" aria-label="Open full player">
+        <img id="currentArt" src="placeholder.png" alt="Album art">
+        <div class="text-group">
+          <h4 id="currentTitle">Not Playing</h4>
+          <p id="currentArtist">Select a song</p>
         </div>
-    </header>
+      </button>
 
-    <main id="songList" class="scroll-area">
-    </main>
+      <div class="action-btns" role="group" aria-label="Playback controls">
+        <button id="btnLoop" class="icon-btn" aria-pressed="false"><span class="material-symbols-rounded" aria-hidden="true">repeat</span></button>
+        <button id="btnPrev" class="icon-btn"><span class="material-symbols-rounded" aria-hidden="true">skip_previous</span></button>
+        <button id="btnPlayPause" class="main-play-btn" aria-label="Play"><span class="material-symbols-rounded" aria-hidden="true">play_arrow</span></button>
+        <button id="btnNext" class="icon-btn"><span class="material-symbols-rounded" aria-hidden="true">skip_next</span></button>
+      </div>
+    </div>
+  </section>
 
-    <section class="mini-player">
-        <div class="progress-wrapper">
-            <input type="range" id="seekBar" value="0" step="0.1">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
-
-        <div class="player-controls-row">
-            <div class="track-info" id="openFullPlayer">
-                <img id="currentArt" src="placeholder.png">
-                <div class="text-group">
-                    <h4 id="currentTitle">Not Playing</h4>
-                    <p id="currentArtist">Select a song</p>
-                </div>
-            </div>
-
-            <div class="action-btns">
-                <button id="btnLoop" class="icon-btn"><span class="material-symbols-rounded">repeat</span></button>
-                <button id="btnPrev" class="icon-btn"><span class="material-symbols-rounded">skip_previous</span></button>
-                <button id="btnPlayPause" class="main-play-btn"><span class="material-symbols-rounded">play_arrow</span></button>
-                <button id="btnNext" class="icon-btn"><span class="material-symbols-rounded">skip_next</span></button>
-            </div>
-        </div>
-    </section>
-
-<div id="errorScreen" aria-live="assertive" role="alert" hidden>
-  <div class="error-inner">
-    <h2 class="error-title">Something went wrong</h2>
-    <p id="errorMessage" class="error-message">An unexpected error occurred.</p>
-    <div class="error-actions">
-      <button id="errorRetry" class="btn">Retry</button>
-      <button id="errorDismiss" class="btn btn-secondary">Dismiss</button>
+  <!-- Fullscreen error overlay -->
+  <div id="errorScreen" aria-live="assertive" role="alert" hidden>
+    <div class="error-inner">
+      <h2 class="error-title">Something went wrong</h2>
+      <p id="errorMessage" class="error-message">An unexpected error occurred.</p>
+      <div class="error-actions">
+        <button id="errorRetry" class="btn">Retry</button>
+        <button id="errorDismiss" class="btn btn-secondary">Dismiss</button>
+      </div>
     </div>
   </div>
-</div>
 
-    <audio id="audioElement"></audio>
-    <script src="app.js"></script>
-    <script>
-        /* Error overlay and playback stop helpers */
-const errorScreen = document.getElementById('errorScreen');
-const errorMessageEl = document.getElementById('errorMessage');
-const errorRetry = document.getElementById('errorRetry');
-const errorDismiss = document.getElementById('errorDismiss');
+  <audio id="audioElement" preload="metadata"></audio>
 
-function stopPlaybackCompletely() {
-  try {
-    if (audio) {
-      audio.pause();
-      // clear source to stop network activity
-      audio.removeAttribute('src');
-      audio.load();
-    }
-    // reset UI state
-    const playBtn = document.getElementById('btnPlayPause');
-    const titleEl = document.getElementById('currentTitle');
-    const artistEl = document.getElementById('currentArtist');
-    const artEl = document.getElementById('currentArt');
+  <!-- App script (your main app.js) -->
+  <script src="app.js" defer></script>
 
-    if (playBtn) playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
-    if (titleEl) titleEl.innerText = 'Not Playing';
-    if (artistEl) artistEl.innerText = 'Select a song';
-    if (artEl) artEl.src = 'placeholder.png';
+  <!-- Error overlay logic (runs after app.js) -->
+  <script>
+    (function () {
+      // Ensure this runs after app.js; using defer on app.js above helps.
+      const errorScreen = document.getElementById('errorScreen');
+      const errorMessageEl = document.getElementById('errorMessage');
+      const errorRetry = document.getElementById('errorRetry');
+      const errorDismiss = document.getElementById('errorDismiss');
 
-    // clear media session metadata if present
-    if ('mediaSession' in navigator) {
-      try { navigator.mediaSession.metadata = null; } catch (e) {}
-    }
+      // Use the audio element reference from the DOM as a fallback
+      const audioEl = window.audio || document.getElementById('audioElement');
 
-    // mark index invalid
-    currentIndex = -1;
-  } catch (e) {
-    console.warn('Error while stopping playback', e);
-  }
-}
+      function stopPlaybackCompletely() {
+        try {
+          const audio = audioEl;
+          if (audio) {
+            audio.pause();
+            // clear source to stop network activity
+            try { audio.removeAttribute('src'); } catch (e) {}
+            try { audio.load(); } catch (e) {}
+          }
 
-function showErrorOverlay(message, options = {}) {
-  if (!errorScreen || !errorMessageEl) return;
-  errorMessageEl.textContent = String(message || 'An unexpected error occurred.');
-  errorScreen.removeAttribute('hidden');
-  // stop playback immediately
-  stopPlaybackCompletely();
+          // reset UI state
+          const playBtn = document.getElementById('btnPlayPause');
+          const titleEl = document.getElementById('currentTitle');
+          const artistEl = document.getElementById('currentArtist');
+          const artEl = document.getElementById('currentArt');
 
-  // Optionally log to console (still keep original behavior)
-  if (!options.silent) console.error('App error shown to user:', message);
-}
+          if (playBtn) playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
+          if (titleEl) titleEl.innerText = 'Not Playing';
+          if (artistEl) artistEl.innerText = 'Select a song';
+          if (artEl) artEl.src = 'placeholder.png';
 
-function hideErrorOverlay() {
-  if (!errorScreen) return;
-  errorScreen.setAttribute('hidden', '');
-}
+          // clear media session metadata if present
+          if ('mediaSession' in navigator) {
+            try { navigator.mediaSession.metadata = null; } catch (e) {}
+          }
 
-/* Wire up retry and dismiss */
-if (errorRetry) {
-  errorRetry.addEventListener('click', function () {
-    hideErrorOverlay();
-    // Try to reload playlist and resume minimal state
-    // You can customize this to re-run loadMusic or reinitialize parts of the app
-    try {
-      loadMusic().catch(() => {});
-    } catch (e) {
-      // fallback: reload page if re-init fails
-      window.location.reload();
-    }
-  });
-}
+          // mark index invalid if present
+          try { if (typeof currentIndex !== 'undefined') currentIndex = -1; } catch (e) {}
+        } catch (e) {
+          // keep console logging minimal
+          console.warn('Error while stopping playback', e);
+        }
+      }
 
-if (errorDismiss) {
-  errorDismiss.addEventListener('click', function () {
-    hideErrorOverlay();
-  });
-}
+      function showErrorOverlay(message, options = {}) {
+        if (!errorScreen || !errorMessageEl) return;
+        errorMessageEl.textContent = String(message || 'An unexpected error occurred.');
+        errorScreen.removeAttribute('hidden');
+        stopPlaybackCompletely();
+        if (!options.silent) console.error('App error shown to user:', message);
+      }
 
-/* Global error handlers */
-window.addEventListener('error', function (ev) {
-  const msg = ev && ev.message ? ev.message : String(ev);
-  showErrorOverlay('Runtime error: ' + msg);
-});
+      function hideErrorOverlay() {
+        if (!errorScreen) return;
+        errorScreen.setAttribute('hidden', '');
+      }
 
-window.addEventListener('unhandledrejection', function (ev) {
-  const reason = ev && ev.reason ? ev.reason : 'Promise rejected';
-  const text = typeof reason === 'string' ? reason : (reason && reason.message) ? reason.message : JSON.stringify(reason);
-  showErrorOverlay('Unhandled promise rejection: ' + text);
-});
+      if (errorRetry) {
+        errorRetry.addEventListener('click', function () {
+          hideErrorOverlay();
+          // Attempt to reinitialize; prefer calling loadMusic if available
+          try {
+            if (typeof loadMusic === 'function') {
+              loadMusic().catch(() => { window.location.reload(); });
+            } else {
+              window.location.reload();
+            }
+          } catch (e) {
+            window.location.reload();
+          }
+        });
+      }
 
-/* Optional: intercept console.error so logged errors also show overlay */
-(function wrapConsoleError() {
-  if (!console || !console.error) return;
-  const orig = console.error.bind(console);
-  console.error = function (...args) {
-    try {
-      // show first arg as message
-      const msg = args.map(a => (typeof a === 'string' ? a : (a && a.message) ? a.message : JSON.stringify(a))).join(' ');
-      showErrorOverlay(msg, { silent: true });
-    } catch (e) {
-      // ignore overlay errors
-    }
-    orig(...args);
-  };
-})();
-    </script>
+      if (errorDismiss) {
+        errorDismiss.addEventListener('click', hideErrorOverlay);
+      }
+
+      // Global error handlers
+      window.addEventListener('error', function (ev) {
+        const msg = ev && ev.message ? ev.message : String(ev);
+        showErrorOverlay('Runtime error: ' + msg);
+      });
+
+      window.addEventListener('unhandledrejection', function (ev) {
+        const reason = ev && ev.reason ? ev.reason : 'Promise rejected';
+        const text = typeof reason === 'string' ? reason : (reason && reason.message) ? reason.message : JSON.stringify(reason);
+        showErrorOverlay('Unhandled promise rejection: ' + text);
+      });
+
+      // Optional: intercept console.error so logged errors also show overlay
+      (function wrapConsoleError() {
+        if (!console || !console.error) return;
+        const orig = console.error.bind(console);
+        console.error = function (...args) {
+          try {
+            const msg = args.map(a => (typeof a === 'string' ? a : (a && a.message) ? a.message : JSON.stringify(a))).join(' ');
+            showErrorOverlay(msg, { silent: true });
+          } catch (e) {}
+          orig(...args);
+        };
+      })();
+    })();
+  </script>
 </body>
 </html>
