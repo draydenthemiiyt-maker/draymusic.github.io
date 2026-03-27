@@ -60,7 +60,7 @@ body.native-app {
     }
 
 .search-pill {
-    background: rgba(255, 255, 255, 0.30);
+    background: rgba(255, 255, 255, 0.20);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 28px;
@@ -107,7 +107,7 @@ body.native-app {
         height: 52px;
         border-radius: 8px;
         object-fit: cover;
-        background: rgba(255, 255, 255, 0.30);
+        background: rgba(255, 255, 255, 0.20);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
     }
@@ -129,7 +129,7 @@ body.native-app {
     bottom: 20px;
     left: 10px;
     right: 10px;
-    background: rgba(255, 255, 255, 0.30);
+    background: rgba(255, 255, 255, 0.20);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 20px;
@@ -200,7 +200,7 @@ body.native-app {
         width: 44px;
         height: 44px;
         border-radius: 6px;
-        background: rgba(255, 255, 255, 0.30);
+        background: rgba(255, 255, 255, 0.20);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
     }
@@ -232,7 +232,7 @@ body.native-app {
     align-items: center;
     gap: 2px;
     flex-shrink: 0;
-    background: rgba(255, 255, 255, 0.30);
+    background: rgba(255, 255, 255, 0.20);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 20px;
@@ -268,7 +268,7 @@ body.native-app {
 
 .song-card:active {
     transform: scale(0.95) !important;
-    background: rgba(255, 255, 255, 0.30);
+    background: rgba(255, 255, 255, 0.20);
 }
 
 .search-pill:focus-within {
@@ -277,6 +277,6 @@ body.native-app {
 
 #btnLoop.active {
     color: var(--accent);
-    background: rgba(255, 255, 255, 0.30);
+    background: rgba(255, 255, 255, 0.20);
     border-radius: 50%;
 }
