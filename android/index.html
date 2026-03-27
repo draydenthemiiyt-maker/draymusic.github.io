@@ -109,214 +109,91 @@
     <audio id="audioElement"></audio>
     <script src="app.js"></script>
     <script>
-        function _on(el, evt, fn) {
-            if (!el) return;
-            try {
-                if (el.addEventListener) el.addEventListener(evt, fn, false);
-                else if (el.attachEvent) el.attachEvent('on' + evt, fn);
-                else el['on' + evt] = fn;
-            } catch (e) { try { el['on' + evt] = fn; } catch (e2) { } }
-        }
-        function _setText(el, text) {
-            if (!el) return;
-            try {
-                if (typeof el.textContent !== 'undefined') el.textContent = text;
-                else el.innerText = text;
-            } catch (e) { try { el.innerText = text; } catch (e2) { } }
-        }
+        const getEl = id => document.getElementById(id);
+        const errorScreen = getEl('errorScreen');
+        const errorMessageEl = getEl('errorMessage');
+        const errorRetry = getEl('errorRetry');
 
-        var errorScreen = document.getElementById('errorScreen');
-        var errorMessageEl = document.getElementById('errorMessage');
-        var errorRetry = document.getElementById('errorRetry');
-        var errorDismiss = document.getElementById('errorDismiss');
-
+        // Safely stop audio and reset UI
         function stopPlaybackCompletely() {
-            try {
-                var a = (typeof audio !== 'undefined' && audio) ? audio : document.getElementById('audioElement');
-                if (a) {
-                    try { if (typeof a.pause === 'function') a.pause(); } catch (e) { }
-                    try { a.src = ''; } catch (e) { }
-                    try { if (typeof a.load === 'function') a.load(); } catch (e) { }
-                }
-                var playBtn = document.getElementById('btnPlayPause');
-                var titleEl = document.getElementById('currentTitle');
-                var artistEl = document.getElementById('currentArtist');
-                var artEl = document.getElementById('currentArt');
-                if (playBtn) try { playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>'; } catch (e) { }
-                if (titleEl) _setText(titleEl, 'Not Playing');
-                if (artistEl) _setText(artistEl, 'Select a song');
-                if (artEl) try { artEl.src = 'placeholder.png'; } catch (e) { }
-                try { if (typeof currentIndex !== 'undefined') currentIndex = -1; } catch (e) { }
-                try {
-                    if (typeof navigator !== 'undefined' && navigator.mediaSession && typeof navigator.mediaSession.metadata !== 'undefined') {
-                        try { navigator.mediaSession.metadata = null; } catch (e) { }
-                    }
-                } catch (e) { }
-            } catch (e) { try { if (console && console.warn) console.warn('stopPlayback error', e); } catch (e2) { } }
-        }
-
-        function showErrorOverlay(message, options) {
-            options = options || {};
-            if (!errorScreen || !errorMessageEl) return;
-            try {
-                _setText(errorMessageEl, String(message || 'An unexpected error occurred.'));
-                try {
-                    if (errorScreen.removeAttribute) errorScreen.removeAttribute('hidden');
-                    else errorScreen.style.display = 'flex';
-                } catch (e) { try { errorScreen.style.display = 'flex'; } catch (e2) { } }
-                stopPlaybackCompletely();
-                if (!options.silent) {
-                    try { if (console && console.error) console.error('App error shown to user:', message); } catch (e) { }
-                }
-            } catch (e) { }
-        }
-        function hideErrorOverlay() {
-            if (!errorScreen) return;
-            try {
-                if (errorScreen.setAttribute) errorScreen.setAttribute('hidden', '');
-                else errorScreen.style.display = 'none';
-            } catch (e) { try { errorScreen.style.display = 'none'; } catch (e2) { } }
-        }
-
-        if (errorRetry) _on(errorRetry, 'click', function () {
-            hideErrorOverlay();
-            try {
-                window.location.reload();
-            } catch (e) {
-                try { window.location.href = window.location.href; } catch (e2) { }
+            const a = (typeof audio !== 'undefined' && audio) ? audio : getEl('audioElement');
+            if (a) {
+                a.pause ?.();
+                a.src = '';
+                a.load ?.();
             }
+
+            const playBtn = getEl('btnPlayPause');
+            if (playBtn) playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
+
+            const title = getEl('currentTitle'), artist = getEl('currentArtist'), art = getEl('currentArt');
+            if (title) title.textContent = 'Not Playing';
+            if (artist) artist.textContent = 'Select a song';
+            if (art) art.src = 'placeholder.png';
+
+            if (typeof currentIndex !== 'undefined') currentIndex = -1;
+            if (navigator.mediaSession) navigator.mediaSession.metadata = null;
+        }
+
+        // Display the error
+        function showError(msg) {
+            if (!errorScreen || !errorMessageEl) return;
+            errorMessageEl.textContent = String(msg || 'An unexpected error occurred.');
+            errorScreen.style.display = 'flex';
+            errorScreen.removeAttribute('hidden');
+            stopPlaybackCompletely();
+        }
+
+        // Dismiss / Retry
+        errorRetry ?.addEventListener('click', () => window.location.reload());
+
+        // 1. Catch JS Runtime Errors AND Resource Load Errors (Images, CSS, etc.)
+        window.addEventListener('error', (e) => {
+            const isResource = e.target && (e.target.src || e.target.href);
+            const msg = isResource ? `Resource failed to load: ${e.target.src || e.target.href}` : e.message;
+            showError(`[Runtime/Resource] ${msg}`);
+        }, true); // The 'true' enables capture phase, required to catch resource errors
+
+        // 2. Catch Unhandled Promises
+        window.addEventListener('unhandledrejection', (e) => {
+            showError(`[Promise Rejection] ${e.reason ?.message || e.reason || 'Unknown error'}`);
         });
 
-        function reportError(kind, message, extra) {
-            try {
-                var composed = '[' + kind + '] ' + (message || 'Unknown error');
-                if (extra) {
-                    try { composed += ' | ' + JSON.stringify(extra); } catch (e) { composed += ' | ' + String(extra); }
+        // 3. Catch console.error logs
+        const origError = console.error;
+        console.error = (...args) => {
+            const msg = args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' ');
+            showError(`[Console Error] ${msg}`);
+            origError.apply(console, args);
+        };
+
+        // 4. Catch XHR (Ajax) Errors
+        const origOpen = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function (method, url) {
+            this.addEventListener('error', () => showError(`[XHR Error] Network error for ${url}`));
+            this.addEventListener('abort', () => showError(`[XHR Aborted] Request to ${url} aborted`));
+            this.addEventListener('readystatechange', () => {
+                if (this.readyState === 4 && ((this.status >= 400 && this.status < 600) || this.status === 0)) {
+                    showError(`[XHR Failed] Status ${this.status} for ${url}`);
                 }
-                showErrorOverlay(composed, { silent: true });
-            } catch (e) { }
+            });
+            return origOpen.apply(this, arguments);
+        };
+
+        // 5. Catch Fetch API Errors (Modern Networking)
+        if (window.fetch) {
+            const origFetch = window.fetch;
+            window.fetch = async (...args) => {
+                try {
+                    const res = await origFetch(...args);
+                    if (!res.ok) showError(`[Fetch Failed] Status ${res.status} for ${args[0]}`);
+                    return res;
+                } catch (err) {
+                    showError(`[Fetch Network Error] ${err.message}`);
+                    throw err;
+                }
+            };
         }
-
-        if (typeof window !== 'undefined') {
-            try {
-                window.onerror = function (msg, url, lineNo, colNo, err) {
-                    try {
-                        var m = (msg && typeof msg === 'string') ? msg : String(msg);
-                        var src = url || 'unknown';
-                        var loc = (lineNo ? (':' + lineNo) : '');
-                        reportError('Runtime error', m + ' (' + src + loc + ')', err || null);
-                    } catch (e) { }
-                    return false;
-                };
-            } catch (e) { }
-        }
-
-        (function wrapConsoleError() {
-            try {
-                if (!window.console) window.console = {};
-                var orig = console.error || function () { };
-                console.error = function () {
-                    try {
-                        var parts = [];
-                        for (var i = 0; i < arguments.length; i++) {
-                            var a = arguments[i];
-                            if (typeof a === 'string') parts.push(a);
-                            else if (a && a.message) parts.push(a.message);
-                            else {
-                                try { parts.push(JSON.stringify(a)); } catch (e) { parts.push(String(a)); }
-                            }
-                        }
-                        var msg = parts.join(' ');
-                        reportError(msg);
-                    } catch (e) { }
-                    try { orig.apply(console, arguments); } catch (e) { }
-                };
-            } catch (e) { }
-        })();
-
-        (function wrapXHR() {
-            try {
-                if (typeof XMLHttpRequest === 'undefined') return;
-                var OldXHR = XMLHttpRequest;
-                function NewXHR() {
-                    var xhr = new OldXHR();
-                    try {
-                        var origOpen = xhr.open;
-                        xhr.open = function (method, url, async) {
-                            try { xhr._url = url; } catch (e) { }
-                            return origOpen.apply(xhr, arguments);
-                        };
-                    } catch (e) { }
-                    try {
-                        _on(xhr, 'readystatechange', function () {
-                            try {
-                                if (xhr.readyState === 4) {
-                                    try {
-                                        var status = xhr.status;
-                                        /* In some environments status 0 indicates network error for file:// or CORS; treat as possible error */
-                                        if ((status >= 400 && status < 600) || status === 0) {
-                                            reportError('XHR error', 'Request failed: ' + (xhr._url || 'unknown') + ' status:' + status, { responseURL: xhr._url, status: status });
-                                        }
-                                    } catch (e) { }
-                                }
-                            } catch (e) { }
-                        });
-                        _on(xhr, 'error', function () {
-                            try { reportError('XHR network error', 'Network error for ' + (xhr._url || 'unknown')); } catch (e) { }
-                        });
-                        _on(xhr, 'abort', function () {
-                            try { reportError('XHR aborted', 'Request aborted ' + (xhr._url || 'unknown')); } catch (e) { }
-                        });
-                    } catch (e) { }
-                    return xhr;
-                }
-                try { window.XMLHttpRequest = NewXHR; } catch (e) { }
-            } catch (e) { }
-        })();
-
-        (function watchResources() {
-            try {
-                function attachImgHandlers() {
-                    try {
-                        var imgs = document.getElementsByTagName('img');
-                        for (var i = 0; i < imgs.length; i++) {
-                            try {
-                                var im = imgs[i];
-                                if (!im._errorHooked) {
-                                    im._errorHooked = true;
-                                    _on(im, 'error', function () {
-                                        try { reportError('Resource error', 'Image failed to load: ' + (this && this.src ? this.src : 'unknown')); } catch (e) { }
-                                    });
-                                }
-                            } catch (e) { }
-                        }
-                    } catch (e) { }
-                }
-                attachImgHandlers();
-                try { setInterval(attachImgHandlers, 2000); } catch (e) { }
-            } catch (e) { }
-        })();
-
-        try {
-            if (window.addEventListener) {
-                window.addEventListener('unhandledrejection', function (ev) {
-                    try {
-                        var reason = (ev && ev.reason) ? ev.reason : 'Promise rejected';
-                        var text;
-                        if (typeof reason === 'string') text = reason;
-                        else if (reason && reason.message) text = reason.message;
-                        else {
-                            try { text = JSON.stringify(reason); } catch (e) { text = String(reason); }
-                        }
-                        reportError('Unhandled rejection', text);
-                    } catch (e) { }
-                }, false);
-            } else if (window.onunhandledrejection) {
-                _on(window, 'unhandledrejection', function (ev) {
-                    try { reportError('Unhandled rejection', String(ev)); } catch (e) { }
-                });
-            }
-        } catch (e) { }
     </script>
 </body>
 </html>
