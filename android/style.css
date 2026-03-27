@@ -1,7 +1,7 @@
 :root {
     --bg: #000000;
     --surface: #121212;
-    --accent: #d0bcff;
+    --accent: #00a0ff;
     --on-surface: #e6e1e5;
     --text-dim: #938f99;
 }
@@ -248,7 +248,7 @@ body.native-app {
 
 .main-play-btn {
     background: var(--accent);
-    color: #381e72;
+    color: #ffffff;
     border: none;
     border-radius: 12px;
     width: 44px;
