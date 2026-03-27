@@ -47,6 +47,17 @@
         </div>
     </section>
 
+<div id="errorScreen" aria-live="assertive" role="alert" hidden>
+  <div class="error-inner">
+    <h2 class="error-title">Something went wrong</h2>
+    <p id="errorMessage" class="error-message">An unexpected error occurred.</p>
+    <div class="error-actions">
+      <button id="errorRetry" class="btn">Retry</button>
+      <button id="errorDismiss" class="btn btn-secondary">Dismiss</button>
+    </div>
+  </div>
+</div>
+
     <audio id="audioElement"></audio>
     <script src="app.js"></script>
 </body>
