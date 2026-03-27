@@ -1,19 +1,12 @@
-/* Primary @font-face with woff2 then woff fallback.
-   Replace the woff URL with a hosted .woff file if you have one. */
 @font-face {
   font-family: 'Material Symbols Rounded';
   font-style: normal;
   font-weight: 400;
-  src: local('Material Symbols Rounded'),
-       url('https://fonts.gstatic.com/s/materialsymbolsrounded/v320/syl0-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvDmUSVOK7BDJ_vb9vUSzq3wzLK-P0J-V_Zs-QtQth3-jOcbTCVpeRL2w5rwZu2rIelXxc.woff2') format('woff2'),
-       url('/fonts/materialsymbolsrounded.woff') format('woff'); /* <-- host a .woff for IE11 */
-  /* Optional: control swap behavior in modern browsers */
-  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/materialsymbolsrounded/v320/syl0-zNym6YjUruM-QrEh7-nyTnjDwKNJ_190FjpZIvDmUSVOK7BDJ_vb9vUSzq3wzLK-P0J-V_Zs-QtQth3-jOcbTCVpeRL2w5rwZu2rIelXxc.woff2) format('woff2');
 }
 
-/* Default icon class for modern browsers */
 .material-symbols-rounded {
-  font-family: 'Material Symbols Rounded', 'Segoe UI Symbol', 'Segoe UI Emoji', sans-serif;
+  font-family: 'Material Symbols Rounded';
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
@@ -25,32 +18,4 @@
   word-wrap: normal;
   direction: ltr;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  /* Material Symbols uses ligatures; enable standard ligatures */
-  font-variant-ligatures: common-ligatures;
-  font-feature-settings: "liga" 1;
-}
-
-/* IE10/11 fallback: if the webfont fails or IE lacks support for woff2,
-   fall back to a system symbol font and ensure sizing/vertical alignment */
-@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  .material-symbols-rounded {
-    /* Prefer the hosted woff if available; otherwise use system symbol font */
-    font-family: 'Material Symbols Rounded', 'Segoe UI Symbol', 'Segoe UI Emoji', sans-serif;
-    /* IE may not support font-variation-settings or advanced ligatures.
-       Use letter-spacing and line-height tweaks to keep icons aligned. */
-    letter-spacing: 0;
-    line-height: 1;
-    vertical-align: middle;
-    /* If you rely on ligature names (e.g., <i class="material-symbols-rounded">play_arrow</i>)
-       and the webfont isn't available in IE, consider replacing ligature text with
-       an SVG or <span class="msr-icon" data-icon="play_arrow"></span> and map to an SVG sprite. */
-  }
-}
-
-/* Optional: visually hide fallback text for accessibility pattern where you use
-   <span class="material-symbols-rounded" aria-hidden="true">play_arrow</span>
-   and provide a separate accessible label. */
-.material-symbols-rounded[aria-hidden="true"] {
-  speak: none;
 }
