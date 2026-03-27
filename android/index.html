@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="mobile-web-app-capable" content="yes">
     <title>DrayMusic</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" id="stylesheet" href="">
     <link href="google.css" rel="stylesheet">
 </head>
 <body class="native-app">
@@ -47,6 +47,83 @@
     </section>
 
     <audio id="audioElement"></audio>
-    <script src="app.js"></script>
+    <script id="javascript" src=""></script>
+<script>
+(function () {
+  'use strict';
+
+  // Detect UWP / Windows Runtime presence
+  var isWindows = !!(window.Windows && (Windows.System || Windows.UI || Windows.Foundation));
+
+  // Elements by ID (as provided)
+  var styleEl = document.getElementById('stylesheet');
+  var scriptEl = document.getElementById('javascript');
+  var body = document.body || document.getElementsByTagName('body')[0];
+
+  // Paths
+  var stylePath = isWindows ? 'windows/style.css' : 'style.css';
+  var scriptPath = isWindows ? 'windows/app.js' : 'app.js';
+
+  // Set or create stylesheet link
+  if (styleEl) {
+    try { styleEl.setAttribute('href', stylePath); } catch (e) { styleEl.href = stylePath; }
+  } else {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.id = 'stylesheet';
+    link.href = stylePath;
+    var head = document.getElementsByTagName('head')[0] || document.documentElement;
+    head.appendChild(link);
+  }
+
+  // Set or create main script tag
+  if (scriptEl) {
+    try { scriptEl.setAttribute('src', scriptPath); } catch (e) { scriptEl.src = scriptPath; }
+    // If the script tag was previously empty and is already in the DOM, re-inserting it ensures it executes.
+    // Create a new script element and replace the old one to guarantee execution.
+    var shouldReplace = !!(scriptEl.getAttribute('src') && scriptEl.getAttribute('src') === scriptPath && !scriptEl.hasAttribute('data-executed'));
+    if (shouldReplace) {
+      var newScript = document.createElement('script');
+      newScript.id = scriptEl.id || '';
+      newScript.src = scriptPath;
+      // preserve async/defer if present
+      if (scriptEl.async) newScript.async = true;
+      if (scriptEl.defer) newScript.defer = true;
+      // copy other attributes except src
+      for (var i = 0; i < scriptEl.attributes.length; i++) {
+        var attr = scriptEl.attributes[i];
+        if (attr.name !== 'src' && attr.name !== 'id') newScript.setAttribute(attr.name, attr.value);
+      }
+      scriptEl.parentNode.replaceChild(newScript, scriptEl);
+      // mark executed to avoid double-replace if this runs again
+      newScript.setAttribute('data-executed', '1');
+    }
+  } else {
+    var s = document.createElement('script');
+    s.id = 'javascript';
+    s.src = scriptPath;
+    document.body.appendChild(s);
+  }
+
+  // Toggle win-type-body class on <body>
+  if (body) {
+    if (isWindows) {
+      if (body.classList) {
+        body.classList.add('win-type-body');
+      } else {
+        // IE9 fallback
+        var cls = (' ' + body.className + ' ').replace(/\s+/g, ' ');
+        if (cls.indexOf(' win-type-body ') === -1) body.className = (body.className + ' win-type-body').trim();
+      }
+    } else {
+      if (body.classList) {
+        body.classList.remove('win-type-body');
+      } else {
+        body.className = body.className.replace(/\bwin-type-body\b/g, '').replace(/\s+/g, ' ').trim();
+      }
+    }
+  }
+})();
+</script>
 </body>
 </html>
