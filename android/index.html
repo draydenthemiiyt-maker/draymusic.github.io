@@ -128,106 +128,210 @@
     <audio id="audioElement"></audio>
     <script src="app.js"></script>
     <script>
-        /* Error overlay and playback stop helpers */
-const errorScreen = document.getElementById('errorScreen');
-const errorMessageEl = document.getElementById('errorMessage');
-const errorRetry = document.getElementById('errorRetry');
-const errorDismiss = document.getElementById('errorDismiss');
+/* Error overlay and playback stop helpers (legacy-friendly, keeps original layout & names) */
 
+/* Replace modern declarations with var for old browsers */
+var errorScreen = document.getElementById('errorScreen');
+var errorMessageEl = document.getElementById('errorMessage');
+var errorRetry = document.getElementById('errorRetry');
+var errorDismiss = document.getElementById('errorDismiss');
+
+/* Helper: cross-browser addEvent (keeps addEventListener usage when available) */
+function _on(el, evt, fn) {
+  if (!el) return;
+  if (el.addEventListener) el.addEventListener(evt, fn, false);
+  else if (el.attachEvent) el.attachEvent('on' + evt, fn);
+  else el['on' + evt] = fn;
+}
+
+/* Helper: safe text setter for old browsers */
+function _setText(el, text) {
+  if (!el) return;
+  if (typeof el.textContent !== 'undefined') el.textContent = text;
+  else el.innerText = text;
+}
+
+/* Keep the original function name and behavior but use legacy-safe code */
 function stopPlaybackCompletely() {
   try {
-    if (audio) {
-      audio.pause();
-      // clear source to stop network activity
-      audio.removeAttribute('src');
-      audio.load();
+    /* Prefer global audio variable if your app defines it; otherwise find element */
+    var a = (typeof audio !== 'undefined' && audio) ? audio : document.getElementById('audioElement');
+
+    if (a) {
+      try {
+        if (typeof a.pause === 'function') a.pause();
+      } catch (e) {}
+
+      /* clear source to stop network activity (compatible fallbacks) */
+      try {
+        if (typeof a.removeAttribute === 'function') {
+          a.removeAttribute('src');
+        } else {
+          a.src = '';
+        }
+      } catch (e) {
+        try { a.src = ''; } catch (e2) {}
+      }
+
+      try {
+        if (typeof a.load === 'function') a.load();
+      } catch (e) {}
     }
-    // reset UI state
-    const playBtn = document.getElementById('btnPlayPause');
-    const titleEl = document.getElementById('currentTitle');
-    const artistEl = document.getElementById('currentArtist');
-    const artEl = document.getElementById('currentArt');
 
-    if (playBtn) playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
-    if (titleEl) titleEl.innerText = 'Not Playing';
-    if (artistEl) artistEl.innerText = 'Select a song';
-    if (artEl) artEl.src = 'placeholder.png';
+    /* reset UI state */
+    var playBtn = document.getElementById('btnPlayPause');
+    var titleEl = document.getElementById('currentTitle');
+    var artistEl = document.getElementById('currentArtist');
+    var artEl = document.getElementById('currentArt');
 
-    // clear media session metadata if present
-    if ('mediaSession' in navigator) {
-      try { navigator.mediaSession.metadata = null; } catch (e) {}
+    if (playBtn) {
+      try { playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>'; } catch (e) {}
+    }
+    if (titleEl) _setText(titleEl, 'Not Playing');
+    if (artistEl) _setText(artistEl, 'Select a song');
+    if (artEl) {
+      try { artEl.src = 'placeholder.png'; } catch (e) {}
     }
 
-    // mark index invalid
-    currentIndex = -1;
+    /* clear media session metadata if present (try/catch for old browsers) */
+    try {
+      if (typeof navigator !== 'undefined' && navigator.mediaSession && typeof navigator.mediaSession.metadata !== 'undefined') {
+        try { navigator.mediaSession.metadata = null; } catch (e) {}
+      }
+    } catch (e) {}
+
+    /* mark index invalid if present */
+    try { if (typeof currentIndex !== 'undefined') currentIndex = -1; } catch (e) {}
+
   } catch (e) {
-    console.warn('Error while stopping playback', e);
+    try { if (console && console.warn) console.warn('Error while stopping playback', e); } catch (e2) {}
   }
 }
 
-function showErrorOverlay(message, options = {}) {
+/* Keep same signature but avoid default param syntax */
+function showErrorOverlay(message, options) {
+  options = options || {};
   if (!errorScreen || !errorMessageEl) return;
-  errorMessageEl.textContent = String(message || 'An unexpected error occurred.');
-  errorScreen.removeAttribute('hidden');
-  // stop playback immediately
-  stopPlaybackCompletely();
+  try {
+    _setText(errorMessageEl, String(message || 'An unexpected error occurred.'));
 
-  // Optionally log to console (still keep original behavior)
-  if (!options.silent) console.error('App error shown to user:', message);
+    /* remove hidden attribute in a compatible way */
+    try {
+      if (errorScreen.removeAttribute) errorScreen.removeAttribute('hidden');
+      else errorScreen.style.display = 'flex';
+    } catch (e) {
+      try { errorScreen.style.display = 'flex'; } catch (e2) {}
+    }
+
+    /* stop playback immediately */
+    stopPlaybackCompletely();
+
+    /* Optionally log to console (still keep original behavior) */
+    if (!options.silent) {
+      try { if (console && console.error) console.error('App error shown to user:', message); } catch (e) {}
+    }
+  } catch (e) {}
 }
 
 function hideErrorOverlay() {
   if (!errorScreen) return;
-  errorScreen.setAttribute('hidden', '');
+  try {
+    if (errorScreen.setAttribute) errorScreen.setAttribute('hidden', '');
+    else errorScreen.style.display = 'none';
+  } catch (e) {
+    try { errorScreen.style.display = 'none'; } catch (e2) {}
+  }
 }
 
-/* Wire up retry and dismiss */
+/* Wire up retry and dismiss using cross-browser event helper */
 if (errorRetry) {
-  errorRetry.addEventListener('click', function () {
+  _on(errorRetry, 'click', function () {
     hideErrorOverlay();
-    // Try to reload playlist and resume minimal state
-    // You can customize this to re-run loadMusic or reinitialize parts of the app
     try {
-      loadMusic().catch(() => {});
+      /* Try to call loadMusic if available; handle both sync and promise-returning functions */
+      if (typeof loadMusic === 'function') {
+        try {
+          var res = loadMusic();
+          if (res && typeof res.then === 'function') {
+            try {
+              res.then(function () {}, function () { try { window.location.reload(); } catch (e) {} });
+            } catch (e) { try { window.location.reload(); } catch (e2) {} }
+          }
+        } catch (e) {
+          try { window.location.reload(); } catch (e2) {}
+        }
+      } else {
+        try { window.location.reload(); } catch (e) {}
+      }
     } catch (e) {
-      // fallback: reload page if re-init fails
-      window.location.reload();
+      try { window.location.reload(); } catch (e2) {}
     }
   });
 }
 
 if (errorDismiss) {
-  errorDismiss.addEventListener('click', function () {
+  _on(errorDismiss, 'click', function () {
     hideErrorOverlay();
   });
 }
 
 /* Global error handlers */
-window.addEventListener('error', function (ev) {
-  const msg = ev && ev.message ? ev.message : String(ev);
-  showErrorOverlay('Runtime error: ' + msg);
-});
+/* Use window.onerror for maximum compatibility */
+if (typeof window !== 'undefined') {
+  window.onerror = function (msg, src, lineNo, colNo, err) {
+    try {
+      var message = (msg && typeof msg === 'string') ? msg : String(msg);
+      var composed = 'Runtime error: ' + message;
+      if (src) composed += ' (' + src + (lineNo ? ':' + lineNo : '') + ')';
+      showErrorOverlay(composed);
+    } catch (e) {}
+    /* return false to allow default browser handling as well */
+    return false;
+  };
 
-window.addEventListener('unhandledrejection', function (ev) {
-  const reason = ev && ev.reason ? ev.reason : 'Promise rejected';
-  const text = typeof reason === 'string' ? reason : (reason && reason.message) ? reason.message : JSON.stringify(reason);
-  showErrorOverlay('Unhandled promise rejection: ' + text);
-});
+  /* If the browser supports addEventListener, attach unhandledrejection (modern browsers only) */
+  if (window.addEventListener) {
+    try {
+      window.addEventListener('unhandledrejection', function (ev) {
+        try {
+          var reason = (ev && ev.reason) ? ev.reason : 'Promise rejected';
+          var text;
+          if (typeof reason === 'string') text = reason;
+          else if (reason && reason.message) text = reason.message;
+          else {
+            try { text = JSON.stringify(reason); } catch (e) { text = String(reason); }
+          }
+          showErrorOverlay('Unhandled promise rejection: ' + text);
+        } catch (e) {}
+      }, false);
+    } catch (e) {}
+  }
+}
 
 /* Optional: intercept console.error so logged errors also show overlay */
+/* Keep original behavior but avoid modern syntax */
 (function wrapConsoleError() {
-  if (!console || !console.error) return;
-  const orig = console.error.bind(console);
-  console.error = function (...args) {
-    try {
-      // show first arg as message
-      const msg = args.map(a => (typeof a === 'string' ? a : (a && a.message) ? a.message : JSON.stringify(a))).join(' ');
-      showErrorOverlay(msg, { silent: true });
-    } catch (e) {
-      // ignore overlay errors
-    }
-    orig(...args);
-  };
+  try {
+    if (!window.console || typeof console.error !== 'function') return;
+    var orig = console.error;
+    console.error = function () {
+      try {
+        /* Build message from arguments in an old-browser-safe way */
+        var parts = [];
+        for (var i = 0; i < arguments.length; i++) {
+          var a = arguments[i];
+          if (typeof a === 'string') parts.push(a);
+          else if (a && a.message) parts.push(a.message);
+          else {
+            try { parts.push(JSON.stringify(a)); } catch (e) { parts.push(String(a)); }
+          }
+        }
+        var msg = parts.join(' ');
+        try { showErrorOverlay(msg, { silent: true }); } catch (e) {}
+      } catch (e) {}
+      try { orig.apply(console, arguments); } catch (e) {}
+    };
+  } catch (e) {}
 })();
     </script>
 </body>
