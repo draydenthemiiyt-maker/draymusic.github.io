@@ -181,17 +181,11 @@
         if (errorRetry) _on(errorRetry, 'click', function () {
             hideErrorOverlay();
             try {
-                if (typeof loadMusic === 'function') {
-                    try {
-                        var res = loadMusic();
-                        if (res && typeof res.then === 'function') {
-                            try { res.then(function () { }, function () { try { window.location.reload(); } catch (e) { } }); } catch (e) { try { window.location.reload(); } catch (e2) { } }
-                        }
-                    } catch (e) { try { window.location.reload(); } catch (e2) { } }
-                } else try { window.location.reload(); } catch (e) { }
-            } catch (e) { try { window.location.reload(); } catch (e2) { } }
+                window.location.reload();
+            } catch (e) {
+                try { window.location.href = window.location.href; } catch (e2) { }
+            }
         });
-        if (errorDismiss) _on(errorDismiss, 'click', hideErrorOverlay);
 
         function reportError(kind, message, extra) {
             try {
