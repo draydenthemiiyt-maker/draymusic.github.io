@@ -183,15 +183,15 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    cursor: default;
 }
 
 .track-info {
     display: flex;
     align-items: center;
     gap: 12px;
-    flex: 1; /* This is the key change */
-    min-width: 0; /* Critical for text truncation to work in flexbox */
+    flex: 1;
+    min-width: 0;
+    cursor: default;
 }
 
     .track-info img {
@@ -208,6 +208,7 @@ body {
     min-width: 0;
     overflow: hidden;
     white-space: nowrap;
+    cursor: default;
 }
 
     .text-group h4 {
