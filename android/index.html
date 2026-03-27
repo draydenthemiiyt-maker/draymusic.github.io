@@ -167,10 +167,22 @@
         // 4. Catch Global JS Errors & Resource (Image/CSS) Errors
         bindEvent(window, 'error', function (e) {
             var target = e.target || e.srcElement;
-            var isResource = target && (target.src || target.href);
-            var msg = isResource ? ('Resource failed: ' + (target.src || target.href)) : e.message;
-            showError('[Error] ' + msg);
-        }, true); // The 'true' is vital here to catch failing images
+
+            // If it's the window object, it's a JS syntax/runtime error
+            if (target === window) {
+                showError('[Runtime Error] ' + e.message);
+                return;
+            }
+
+            // If it's an element (img, script, link), it's a resource error
+            var src = target.src || target.href;
+            if (src) {
+                // FILTER: Ignore errors from .html files (like your index.html)
+                if (src.indexOf('.html') !== -1) return;
+
+                showError('[Resource Failed] ' + src);
+            }
+        }, true);
 
         // 5. Catch Promise Rejections (If polyfilled or in newer browsers)
         bindEvent(window, 'unhandledrejection', function (e) {
