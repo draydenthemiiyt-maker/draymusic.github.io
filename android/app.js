@@ -1,165 +1,208 @@
+// Elements (guarded)
 const audio = document.getElementById('audioElement');
 const songListContainer = document.getElementById('songList');
 const searchInput = document.getElementById('searchInput');
 const seekBar = document.getElementById('seekBar');
 const progressFill = document.getElementById('progressFill');
 const progressWrapper = document.querySelector('.progress-wrapper');
+
 let allSongs = [];
 let currentPlaylist = [];
 let currentIndex = -1;
 let isLooping = false;
-seekBar.addEventListener('touchstart', () => progressWrapper.classList.add('seeking'));
-seekBar.addEventListener('mousedown', () => progressWrapper.classList.add('seeking'));
-window.addEventListener('touchend', () => {
-progressWrapper.classList.remove('seeking');
-});
 
-window.addEventListener('mouseup', () => {
+/* --- Event listeners with guards --- */
+if (seekBar && progressWrapper) {
+  seekBar.addEventListener('touchstart', () => progressWrapper.classList.add('seeking'));
+  seekBar.addEventListener('mousedown', () => progressWrapper.classList.add('seeking'));
+
+  window.addEventListener('touchend', () => {
     progressWrapper.classList.remove('seeking');
-});
+  });
+  window.addEventListener('mouseup', () => {
+    progressWrapper.classList.remove('seeking');
+  });
 
-seekBar.oninput = () => {
-    if (!audio.duration) return;
-    const seekTo = (seekBar.value / 100) * audio.duration;
+  // Fixed syntax here and ensured numeric usage
+  seekBar.oninput = () => {
+    if (!audio || !audio.duration) return;
+
+    // ensure value is numeric (range input may give string)
+    const value = Number(seekBar.value) || 0;
+    const seekTo = (value / 100) * audio.duration;
     audio.currentTime = seekTo;
-    const pct = seekBar.value + "%";
-    progressFill.style.width = pct;
-    }
-};
 
+    const pct = value + "%";
+    if (progressFill) progressFill.style.width = pct;
+  };
+}
+
+/* --- Load music XML and parse safely --- */
 async function loadMusic() {
-    try {
-        const response = await fetch('https://draydenthemiiyt-maker.github.io/draymusic.github.io/music.xml?nocache=' + Date.now());
-        const text = await response.text();
-        const xml = new DOMParser().parseFromString(text, 'text/xml');
-        const items = xml.getElementsByTagName('song');
+  try {
+    const response = await fetch('https://draydenthemiiyt-maker.github.io/draymusic.github.io/music.xml?nocache=' + Date.now());
+    const text = await response.text();
+    const xml = new DOMParser().parseFromString(text, 'text/xml');
+    const items = xml.getElementsByTagName('song') || [];
 
-        allSongs = Array.from(items).map(s => ({
-            title: s.getElementsByTagName('title')[0].textContent,
-            artist: s.getElementsByTagName('artist')[0].textContent,
-            url: s.getElementsByTagName('url')[0].textContent,
-            art: s.getElementsByTagName('albumArt')[0].textContent || 'placeholder.png'
-        }));
+    allSongs = Array.from(items).map(s => {
+      const getText = (tag) => {
+        const el = s.getElementsByTagName(tag)[0];
+        return el && el.textContent ? el.textContent : '';
+      };
 
-        for (let i = allSongs.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [allSongs[i], allSongs[j]] = [allSongs[j], allSongs[i]];
-        }
+      return {
+        title: getText('title') || 'Unknown Title',
+        artist: getText('artist') || 'Unknown Artist',
+        url: getText('url') || '',
+        art: getText('albumArt') || 'placeholder.png'
+      };
+    });
 
-        currentPlaylist = allSongs;
-        renderList(currentPlaylist);
-
-    } catch (e) {
-        console.error(e);
+    // Fisher–Yates shuffle
+    for (let i = allSongs.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [allSongs[i], allSongs[j]] = [allSongs[j], allSongs[i]];
     }
+
+    currentPlaylist = allSongs.slice();
+    renderList(currentPlaylist);
+  } catch (e) {
+    console.error('Failed to load music:', e);
+  }
 }
 
+/* --- Render list safely --- */
 function renderList(data) {
-    songListContainer.innerHTML = data.map((song, index) => `
-        <div class="song-card" onclick="playSong(${index})" style="animation-delay: ${index * 0.05}s">
-            <img src="${song.art}">
-            <div class="info">
-                <h4>${song.title}</h4>
-                <p>${song.artist}</p>
-            </div>
+  if (!songListContainer) return;
+
+  songListContainer.innerHTML = data.map((song, index) => {
+    // Escape values minimally to avoid breaking HTML (simple replace)
+    const esc = (str) => String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    return `
+      <div class="song-card" data-index="${index}" style="animation-delay: ${index * 0.05}s">
+        <img src="${esc(song.art)}" alt="${esc(song.title)} album art">
+        <div class="info">
+          <h4>${esc(song.title)}</h4>
+          <p>${esc(song.artist)}</p>
         </div>
-    `).join('');
+      </div>
+    `;
+  }).join('');
+
+  // Attach click handlers (avoid inline onclick)
+  const cards = songListContainer.querySelectorAll('.song-card');
+  cards.forEach(card => {
+    card.addEventListener('click', function () {
+      const idx = Number(this.getAttribute('data-index'));
+      playSong(idx);
+    });
+  });
 }
 
+/* --- Playback functions --- */
 function playSong(index) {
-    if (currentPlaylist.length === 0) return;
+  if (!audio || currentPlaylist.length === 0) return;
 
-    currentIndex = (index + currentPlaylist.length) % currentPlaylist.length;
-    const song = currentPlaylist[currentIndex];
+  currentIndex = (index + currentPlaylist.length) % currentPlaylist.length;
+  const song = currentPlaylist[currentIndex];
+  if (!song || !song.url) return;
 
-    audio.src = song.url;
-    audio.play();
-    
-    if ('mediaSession' in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-            title: song.title,
-            artist: song.artist,
-            artwork: [{ src: song.art, sizes: '512x512', type: 'image/png' }]
-        });
+  audio.src = song.url;
+  audio.play().catch(err => {
+    // autoplay may be blocked; handle gracefully
+    console.warn('Playback failed:', err);
+  });
+
+  if ('mediaSession' in navigator) {
+    try {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: song.title,
+        artist: song.artist,
+        artwork: [{ src: song.art, sizes: '512x512', type: 'image/png' }]
+      });
+    } catch (e) {
+      // some browsers may throw if artwork is invalid
+      console.warn('mediaSession metadata error', e);
     }
+  }
 
-    document.getElementById('currentTitle').innerText = song.title;
-    document.getElementById('currentArtist').innerText = song.artist;
-    document.getElementById('currentArt').src = song.art;
-    document.getElementById('btnPlayPause').innerHTML = '<span class="material-symbols-rounded">pause</span>';
-}
+  const titleEl = document.getElementById('currentTitle');
+  const artistEl = document.getElementById('currentArtist');
+  const artEl = document.getElementById('currentArt');
+  const playBtn = document.getElementById('btnPlayPause');
 
-function togglePlay() {
-    const btn = document.getElementById('btnPlayPause');
-    if (audio.paused) {
-        audio.play();
-        btn.innerHTML = '<span class="material-symbols-rounded">pause</span>';
-        updateAndroidPlayback(true);
-    } else {
-        audio.pause();
-        btn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
-        updateAndroidPlayback(false);
-    }
+  if (titleEl) titleEl.innerText = song.title;
+  if (artistEl) artistEl.innerText = song.artist;
+  if (artEl) artEl.src = song.art;
+  if (playBtn) playBtn.innerHTML = '<span class="material-symbols-rounded">pause</span>';
 }
 
 function playNext() { playSong(currentIndex + 1); }
 function playPrev() { playSong(currentIndex - 1); }
 
-function updateAndroidPlayback(isPlaying) {
-    if (typeof android !== 'undefined' && android.notification) {
-        const song = currentPlaylist[currentIndex];
-        android.notification.playback({
-            title: song.title,
-            artist: song.artist,
-            image: song.art,
-            playing: isPlaying
-        });
+/* --- Time update --- */
+if (audio && progressWrapper && progressFill && seekBar) {
+  audio.ontimeupdate = () => {
+    if (audio.duration && !progressWrapper.classList.contains('seeking')) {
+      const pct = (audio.currentTime / audio.duration) * 100;
+      seekBar.value = pct;
+      progressFill.style.width = pct + "%";
     }
+  };
 }
 
-audio.ontimeupdate = () => {
-    if (audio.duration && !progressWrapper.classList.contains('seeking')) {
-        const pct = (audio.currentTime / audio.duration) * 100;
-        seekBar.value = pct;
-        progressFill.style.width = pct + "%";
-    }
-};
-
-document.getElementById('btnPlayPause').onclick = () => {
-    const btn = document.getElementById('btnPlayPause');
+/* --- Controls --- */
+const btnPlayPause = document.getElementById('btnPlayPause');
+if (btnPlayPause && audio) {
+  btnPlayPause.onclick = () => {
     if (audio.paused) {
-        audio.play();
-        btn.innerHTML = '<span class="material-symbols-rounded">pause</span>';
+      audio.play().catch(() => {});
+      btnPlayPause.innerHTML = '<span class="material-symbols-rounded">pause</span>';
     } else {
-        audio.pause();
-        btn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
+      audio.pause();
+      btnPlayPause.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
     }
-};
+  };
+}
 
-document.getElementById('btnNext').onclick = () => playSong(currentIndex + 1);
-document.getElementById('btnPrev').onclick = () => playSong(currentIndex - 1);
+const btnNext = document.getElementById('btnNext');
+const btnPrev = document.getElementById('btnPrev');
+if (btnNext) btnNext.onclick = () => playSong(currentIndex + 1);
+if (btnPrev) btnPrev.onclick = () => playSong(currentIndex - 1);
 
-document.getElementById('btnLoop').onclick = () => {
+const btnLoop = document.getElementById('btnLoop');
+if (btnLoop) {
+  btnLoop.onclick = () => {
     isLooping = !isLooping;
-    document.getElementById('btnLoop').classList.toggle('active', isLooping);
-};
+    btnLoop.classList.toggle('active', isLooping);
+  };
+}
 
-audio.onended = () => {
+/* --- Ended behavior --- */
+if (audio) {
+  audio.onended = () => {
     if (isLooping) {
-        audio.currentTime = 0;
-        audio.play();
+      audio.currentTime = 0;
+      audio.play().catch(() => {});
     } else {
-        playSong(currentIndex + 1);
+      playSong(currentIndex + 1);
     }
-};
+  };
+}
 
-searchInput.oninput = () => {
-    const q = searchInput.value.toLowerCase();
+/* --- Search --- */
+if (searchInput) {
+  searchInput.oninput = () => {
+    const q = (searchInput.value || '').toLowerCase();
     currentPlaylist = allSongs.filter(s =>
-        s.title.toLowerCase().includes(q) ||
-        s.artist.toLowerCase().includes(q)
+      (s.title || '').toLowerCase().includes(q) ||
+      (s.artist || '').toLowerCase().includes(q)
     );
     renderList(currentPlaylist);
-};
+  };
+}
 
+/* --- Start --- */
 loadMusic();
