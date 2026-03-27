@@ -8,6 +8,73 @@
     <title>DrayMusic</title>
     <link rel="stylesheet" href="style.css">
     <link href="google.css" rel="stylesheet">
+    <style>
+#errorScreen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8));
+  z-index: 9999;
+  color: #fff;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  padding: 24px;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+#errorScreen[hidden] {
+  display: none;
+}
+
+.error-inner {
+  max-width: 720px;
+  width: 100%;
+  background: rgba(20,20,20,0.95);
+  border-radius: 12px;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  text-align: center;
+}
+
+.error-title {
+  margin: 0 0 8px;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.error-message {
+  margin: 0 0 18px;
+  color: #ddd;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.error-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.btn {
+  background: #1db954;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff;
+}
+    </style>
 </head>
 <body class="native-app">
     <img id="body-bg" src="gradient.gif" aria-hidden="true">
@@ -60,5 +127,108 @@
 
     <audio id="audioElement"></audio>
     <script src="app.js"></script>
+    <script>
+        /* Error overlay and playback stop helpers */
+const errorScreen = document.getElementById('errorScreen');
+const errorMessageEl = document.getElementById('errorMessage');
+const errorRetry = document.getElementById('errorRetry');
+const errorDismiss = document.getElementById('errorDismiss');
+
+function stopPlaybackCompletely() {
+  try {
+    if (audio) {
+      audio.pause();
+      // clear source to stop network activity
+      audio.removeAttribute('src');
+      audio.load();
+    }
+    // reset UI state
+    const playBtn = document.getElementById('btnPlayPause');
+    const titleEl = document.getElementById('currentTitle');
+    const artistEl = document.getElementById('currentArtist');
+    const artEl = document.getElementById('currentArt');
+
+    if (playBtn) playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
+    if (titleEl) titleEl.innerText = 'Not Playing';
+    if (artistEl) artistEl.innerText = 'Select a song';
+    if (artEl) artEl.src = 'placeholder.png';
+
+    // clear media session metadata if present
+    if ('mediaSession' in navigator) {
+      try { navigator.mediaSession.metadata = null; } catch (e) {}
+    }
+
+    // mark index invalid
+    currentIndex = -1;
+  } catch (e) {
+    console.warn('Error while stopping playback', e);
+  }
+}
+
+function showErrorOverlay(message, options = {}) {
+  if (!errorScreen || !errorMessageEl) return;
+  errorMessageEl.textContent = String(message || 'An unexpected error occurred.');
+  errorScreen.removeAttribute('hidden');
+  // stop playback immediately
+  stopPlaybackCompletely();
+
+  // Optionally log to console (still keep original behavior)
+  if (!options.silent) console.error('App error shown to user:', message);
+}
+
+function hideErrorOverlay() {
+  if (!errorScreen) return;
+  errorScreen.setAttribute('hidden', '');
+}
+
+/* Wire up retry and dismiss */
+if (errorRetry) {
+  errorRetry.addEventListener('click', function () {
+    hideErrorOverlay();
+    // Try to reload playlist and resume minimal state
+    // You can customize this to re-run loadMusic or reinitialize parts of the app
+    try {
+      loadMusic().catch(() => {});
+    } catch (e) {
+      // fallback: reload page if re-init fails
+      window.location.reload();
+    }
+  });
+}
+
+if (errorDismiss) {
+  errorDismiss.addEventListener('click', function () {
+    hideErrorOverlay();
+  });
+}
+
+/* Global error handlers */
+window.addEventListener('error', function (ev) {
+  const msg = ev && ev.message ? ev.message : String(ev);
+  showErrorOverlay('Runtime error: ' + msg);
+});
+
+window.addEventListener('unhandledrejection', function (ev) {
+  const reason = ev && ev.reason ? ev.reason : 'Promise rejected';
+  const text = typeof reason === 'string' ? reason : (reason && reason.message) ? reason.message : JSON.stringify(reason);
+  showErrorOverlay('Unhandled promise rejection: ' + text);
+});
+
+/* Optional: intercept console.error so logged errors also show overlay */
+(function wrapConsoleError() {
+  if (!console || !console.error) return;
+  const orig = console.error.bind(console);
+  console.error = function (...args) {
+    try {
+      // show first arg as message
+      const msg = args.map(a => (typeof a === 'string' ? a : (a && a.message) ? a.message : JSON.stringify(a))).join(' ');
+      showErrorOverlay(msg, { silent: true });
+    } catch (e) {
+      // ignore overlay errors
+    }
+    orig(...args);
+  };
+})();
+    </script>
 </body>
 </html>
