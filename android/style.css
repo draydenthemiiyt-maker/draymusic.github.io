@@ -6,6 +6,7 @@
     --text-dim: #938f99;
 }
 
+/* Base resets and modern rules (keeps your original behavior for modern browsers) */
 * {
     box-sizing: border-box;
     -webkit-user-select: none;
@@ -40,24 +41,16 @@ body.native-app {
 }
 
 @keyframes fadeUp {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
+    from { opacity: 0; }
+    to   { opacity: 1; }
 }
 
-.app-header {
-    padding: 20px 20px;
+.app-header { padding: 20px 20px; }
+.app-header h1 {
+    font-size: 32px;
+    margin: 0 0 15px 0;
+    font-weight: 700;
 }
-
-    .app-header h1 {
-        font-size: 32px;
-        margin: 0 0 15px 0;
-        font-weight: 700;
-    }
 
 .search-pill {
     background: rgb(255 255 255 / 10%);
@@ -69,15 +62,14 @@ body.native-app {
     gap: 10px;
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
-    .search-pill input {
-        background: transparent;
-        border: none;
-        color: white;
-        font-size: 16px;
-        outline: none;
-        width: 100%;
-    }
+.search-pill input {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    width: 100%;
+}
 
 .scroll-area {
     flex: 1;
@@ -96,31 +88,28 @@ body.native-app {
     animation: fadeUp 0.5s ease-out forwards;
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
 }
+.song-card[style*="animation-delay"] { transform: translateY(0); }
 
-    .song-card[style*="animation-delay"] {
-        transform: translateY(0);
-    }
+.song-card img {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: rgb(255 255 255 / 10%);
+    backdrop-filter: blur(20px);
+    display: block;
+}
 
-    .song-card img {
-        width: 52px;
-        height: 52px;
-        border-radius: 8px;
-        object-fit: cover;
-        background: rgb(255 255 255 / 10%);
-        backdrop-filter: blur(20px);
-    }
-
-    .song-card .info h4 {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 500;
-    }
-
-    .song-card .info p {
-        margin: 4px 0 0;
-        color: var(--text-dim);
-        font-size: 14px;
-    }
+.song-card .info h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 500;
+}
+.song-card .info p {
+    margin: 4px 0 0;
+    color: var(--text-dim);
+    font-size: 14px;
+}
 
 .mini-player {
     position: fixed;
@@ -138,36 +127,30 @@ body.native-app {
 .progress-wrapper {
     position: relative;
     width: 100%;
-    height: 4px; /* Slightly thicker base */
+    height: 4px;
     background: #333;
     transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    z-index: 20; /* Ensure it stays above the player background */
+    z-index: 20;
 }
-
-    /* Only expand the height when seeking to avoid blocking buttons */
-    .progress-wrapper.seeking {
-        height: 12px;
-    }
+.progress-wrapper.seeking { height: 12px; }
 
 #seekBar {
     position: absolute;
-    top: -10px; /* Reduced from -20px to avoid overlapping buttons */
+    top: -10px;
     left: 0;
     width: 100%;
-    height: 24px; /* Reduced resting height */
+    height: 24px;
     opacity: 0;
     z-index: 30;
     margin: 0;
     cursor: pointer;
     touch-action: none;
 }
-
-    /* Expand the hitbox ONLY while the user is already touching it */
-    #seekBar:active,
-    .progress-wrapper.seeking #seekBar {
-        height: 60px;
-        top: -25px;
-    }
+#seekBar:active,
+.progress-wrapper.seeking #seekBar {
+    height: 60px;
+    top: -25px;
+}
 
 .progress-fill {
     height: 100%;
@@ -176,54 +159,48 @@ body.native-app {
     transition: width 0.1s linear;
 }
 
-/* 1. Ensure the row fills space and aligns items */
+/* Player layout */
 .player-controls-row {
     padding: 12px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px; /* Gap between text and buttons */
+    gap: 12px;
 }
 
-/* 2. Make track info take all remaining space */
 .track-info {
     display: flex;
     align-items: center;
     gap: 12px;
-    flex: 1; /* This is the key change */
-    min-width: 0; /* Critical for text truncation to work in flexbox */
+    flex: 1;
+    min-width: 0;
+}
+.track-info img {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    background: rgb(255 255 255 / 10%);
+    backdrop-filter: blur(20px);
 }
 
-    .track-info img {
-        width: 44px;
-        height: 44px;
-        border-radius: 6px;
-        background: rgb(255 255 255 / 10%);
-        backdrop-filter: blur(20px);
-    }
-
-/* 3. Ensure text-group doesn't expand */
 .text-group {
     flex: 1;
     min-width: 0;
     overflow: hidden;
     white-space: nowrap;
 }
+.text-group h4 {
+    margin: 0;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.text-group p {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: var(--text-dim);
+}
 
-    .text-group h4 {
-        margin: 0;
-        font-size: 14px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-
-    .text-group p {
-        margin: 2px 0 0;
-        font-size: 12px;
-        color: var(--text-dim);
-    }
-
-/* 4. Keep buttons from shrinking */
 .action-btns {
     display: flex;
     align-items: center;
@@ -238,14 +215,12 @@ body.native-app {
 .icon-btn, .main-play-btn {
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
-
 .icon-btn {
     background: none;
     border: none;
     color: white;
     padding: 8px;
 }
-
 .main-play-btn {
     background: var(--accent);
     color: #ffffff;
@@ -257,22 +232,130 @@ body.native-app {
     align-items: center;
     justify-content: center;
 }
-
-    .icon-btn:active, .main-play-btn:active {
-        transform: scale(0.8) !important;
-    }
+.icon-btn:active, .main-play-btn:active { transform: scale(0.8) !important; }
 
 .song-card:active {
     transform: scale(0.95) !important;
     background: rgba(255, 255, 255, 0.08);
 }
-
-.search-pill:focus-within {
-    transform: scale(0.98);
-}
+.search-pill:focus-within { transform: scale(0.98); }
 
 #btnLoop.active {
     color: var(--accent);
     background: rgba(208, 188, 255, 0.1);
     border-radius: 50%;
+}
+
+/* -------------------------
+   Internet Explorer 10/11
+   Overrides and fallbacks
+   ------------------------- */
+/* Targets IE10 and IE11 (and Edge Legacy) */
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+    /* Replace CSS variables with literal values */
+    body.native-app { background-color: #000000; color: #e6e1e5; }
+
+    /* Remove backdrop-filter and use semi-transparent backgrounds */
+    .search-pill,
+    .song-card img,
+    .mini-player,
+    .track-info img,
+    .action-btns {
+        background: rgba(255,255,255,0.08);
+        /* mimic blur with subtle shadow and slightly lighter overlay */
+        box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+        backdrop-filter: none;
+    }
+
+    /* body-bg: filter blur not supported well; reduce intensity and keep opacity */
+    #body-bg {
+        filter: none;
+        opacity: 0.25;
+        transform: scale(1.03);
+        background-color: #000;
+    }
+
+    /* object-fit fallback: ensure images have fixed size and use background fallback pattern below */
+    .song-card img,
+    .track-info img {
+        object-fit: none;
+        /* keep the same size */
+        width: 52px;
+        height: 52px;
+        /* ensure images don't stretch */
+        max-width: 100%;
+        max-height: 100%;
+        /* remove backdrop-filter */
+        background: rgba(255,255,255,0.08);
+    }
+
+    /* Accent color literals */
+    .progress-fill { background: #00a0ff; }
+
+    .main-play-btn { background: #00a0ff; color: #ffffff; }
+
+    /* Seekbar and hitbox behavior preserved */
+    .progress-wrapper { background: #333; }
+    #seekBar { top: -10px; height: 24px; opacity: 0; }
+
+    /* Keep flex layout but ensure IE flex bugs are handled */
+    .player-controls-row,
+    .track-info,
+    .action-btns,
+    .text-group {
+        display: -ms-flexbox;
+        display: flex;
+    }
+    .player-controls-row { -ms-flex-pack: justify; justify-content: space-between; -ms-flex-align: center; align-items: center; }
+    .track-info { -ms-flex: 1 1 auto; flex: 1; min-width: 0; }
+    .text-group { -ms-flex: 1 1 auto; flex: 1; min-width: 0; overflow: hidden; white-space: nowrap; }
+
+    /* Ensure text truncation works in IE */
+    .text-group h4 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Active/pressed transforms: IE needs -ms-transform fallback */
+    .icon-btn:active, .main-play-btn:active,
+    .song-card:active {
+        -ms-transform: scale(0.8);
+        transform: scale(0.8);
+    }
+
+    .song-card:active {
+        background: rgba(255,255,255,0.08);
+    }
+
+    /* Loop button active */
+    #btnLoop.active {
+        color: #00a0ff;
+        background: rgba(208,188,255,0.1);
+        border-radius: 50%;
+    }
+}
+
+/* Optional small helper for object-fit fallback when you can change HTML:
+   Use this pattern for album art to get exact cover behavior in IE:
+   <div class="cover" style="background-image:url('...')"><img src="..." alt=""></div>
+   CSS below makes the div behave like object-fit:cover while keeping the img for accessibility.
+*/
+.cover {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+    display: inline-block;
+}
+.cover img {
+    /* visually hide the img but keep it for screen readers */
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    position: absolute;
+    pointer-events: none;
 }
