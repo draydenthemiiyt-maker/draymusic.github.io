@@ -51,6 +51,7 @@ body {
 
 .app-header {
     padding: 20px 20px;
+    cursor: default;
 }
 
     .app-header h1 {
@@ -182,6 +183,7 @@ body {
     justify-content: space-between;
     align-items: center;
     gap: 12px;
+    cursor: default;
 }
 
 .track-info {
