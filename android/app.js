@@ -125,7 +125,7 @@ async function loadMusic() {
     currentPlaylist = allSongs.slice();
     renderList(currentPlaylist);
   } catch (e) {
-    console.error('Failed to load music:', e);
+    console.warn('Failed to load music:', e);
   }
 }
 
@@ -164,7 +164,7 @@ function playSong(index) {
 
   audio.src = song.url;
   audio.play().catch(err => {
-    console.error('Playback failed:', err);
+    console.warn('Playback failed:', err);
   });
 
   const titleEl = document.getElementById('currentTitle');
