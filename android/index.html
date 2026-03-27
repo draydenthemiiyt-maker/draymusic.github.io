@@ -8,9 +8,6 @@
     <title>DrayMusic</title>
     <link rel="stylesheet" href="style.css">
     <link href="google.css" rel="stylesheet">
-    <link href="ms-appx-web:///lib/winjs-4.0.1/css/ui-dark.css" rel="stylesheet" />
-    <script src="ms-appx-web:///lib/winjs-4.0.1/js/base.js"></script>
-    <script src="ms-appx-web:///lib/winjs-4.0.1/js/ui.js"></script>
     <style>
         #errorScreen {
             position: fixed;
@@ -21,8 +18,7 @@
             align-items: center;
             justify-content: center;
             background: #640000;
-            font-family: system-ui;
-            font-family: 'Segoe UI';
+            font-family: system-ui, "Segoe UI", Roboto;
         }
 
             #errorScreen[hidden] {
@@ -61,7 +57,7 @@
         }
 
             .btn:hover {
-                background: #ffffff30;
+                background: rgba(255, 255, 255, 0.10);
             }
 
             .btn:active {
