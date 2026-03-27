@@ -14,10 +14,11 @@
     touch-action: manipulation;
 }
 
-body.native-app {
+body {
     margin: 0;
     padding: 0;
     font-family: system-ui;
+    font-family: 'Segoe UI';
     background-color: var(--bg);
     color: var(--on-surface);
     height: 100vh;
