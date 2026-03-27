@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="style.css">
     <link href="google.css" rel="stylesheet">
     <style>
-
         #errorScreen {
             position: fixed;
             inset: 0;
@@ -108,191 +107,127 @@
     <audio id="audioElement"></audio>
     <script src="app.js"></script>
     <script>
+        function _on(el, evt, fn) {
+            if (!el) return;
+            try {
+                if (el.addEventListener) el.addEventListener(evt, fn, false);
+                else if (el.attachEvent) el.attachEvent('on' + evt, fn);
+                else el['on' + evt] = fn;
+            } catch (e) { try { el['on' + evt] = fn; } catch (e2) { } }
+        }
+        function _setText(el, text) {
+            if (!el) return;
+            try {
+                if (typeof el.textContent !== 'undefined') el.textContent = text;
+                else el.innerText = text;
+            } catch (e) { try { el.innerText = text; } catch (e2) { } }
+        }
+
+        /* UI elements (adjust IDs if needed) */
         var errorScreen = document.getElementById('errorScreen');
         var errorMessageEl = document.getElementById('errorMessage');
         var errorRetry = document.getElementById('errorRetry');
         var errorDismiss = document.getElementById('errorDismiss');
 
-        function _on(el, evt, fn) {
-            if (!el) return;
-            if (el.addEventListener) el.addEventListener(evt, fn, false);
-            else if (el.attachEvent) el.attachEvent('on' + evt, fn);
-            else el['on' + evt] = fn;
-        }
-
-        /* Helper: safe text setter for old browsers */
-        function _setText(el, text) {
-            if (!el) return;
-            if (typeof el.textContent !== 'undefined') el.textContent = text;
-            else el.innerText = text;
-        }
-
-        /* Keep the original function name and behavior but use legacy-safe code */
+        /* Stop playback function (keeps behavior from your original) */
         function stopPlaybackCompletely() {
             try {
-                /* Prefer global audio variable if your app defines it; otherwise find element */
                 var a = (typeof audio !== 'undefined' && audio) ? audio : document.getElementById('audioElement');
-
                 if (a) {
-                    try {
-                        if (typeof a.pause === 'function') a.pause();
-                    } catch (e) { }
-
-                    /* clear source to stop network activity (compatible fallbacks) */
-                    try {
-                        if (typeof a.removeAttribute === 'function') {
-                            a.removeAttribute('src');
-                        } else {
-                            a.src = '';
-                        }
-                    } catch (e) {
-                        try { a.src = ''; } catch (e2) { }
-                    }
-
-                    try {
-                        if (typeof a.load === 'function') a.load();
-                    } catch (e) { }
+                    try { if (typeof a.pause === 'function') a.pause(); } catch (e) { }
+                    try { a.src = ''; } catch (e) { }
+                    try { if (typeof a.load === 'function') a.load(); } catch (e) { }
                 }
-
-                /* reset UI state */
                 var playBtn = document.getElementById('btnPlayPause');
                 var titleEl = document.getElementById('currentTitle');
                 var artistEl = document.getElementById('currentArtist');
                 var artEl = document.getElementById('currentArt');
-
-                if (playBtn) {
-                    try { playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>'; } catch (e) { }
-                }
+                if (playBtn) try { playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>'; } catch (e) { }
                 if (titleEl) _setText(titleEl, 'Not Playing');
                 if (artistEl) _setText(artistEl, 'Select a song');
-                if (artEl) {
-                    try { artEl.src = 'placeholder.png'; } catch (e) { }
-                }
-
-                /* clear media session metadata if present (try/catch for old browsers) */
+                if (artEl) try { artEl.src = 'placeholder.png'; } catch (e) { }
+                try { if (typeof currentIndex !== 'undefined') currentIndex = -1; } catch (e) { }
                 try {
                     if (typeof navigator !== 'undefined' && navigator.mediaSession && typeof navigator.mediaSession.metadata !== 'undefined') {
                         try { navigator.mediaSession.metadata = null; } catch (e) { }
                     }
                 } catch (e) { }
-
-                /* mark index invalid if present */
-                try { if (typeof currentIndex !== 'undefined') currentIndex = -1; } catch (e) { }
-
-            } catch (e) {
-                try { if (console && console.warn) console.warn('Error while stopping playback', e); } catch (e2) { }
-            }
+            } catch (e) { try { if (console && console.warn) console.warn('stopPlayback error', e); } catch (e2) { } }
         }
 
-        /* Keep same signature but avoid default param syntax */
+        /* Show / hide overlay */
         function showErrorOverlay(message, options) {
             options = options || {};
             if (!errorScreen || !errorMessageEl) return;
             try {
                 _setText(errorMessageEl, String(message || 'An unexpected error occurred.'));
-
-                /* remove hidden attribute in a compatible way */
                 try {
                     if (errorScreen.removeAttribute) errorScreen.removeAttribute('hidden');
                     else errorScreen.style.display = 'flex';
-                } catch (e) {
-                    try { errorScreen.style.display = 'flex'; } catch (e2) { }
-                }
-
-                /* stop playback immediately */
+                } catch (e) { try { errorScreen.style.display = 'flex'; } catch (e2) { } }
                 stopPlaybackCompletely();
-
-                /* Optionally log to console (still keep original behavior) */
                 if (!options.silent) {
                     try { if (console && console.error) console.error('App error shown to user:', message); } catch (e) { }
                 }
             } catch (e) { }
         }
-
         function hideErrorOverlay() {
             if (!errorScreen) return;
             try {
                 if (errorScreen.setAttribute) errorScreen.setAttribute('hidden', '');
                 else errorScreen.style.display = 'none';
-            } catch (e) {
-                try { errorScreen.style.display = 'none'; } catch (e2) { }
-            }
+            } catch (e) { try { errorScreen.style.display = 'none'; } catch (e2) { } }
         }
 
-        /* Wire up retry and dismiss using cross-browser event helper */
-        if (errorRetry) {
-            _on(errorRetry, 'click', function () {
-                hideErrorOverlay();
-                try {
-                    /* Try to call loadMusic if available; handle both sync and promise-returning functions */
-                    if (typeof loadMusic === 'function') {
-                        try {
-                            var res = loadMusic();
-                            if (res && typeof res.then === 'function') {
-                                try {
-                                    res.then(function () { }, function () { try { window.location.reload(); } catch (e) { } });
-                                } catch (e) { try { window.location.reload(); } catch (e2) { } }
-                            }
-                        } catch (e) {
-                            try { window.location.reload(); } catch (e2) { }
+        /* Retry / Dismiss wiring */
+        if (errorRetry) _on(errorRetry, 'click', function () {
+            hideErrorOverlay();
+            try {
+                if (typeof loadMusic === 'function') {
+                    try {
+                        var res = loadMusic();
+                        if (res && typeof res.then === 'function') {
+                            try { res.then(function () { }, function () { try { window.location.reload(); } catch (e) { } }); } catch (e) { try { window.location.reload(); } catch (e2) { } }
                         }
-                    } else {
-                        try { window.location.reload(); } catch (e) { }
-                    }
-                } catch (e) {
-                    try { window.location.reload(); } catch (e2) { }
+                    } catch (e) { try { window.location.reload(); } catch (e2) { } }
+                } else try { window.location.reload(); } catch (e) { }
+            } catch (e) { try { window.location.reload(); } catch (e2) { } }
+        });
+        if (errorDismiss) _on(errorDismiss, 'click', hideErrorOverlay);
+
+        /* Central reporting function */
+        function reportError(kind, message, extra) {
+            try {
+                var composed = '[' + kind + '] ' + (message || 'Unknown error');
+                if (extra) {
+                    try { composed += ' | ' + JSON.stringify(extra); } catch (e) { composed += ' | ' + String(extra); }
                 }
-            });
+                showErrorOverlay(composed, { silent: true });
+            } catch (e) { }
         }
 
-        if (errorDismiss) {
-            _on(errorDismiss, 'click', function () {
-                hideErrorOverlay();
-            });
-        }
-
-        /* Global error handlers */
-        /* Use window.onerror for maximum compatibility */
+        /* 1) Runtime errors via window.onerror (works in IE8) */
         if (typeof window !== 'undefined') {
-            window.onerror = function (msg, src, lineNo, colNo, err) {
-                try {
-                    var message = (msg && typeof msg === 'string') ? msg : String(msg);
-                    var composed = 'Runtime error: ' + message;
-                    if (src) composed += ' (' + src + (lineNo ? ':' + lineNo : '') + ')';
-                    showErrorOverlay(composed);
-                } catch (e) { }
-                /* return false to allow default browser handling as well */
-                return false;
-            };
-
-            /* If the browser supports addEventListener, attach unhandledrejection (modern browsers only) */
-            if (window.addEventListener) {
-                try {
-                    window.addEventListener('unhandledrejection', function (ev) {
-                        try {
-                            var reason = (ev && ev.reason) ? ev.reason : 'Promise rejected';
-                            var text;
-                            if (typeof reason === 'string') text = reason;
-                            else if (reason && reason.message) text = reason.message;
-                            else {
-                                try { text = JSON.stringify(reason); } catch (e) { text = String(reason); }
-                            }
-                            showErrorOverlay('Unhandled promise rejection: ' + text);
-                        } catch (e) { }
-                    }, false);
-                } catch (e) { }
-            }
+            try {
+                window.onerror = function (msg, url, lineNo, colNo, err) {
+                    try {
+                        var m = (msg && typeof msg === 'string') ? msg : String(msg);
+                        var src = url || 'unknown';
+                        var loc = (lineNo ? (':' + lineNo) : '');
+                        reportError('Runtime error', m + ' (' + src + loc + ')', err || null);
+                    } catch (e) { }
+                    return false; /* allow default handling too */
+                };
+            } catch (e) { }
         }
 
-        /* Optional: intercept console.error so logged errors also show overlay */
-        /* Keep original behavior but avoid modern syntax */
+        /* 2) Wrap console.error so logged errors also surface */
         (function wrapConsoleError() {
             try {
-                if (!window.console || typeof console.error !== 'function') return;
-                var orig = console.error;
+                if (!window.console) window.console = {};
+                var orig = console.error || function () { };
                 console.error = function () {
                     try {
-                        /* Build message from arguments in an old-browser-safe way */
                         var parts = [];
                         for (var i = 0; i < arguments.length; i++) {
                             var a = arguments[i];
@@ -303,12 +238,102 @@
                             }
                         }
                         var msg = parts.join(' ');
-                        try { showErrorOverlay(msg, { silent: true }); } catch (e) { }
+                        reportError('Console error', msg);
                     } catch (e) { }
                     try { orig.apply(console, arguments); } catch (e) { }
                 };
             } catch (e) { }
         })();
+
+        /* 3) Detect XHR / network errors by wrapping XMLHttpRequest */
+        (function wrapXHR() {
+            try {
+                if (typeof XMLHttpRequest === 'undefined') return;
+                var OldXHR = XMLHttpRequest;
+                function NewXHR() {
+                    var xhr = new OldXHR();
+                    try {
+                        var origOpen = xhr.open;
+                        xhr.open = function (method, url, async) {
+                            try { xhr._url = url; } catch (e) { }
+                            return origOpen.apply(xhr, arguments);
+                        };
+                    } catch (e) { }
+                    try {
+                        _on(xhr, 'readystatechange', function () {
+                            try {
+                                if (xhr.readyState === 4) {
+                                    try {
+                                        var status = xhr.status;
+                                        /* In some environments status 0 indicates network error for file:// or CORS; treat as possible error */
+                                        if ((status >= 400 && status < 600) || status === 0) {
+                                            reportError('XHR error', 'Request failed: ' + (xhr._url || 'unknown') + ' status:' + status, { responseURL: xhr._url, status: status });
+                                        }
+                                    } catch (e) { }
+                                }
+                            } catch (e) { }
+                        });
+                        _on(xhr, 'error', function () {
+                            try { reportError('XHR network error', 'Network error for ' + (xhr._url || 'unknown')); } catch (e) { }
+                        });
+                        _on(xhr, 'abort', function () {
+                            try { reportError('XHR aborted', 'Request aborted ' + (xhr._url || 'unknown')); } catch (e) { }
+                        });
+                    } catch (e) { }
+                    return xhr;
+                }
+                try { window.XMLHttpRequest = NewXHR; } catch (e) { }
+            } catch (e) { }
+        })();
+
+        /* 4) Resource load errors for images and other elements
+           - Attach onerror to existing images
+           - Monitor DOM additions (best-effort for old browsers by polling) */
+        (function watchResources() {
+            try {
+                function attachImgHandlers() {
+                    try {
+                        var imgs = document.getElementsByTagName('img');
+                        for (var i = 0; i < imgs.length; i++) {
+                            try {
+                                var im = imgs[i];
+                                if (!im._errorHooked) {
+                                    im._errorHooked = true;
+                                    _on(im, 'error', function () {
+                                        try { reportError('Resource error', 'Image failed to load: ' + (this && this.src ? this.src : 'unknown')); } catch (e) { }
+                                    });
+                                }
+                            } catch (e) { }
+                        }
+                    } catch (e) { }
+                }
+                attachImgHandlers();
+                /* Poll for new images every 2 seconds (IE8 has no MutationObserver) */
+                try { setInterval(attachImgHandlers, 2000); } catch (e) { }
+            } catch (e) { }
+        })();
+
+        /* 5) Unhandled promise rejections if supported (modern browsers only) */
+        try {
+            if (window.addEventListener) {
+                window.addEventListener('unhandledrejection', function (ev) {
+                    try {
+                        var reason = (ev && ev.reason) ? ev.reason : 'Promise rejected';
+                        var text;
+                        if (typeof reason === 'string') text = reason;
+                        else if (reason && reason.message) text = reason.message;
+                        else {
+                            try { text = JSON.stringify(reason); } catch (e) { text = String(reason); }
+                        }
+                        reportError('Unhandled rejection', text);
+                    } catch (e) { }
+                }, false);
+            } else if (window.onunhandledrejection) {
+                _on(window, 'unhandledrejection', function (ev) {
+                    try { reportError('Unhandled rejection', String(ev)); } catch (e) { }
+                });
+            }
+        } catch (e) { }
     </script>
 </body>
 </html>
