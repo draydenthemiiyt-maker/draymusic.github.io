@@ -124,6 +124,7 @@ body {
         margin: 4px 0 0;
         color: var(--text-dim);
         font-size: 14px;
+        cursor: default;
     }
 
 .mini-player {
@@ -191,7 +192,6 @@ body {
     gap: 12px;
     flex: 1;
     min-width: 0;
-    cursor: default;
 }
 
     .track-info img {
