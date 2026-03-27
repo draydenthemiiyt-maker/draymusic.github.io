@@ -17,7 +17,7 @@
 body.native-app {
     margin: 0;
     padding: 0;
-    font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+    font-family: system-ui;
     background-color: var(--bg);
     color: var(--on-surface);
     height: 100vh;
@@ -62,6 +62,7 @@ body.native-app {
 .search-pill {
     background: #ffffff1a;
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-radius: 28px;
     padding: 12px 16px;
     display: flex;
@@ -108,6 +109,7 @@ body.native-app {
         object-fit: cover;
         background: rgb(255 255 255 / 10%);
         backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
     }
 
     .song-card .info h4 {
@@ -129,6 +131,7 @@ body.native-app {
     right: 10px;
     background: rgb(255 255 255 / 10%);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-radius: 20px;
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0,0,0,0.6);
@@ -199,6 +202,7 @@ body.native-app {
         border-radius: 6px;
         background: #ffffff1a;
         backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
     }
 
 /* 3. Ensure text-group doesn't expand */
@@ -230,6 +234,7 @@ body.native-app {
     flex-shrink: 0;
     background: #ffffff1a;
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-radius: 20px;
     padding: 3px;
 }
