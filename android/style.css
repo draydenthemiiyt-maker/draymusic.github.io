@@ -17,8 +17,7 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: system-ui;
-    font-family: 'Segoe UI';
+    font-family: system-ui, "Segoe UI", Roboto;
     background-color: var(--bg);
     color: var(--on-surface);
     height: 100vh;
@@ -138,7 +137,6 @@ body {
     overflow: hidden;
 }
 
-/* --- Improved Seek Bar Hitbox --- */
 .progress-wrapper {
     position: relative;
     width: 100%;
@@ -149,24 +147,22 @@ body {
     cursor: pointer;
 }
 
-    /* Only expand the height when seeking to avoid blocking buttons */
     .progress-wrapper.seeking {
         height: 12px;
     }
 
 #seekBar {
     position: absolute;
-    top: -10px; /* Reduced from -20px to avoid overlapping buttons */
+    top: -10px;
     left: 0;
     width: 100%;
-    height: 24px; /* Reduced resting height */
+    height: 24px;
     opacity: 0;
     z-index: 30;
     margin: 0;
     touch-action: none;
 }
 
-    /* Expand the hitbox ONLY while the user is already touching it */
     #seekBar:active,
     .progress-wrapper.seeking #seekBar {
         height: 60px;
@@ -180,16 +176,14 @@ body {
     transition: width 0.1s linear;
 }
 
-/* 1. Ensure the row fills space and aligns items */
 .player-controls-row {
     padding: 12px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px; /* Gap between text and buttons */
+    gap: 12px;
 }
 
-/* 2. Make track info take all remaining space */
 .track-info {
     display: flex;
     align-items: center;
@@ -207,7 +201,6 @@ body {
         -webkit-backdrop-filter: blur(20px);
     }
 
-/* 3. Ensure text-group doesn't expand */
 .text-group {
     flex: 1;
     min-width: 0;
@@ -228,7 +221,6 @@ body {
         color: var(--text-dim);
     }
 
-/* 4. Keep buttons from shrinking */
 .action-btns {
     display: flex;
     align-items: center;
