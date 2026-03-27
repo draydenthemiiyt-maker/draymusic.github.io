@@ -1,3 +1,11 @@
+:root {
+    --bg: #000000;
+    --surface: #121212;
+    --accent: #d0bcff;
+    --on-surface: #e6e1e5;
+    --text-dim: #938f99;
+}
+
 * {
     box-sizing: border-box;
     -webkit-user-select: none;
@@ -10,8 +18,8 @@ body.native-app {
     margin: 0;
     padding: 0;
     font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
-    background-color: #000000;
-    color: #e6e1e5;
+    background-color: var(--bg);
+    color: var(--on-surface);
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -110,7 +118,7 @@ body.native-app {
 
     .song-card .info p {
         margin: 4px 0 0;
-        color: #938f99;
+        color: var(--text-dim);
         font-size: 14px;
     }
 
@@ -163,7 +171,7 @@ body.native-app {
 
 .progress-fill {
     height: 100%;
-    background: #00a0ff;
+    background: var(--accent);
     width: 0%;
     transition: width 0.1s linear;
 }
@@ -212,7 +220,7 @@ body.native-app {
     .text-group p {
         margin: 2px 0 0;
         font-size: 12px;
-        color: #938f99;
+        color: var(--text-dim);
     }
 
 /* 4. Keep buttons from shrinking */
@@ -239,8 +247,8 @@ body.native-app {
 }
 
 .main-play-btn {
-    background: #00a0ff;
-    color: #ffffff;
+    background: var(--accent);
+    color: #381e72;
     border: none;
     border-radius: 12px;
     width: 44px;
@@ -264,7 +272,7 @@ body.native-app {
 }
 
 #btnLoop.active {
-    color: #00a0ff;
+    color: var(--accent);
     background: rgba(208, 188, 255, 0.1);
     border-radius: 50%;
 }
