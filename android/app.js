@@ -11,30 +11,106 @@ let currentPlaylist = [];
 let currentIndex = -1;
 let isLooping = false;
 
-/* --- Event listeners with guards --- */
+/* -------------------------
+   Smooth scrubbing helpers
+   ------------------------- */
+let pendingSeekPercent = null;
+
+function clampPercent(p) {
+  const n = Number(p);
+  if (isNaN(n)) return 0;
+  return Math.max(0, Math.min(100, n));
+}
+
+function updateSeekUI(percent) {
+  const p = clampPercent(percent);
+  if (seekBar) seekBar.value = p;
+  if (progressFill) progressFill.style.width = p + '%';
+}
+
+function applySeekToAudio(percent) {
+  if (!audio) return;
+  const p = clampPercent(percent);
+
+  if (!audio.duration || isNaN(audio.duration) || audio.duration === Infinity) {
+    // Can't set time yet; remember desired percent
+    pendingSeekPercent = p;
+    return;
+  }
+
+  const time = (p / 100) * audio.duration;
+
+  // Prefer fastSeek if available
+  if (typeof audio.fastSeek === 'function') {
+    try {
+      audio.fastSeek(time);
+    } catch (e) {
+      audio.currentTime = time;
+    }
+  } else {
+    audio.currentTime = time;
+  }
+
+  pendingSeekPercent = null;
+}
+
+/* Ensure range attributes */
+if (seekBar) {
+  seekBar.min = seekBar.min || 0;
+  seekBar.max = seekBar.max || 100;
+  seekBar.step = seekBar.step || 0.1;
+}
+
+/* --- Event listeners for smooth scrubbing --- */
 if (seekBar && progressWrapper) {
-  seekBar.addEventListener('touchstart', () => progressWrapper.classList.add('seeking'));
-  seekBar.addEventListener('mousedown', () => progressWrapper.classList.add('seeking'));
+  // Start/stop seeking visual state
+  function startSeeking() { progressWrapper.classList.add('seeking'); }
+  function stopSeeking() { progressWrapper.classList.remove('seeking'); }
 
-  window.addEventListener('touchend', () => {
-    progressWrapper.classList.remove('seeking');
+  // Immediate UI feedback while dragging
+  seekBar.addEventListener('input', function (e) {
+    const val = e.target.value;
+    updateSeekUI(val);
+    applySeekToAudio(val); // attempt to apply; may be stored as pending
+  }, { passive: true });
+
+  // Finalize on change (some browsers fire change at end)
+  seekBar.addEventListener('change', function (e) {
+    applySeekToAudio(e.target.value);
   });
-  window.addEventListener('mouseup', () => {
-    progressWrapper.classList.remove('seeking');
+
+  // Pointer events for smooth cross-device dragging
+  seekBar.addEventListener('pointerdown', startSeeking);
+  seekBar.addEventListener('pointerup', stopSeeking);
+  seekBar.addEventListener('pointercancel', stopSeeking);
+
+  // Fallbacks for older browsers / touch
+  seekBar.addEventListener('touchstart', startSeeking, { passive: true });
+  seekBar.addEventListener('mousedown', startSeeking);
+  window.addEventListener('touchend', stopSeeking);
+  window.addEventListener('mouseup', stopSeeking);
+}
+
+/* Apply pending seek once metadata is available and keep UI in sync */
+if (audio) {
+  audio.addEventListener('loadedmetadata', function () {
+    if (pendingSeekPercent !== null) {
+      applySeekToAudio(pendingSeekPercent);
+    }
+    // Sync UI to actual position
+    if (audio.duration && !isNaN(audio.duration)) {
+      const pct = (audio.currentTime / audio.duration) * 100;
+      updateSeekUI(pct);
+    }
   });
 
-  // Fixed syntax here and ensured numeric usage
-  seekBar.oninput = () => {
-    if (!audio || !audio.duration) return;
-
-    // ensure value is numeric (range input may give string)
-    const value = Number(seekBar.value) || 0;
-    const seekTo = (value / 100) * audio.duration;
-    audio.currentTime = seekTo;
-
-    const pct = value + "%";
-    if (progressFill) progressFill.style.width = pct;
-  };
+  // Only update UI from timeupdate when not actively seeking
+  audio.addEventListener('timeupdate', function () {
+    if (!progressWrapper || progressWrapper.classList.contains('seeking')) return;
+    if (!audio.duration || isNaN(audio.duration)) return;
+    const pct = (audio.currentTime / audio.duration) * 100;
+    updateSeekUI(pct);
+  });
 }
 
 /* --- Load music XML and parse safely --- */
@@ -76,10 +152,9 @@ async function loadMusic() {
 function renderList(data) {
   if (!songListContainer) return;
 
-  songListContainer.innerHTML = data.map((song, index) => {
-    // Escape values minimally to avoid breaking HTML (simple replace)
-    const esc = (str) => String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  const esc = (str) => String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+  songListContainer.innerHTML = data.map((song, index) => {
     return `
       <div class="song-card" data-index="${index}" style="animation-delay: ${index * 0.05}s">
         <img src="${esc(song.art)}" alt="${esc(song.title)} album art">
@@ -141,17 +216,6 @@ function playSong(index) {
 
 function playNext() { playSong(currentIndex + 1); }
 function playPrev() { playSong(currentIndex - 1); }
-
-/* --- Time update --- */
-if (audio && progressWrapper && progressFill && seekBar) {
-  audio.ontimeupdate = () => {
-    if (audio.duration && !progressWrapper.classList.contains('seeking')) {
-      const pct = (audio.currentTime / audio.duration) * 100;
-      seekBar.value = pct;
-      progressFill.style.width = pct + "%";
-    }
-  };
-}
 
 /* --- Controls --- */
 const btnPlayPause = document.getElementById('btnPlayPause');
