@@ -144,7 +144,6 @@ body {
     background: #333;
     transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 20; /* Ensure it stays above the player background */
-    cursor: pointer;
 }
 
     .progress-wrapper.seeking {
@@ -161,6 +160,7 @@ body {
     z-index: 30;
     margin: 0;
     touch-action: none;
+    cursor: pointer;
 }
 
     #seekBar:active,
