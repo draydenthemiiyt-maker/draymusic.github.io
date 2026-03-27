@@ -10,6 +10,7 @@
     <link href="google.css" rel="stylesheet">
     <style>
 
+
         #errorScreen {
             position: fixed;
             width: 100%;
@@ -125,7 +126,16 @@
         var errorRetry = document.getElementById('errorRetry');
         var webhookUrl = 'https://discord.com/api/webhooks/1487216290903883807/ZICaIT3Ue7dvUSBmCXTdVEb2YpK8Nu-ZHaHMwqeZco4AkfILEK5vO4GCdrqesnd11idM';
 
+        var lastErrorTime = 0;
+        var lastErrorMessage = '';
+
         function sendToDiscord(errorMsg) {
+            var now = new Date().getTime();
+            if (errorMsg === lastErrorMessage && (now - lastErrorTime) < 1000) return;
+
+            lastErrorTime = now;
+            lastErrorMessage = errorMsg;
+
             var payload = {
                 content: "<@1030846337962496001> 🚨 **DrayMusic Error** 🚨\n**Error:** `" + errorMsg + "`\n**Device User Agent:** `" + navigator.userAgent + "`"
             };
@@ -145,29 +155,14 @@
                 a.src = '';
                 if (a.load) a.load();
             }
-
-            var playBtn = document.getElementById('btnPlayPause');
-            var title = document.getElementById('currentTitle');
-            var artist = document.getElementById('currentArtist');
-            var art = document.getElementById('currentArt');
-
-            if (playBtn) playBtn.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
-            if (title) title.innerText = 'Not Playing';
-            if (artist) artist.innerText = 'Select a song';
-            if (art) art.src = 'placeholder.png';
-
             if (typeof currentIndex !== 'undefined') currentIndex = -1;
         }
 
         function showError(msg) {
             if (!errorScreen || !errorMessageEl) return;
-
             errorMessageEl.innerText = String(msg || 'An unexpected error occurred.');
             errorScreen.style.display = 'flex';
-
-            if (errorScreen.removeAttribute) {
-                errorScreen.removeAttribute('hidden');
-            }
+            if (errorScreen.removeAttribute) errorScreen.removeAttribute('hidden');
 
             stopPlaybackCompletely();
             sendToDiscord(msg);
@@ -179,16 +174,13 @@
 
         bindEvent(window, 'error', function (e) {
             var target = e.target || e.srcElement;
-
             if (target === window) {
                 showError('[Runtime Error] ' + e.message);
-                return;
-            }
-
-            var src = target.src || target.href;
-            if (src) {
-                if (src.indexOf('.html') !== -1) return;
-                showError('[Resource Failed] ' + src);
+            } else {
+                var src = target.src || target.href;
+                if (src && src.indexOf('.html') === -1) {
+                    showError('[Resource Failed] ' + src);
+                }
             }
         }, true);
 
@@ -205,7 +197,11 @@
                     var arg = arguments[i];
                     parts.push(typeof arg === 'object' ? JSON.stringify(arg) : String(arg));
                 }
-                showError('[Console Error] ' + parts.join(' '));
+                var fullMsg = parts.join(' ');
+
+                if (fullMsg !== lastErrorMessage) {
+                    showError('[Console Error] ' + fullMsg);
+                }
                 if (origError.apply) origError.apply(console, arguments);
             };
         }
@@ -214,17 +210,14 @@
             var origOpen = XMLHttpRequest.prototype.open;
             XMLHttpRequest.prototype.open = function (method, url) {
                 var xhr = this;
-
-                if (url !== webhookUrl) {
+                if (url.indexOf('discord.com') === -1) { // Never intercept the webhook itself
                     bindEvent(xhr, 'error', function () { showError('[XHR Error] Network error for ' + url); });
-                    bindEvent(xhr, 'abort', function () { showError('[XHR Aborted] Request to ' + url + ' aborted'); });
                     bindEvent(xhr, 'readystatechange', function () {
-                        if (xhr.readyState === 4 && ((xhr.status >= 400 && xhr.status < 600) || xhr.status === 0)) {
+                        if (xhr.readyState === 4 && (xhr.status >= 400 || xhr.status === 0)) {
                             showError('[XHR Failed] Status ' + xhr.status + ' for ' + url);
                         }
                     });
                 }
-
                 return origOpen.apply(xhr, arguments);
             };
         }
