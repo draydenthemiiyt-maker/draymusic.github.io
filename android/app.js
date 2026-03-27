@@ -187,7 +187,7 @@ function playSong(index) {
   audio.src = song.url;
   audio.play().catch(err => {
     // autoplay may be blocked; handle gracefully
-    console.warn('Playback failed:', err);
+    console.error('Playback failed:', err);
   });
 
   if ('mediaSession' in navigator) {
@@ -199,7 +199,7 @@ function playSong(index) {
       });
     } catch (e) {
       // some browsers may throw if artwork is invalid
-      console.warn('mediaSession metadata error', e);
+      console.error('mediaSession metadata error', e);
     }
   }
 
