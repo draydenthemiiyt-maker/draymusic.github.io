@@ -244,9 +244,9 @@ if (searchInput) {
     var Notifications = Win.UI.Notifications || null;
     var DataXml = Win.Data.Xml.Dom || null;
 
-    /* ---------- Live Tile Integration (Flipping Songs Fix) ---------- */
+    /* ---------- Live Tile Integration (Flipping Songs via Native Templates) ---------- */
     function updateLiveTileFromXml() {
-        if (!Notifications || !DataXml) return;
+        if (!Notifications) return;
 
         var url = 'https://draydenthemiiyt-maker.github.io/draymusic.github.io/music.xml?nocache=' + new Date().getTime();
         var xhr = new XMLHttpRequest();
@@ -259,6 +259,7 @@ if (searchInput) {
 
                     var items = xml.getElementsByTagName('song');
                     var tileUpdater = Notifications.TileUpdateManager.createTileUpdaterForApplication();
+                    var tileType = Notifications.TileTemplateType;
 
                     tileUpdater.enableNotificationQueue(true);
                     tileUpdater.clear();
@@ -270,32 +271,37 @@ if (searchInput) {
                         var artist = s.getElementsByTagName('artist')[0].textContent || "";
                         var art = s.getElementsByTagName('albumArt')[0].textContent || "placeholder.png";
 
-                        var tileXmlString =
-                            "<tile>" +
-                            "<visual>" +
-                            "<binding template='TileMedium'>" +
-                            "<image src='" + art + "' placement='background' />" +
-                            "<text hint-wrap='true' hint-style='caption'>" + title + "</text>" +
-                            "<text hint-style='captionSubtle'>" + artist + "</text>" +
-                            "</binding>" +
-                            "<binding template='TileWide'>" +
-                            "<image src='" + art + "' placement='background' />" +
-                            "<text hint-style='subtitle'>" + title + "</text>" +
-                            "<text hint-style='caption'>" + artist + "</text>" +
-                            "</binding>" +
-                            "</visual>" +
-                            "</tile>";
+                        // 1. Setup Wide Template (310x150)
+                        var wideXml = Notifications.TileUpdateManager.getTemplateContent(tileType.tileWide310x150ImageAndText01);
+                        var wideText = wideXml.getElementsByTagName("text");
+                        var wideImg = wideXml.getElementsByTagName("image");
 
-                        var tileDoc = new DataXml.XmlDocument();
-                        tileDoc.loadXml(tileXmlString);
+                        if (wideText[0]) wideText[0].innerText = title;
+                        if (wideText[1]) wideText[1].innerText = artist;
+                        if (wideImg[0]) wideImg[0].setAttribute("src", art);
 
-                        // FIX: Create the notification and give it a UNIQUE TAG
-                        var notification = new Notifications.TileNotification(tileDoc);
-                        notification.tag = "song_" + i; // This tells Windows these are separate items to flip through
+                        // 2. Setup Square Template (150x150)
+                        var squareXml = Notifications.TileUpdateManager.getTemplateContent(tileType.tileSquare150x150PeekImageAndText02);
+                        var squareText = squareXml.getElementsByTagName("text");
+                        var squareImg = squareXml.getElementsByTagName("image");
+
+                        if (squareText[0]) squareText[0].innerText = title;
+                        if (squareText[1]) squareText[1].innerText = artist;
+                        if (squareImg[0]) squareImg[0].setAttribute("src", art);
+
+                        // 3. Combine Square into Wide for full support
+                        var bindingNode = wideXml.importNode(squareXml.getElementsByTagName("binding").item(0), true);
+                        wideXml.getElementsByTagName("visual").item(0).appendChild(bindingNode);
+
+                        // 4. Send the notification with the unique tag
+                        var notification = new Notifications.TileNotification(wideXml);
+                        notification.tag = "song_" + i;
 
                         tileUpdater.update(notification);
                     }
-                } catch (e) { console.warn('Tile update failed:', e); }
+                } catch (e) {
+                    try { console.warn('Tile update failed:', e); } catch (err) { }
+                }
             }
         };
         xhr.send();
