@@ -444,4 +444,84 @@ if (searchInput) {
   }
 })();
 
+/* Live tile updater (ES5-safe) */
+function updateLiveTileFromPlaylist(playlist) {
+  try {
+    if (typeof window.Windows === 'undefined') {
+      try { console.info('Windows Runtime not available — skipping live tile update.'); } catch (e) {}
+      return;
+    }
+
+    var Notifications = window.Windows.UI.Notifications;
+    if (!Notifications || !Notifications.TileUpdateManager) {
+      try { console.info('Tile APIs not available in this host.'); } catch (e) {}
+      return;
+    }
+
+    var tileUpdater = Notifications.TileUpdateManager.createTileUpdaterForApplication();
+    try { tileUpdater.enableNotificationQueue(true); } catch (e) {}
+    try { tileUpdater.clear(); } catch (e) {}
+
+    // Limit to 5 tiles (Windows cycles up to 5)
+    var limit = Math.min((playlist && playlist.length) || 0, 5);
+
+    for (var i = 0; i < limit; i++) {
+      var song = playlist[i] || {};
+      var title = song.title || '';
+      var artist = song.artist || '';
+      var art = song.art || '';
+
+      // Wide template (310x150) with image and two text lines
+      try {
+        var tileType = Notifications.TileTemplateType;
+        var wideXml = Notifications.TileUpdateManager.getTemplateContent(tileType.tileWide310x150ImageAndText01);
+        var wideText = wideXml.getElementsByTagName('text');
+        var wideImg = wideXml.getElementsByTagName('image');
+
+        if (wideText && wideText.length > 0) {
+          try { wideText[0].appendChild(wideXml.createTextNode(title)); } catch (e) {}
+        }
+        if (wideText && wideText.length > 1) {
+          try { wideText[1].appendChild(wideXml.createTextNode(artist)); } catch (e) {}
+        }
+        if (wideImg && wideImg.length > 0 && art) {
+          try { wideImg[0].setAttribute('src', art); } catch (e) {}
+        }
+
+        // Create a notification from the wide xml
+        var wideNotif = new Notifications.TileNotification(wideXml);
+        try { tileUpdater.update(wideNotif); } catch (e) {}
+      } catch (e) {
+        try { console.warn('Failed to create wide tile for item', i, e); } catch (err) {}
+      }
+
+      // Square template (150x150) with image and text
+      try {
+        var squareXml = Notifications.TileUpdateManager.getTemplateContent(tileType.tileSquare150x150PeekImageAndText02);
+        var squareText = squareXml.getElementsByTagName('text');
+        var squareImg = squareXml.getElementsByTagName('image');
+
+        if (squareText && squareText.length > 0) {
+          try { squareText[0].appendChild(squareXml.createTextNode(title)); } catch (e) {}
+        }
+        if (squareText && squareText.length > 1) {
+          try { squareText[1].appendChild(squareXml.createTextNode(artist)); } catch (e) {}
+        }
+        if (squareImg && squareImg.length > 0 && art) {
+          try { squareImg[0].setAttribute('src', art); } catch (e) {}
+        }
+
+        var squareNotif = new Notifications.TileNotification(squareXml);
+        try { tileUpdater.update(squareNotif); } catch (e) {}
+      } catch (e) {
+        try { console.warn('Failed to create square tile for item', i, e); } catch (err) {}
+      }
+    }
+
+    try { console.info('Live tile updated with', limit, 'items'); } catch (e) {}
+  } catch (e) {
+    try { console.warn('updateLiveTileFromPlaylist failed:', e); } catch (err) {}
+  }
+}
+
 loadMusic();
