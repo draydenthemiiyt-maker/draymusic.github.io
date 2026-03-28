@@ -231,217 +231,274 @@ if (searchInput) {
 
 /* ===== Windows UWP integration (ES5-safe) ===== */
 (function initWindowsIntegration() {
-  if (typeof window.Windows === 'undefined') {
-    try { console.info('Windows Runtime not available — skipping UWP integration.'); } catch (e) {}
-    return;
-  }
-
-  var Win = window.Windows || {};
-  var ViewMgmt = (Win.UI && Win.UI.ViewManagement) ? Win.UI.ViewManagement : null;
-  var Media = Win.Media || null;
-  var Storage = Win.Storage || null;
-  var Foundation = Win.Foundation || null;
-
-  /* ---------- Accent color integration ---------- */
-  try {
-    if (ViewMgmt && ViewMgmt.UISettings) {
-      var uiSettings = new ViewMgmt.UISettings();
-
-      function toHexByte(n) {
-        var s = (n || 0).toString(16);
-        return s.length === 1 ? '0' + s : s;
-      }
-
-      function winColorToHex(winColor) {
-        if (!winColor) return '#0078D7';
-        var r = winColor.r || 0;
-        var g = winColor.g || 0;
-        var b = winColor.b || 0;
-        return '#' + toHexByte(r) + toHexByte(g) + toHexByte(b);
-      }
-
-      function applyAccentFromUISettings() {
-        try {
-          var winColor = uiSettings.getColorValue(ViewMgmt.UIColorType.accent);
-          var hex = winColorToHex(winColor);
-          try {
-            document.documentElement.style.setProperty('--accent', hex);
-            document.documentElement.classList.add('windows-uwp-accent');
-          } catch (e) {}
-          try { console.info('Applied Windows accent color:', hex); } catch (e) {}
-        } catch (e) {
-          try { console.warn('Failed to read Windows accent color:', e); } catch (err) {}
-        }
-      }
-
-      applyAccentFromUISettings();
-
-      try {
-        uiSettings.addEventListener('colorvalueschanged', function () {
-          setTimeout(applyAccentFromUISettings, 0);
-        });
-      } catch (e) {
-        try { console.info('Could not attach color change listener:', e); } catch (err) {}
-      }
+    if (typeof window.Windows === 'undefined') {
+        try { console.info('Windows Runtime not available — skipping UWP integration.'); } catch (e) { }
+        return;
     }
-  } catch (e) {
-    try { console.warn('Accent integration failed:', e); } catch (err) {}
-  }
 
-  /* ---------- System Media Transport Controls (SMTC) integration ---------- */
-  try {
-    if (Media && Media.SystemMediaTransportControls) {
-      var smtc = Media.SystemMediaTransportControls.getForCurrentView();
+    var Win = window.Windows || {};
+    var ViewMgmt = (Win.UI && Win.UI.ViewManagement) ? Win.UI.ViewManagement : null;
+    var Media = Win.Media || null;
+    var Storage = Win.Storage || null;
+    var Foundation = Win.Foundation || null;
+    var Notifications = Win.UI.Notifications || null;
+    var DataXml = Win.Data.Xml.Dom || null;
 
-      try {
-        smtc.isEnabled = true;
-        smtc.isPlayEnabled = true;
-        smtc.isPauseEnabled = true;
-        smtc.isNextEnabled = true;
-        smtc.isPreviousEnabled = true;
-        smtc.isFastForwardEnabled = true;
-        smtc.isRewindEnabled = true;
-      } catch (e) {}
+    /* ---------- Live Tile Integration (Flipping Songs) ---------- */
+    function updateLiveTileFromXml() {
+        if (!Notifications || !DataXml) return;
 
-      function updateSmtcPlaybackStatus() {
-        try {
-          var status = (audio && !audio.paused) ? Media.MediaPlaybackStatus.playing : Media.MediaPlaybackStatus.paused;
-          try {
-            smtc.playbackStatus = status;
-          } catch (err) {
-            try { smtc.setPlaybackStatus && smtc.setPlaybackStatus(status); } catch (e) {}
-          }
-        } catch (e) {}
-      }
+        var url = 'https://draydenthemiiyt-maker.github.io/draymusic.github.io/music.xml?nocache=' + new Date().getTime();
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                try {
+                    var xml = xhr.responseXML;
+                    if (!xml) xml = new DOMParser().parseFromString(xhr.responseText, 'text/xml');
 
-      function updateSmtcMetadata() {
-        try {
-          var updater = smtc.displayUpdater;
-          updater.type = Media.MediaPlaybackType.music;
+                    var items = xml.getElementsByTagName('song');
+                    var tileUpdater = Notifications.TileUpdateManager.createTileUpdaterForApplication();
 
-          var song = (currentPlaylist && typeof currentPlaylist[currentIndex] !== 'undefined') ? currentPlaylist[currentIndex] : null;
-          if (song) {
-            try { updater.musicProperties.title = song.title || ''; } catch (e) {}
-            try { updater.musicProperties.artist = song.artist || ''; } catch (e) {}
-            try { updater.musicProperties.albumArtist = song.artist || ''; } catch (e) {}
+                    tileUpdater.enableNotificationQueue(true); // Enables the "flipping" behavior
+                    tileUpdater.clear();
 
-            if (song.art) {
-              try {
-                var uri = new Foundation.Uri(song.art);
-                var ras = Storage.Streams.RandomAccessStreamReference.createFromUri(uri);
-                updater.thumbnail = ras;
-              } catch (e) {
-                try { updater.thumbnail = null; } catch (err) {}
-              }
-            } else {
-              try { updater.thumbnail = null; } catch (e) {}
+                    var limit = Math.min(items.length, 5); // Windows queue limit is 5
+                    for (var i = 0; i < limit; i++) {
+                        var s = items[i];
+                        var title = s.getElementsByTagName('title')[0].textContent || "";
+                        var artist = s.getElementsByTagName('artist')[0].textContent || "";
+                        var art = s.getElementsByTagName('albumArt')[0].textContent || "placeholder.png";
+
+                        var tileXmlString =
+                            "<tile>" +
+                            "<visual>" +
+                            "<binding template='TileMedium'>" +
+                            "<image src='" + art + "' placement='background' />" +
+                            "<text hint-wrap='true' hint-style='caption'>" + title + "</text>" +
+                            "<text hint-style='captionSubtle'>" + artist + "</text>" +
+                            "</binding>" +
+                            "<binding template='TileWide'>" +
+                            "<image src='" + art + "' placement='background' />" +
+                            "<text hint-style='subtitle'>" + title + "</text>" +
+                            "<text hint-style='caption'>" + artist + "</text>" +
+                            "</binding>" +
+                            "</visual>" +
+                            "</tile>";
+
+                        var tileDoc = new DataXml.XmlDocument();
+                        tileDoc.loadXml(tileXmlString);
+                        tileUpdater.update(new Notifications.TileNotification(tileDoc));
+                    }
+                } catch (e) { console.warn('Tile update failed:', e); }
             }
-          } else {
-            try { updater.musicProperties.title = ''; } catch (e) {}
-            try { updater.musicProperties.artist = ''; } catch (e) {}
-            try { updater.thumbnail = null; } catch (e) {}
-          }
+        };
+        xhr.send();
+    }
 
-          try { updater.update(); } catch (e) {}
-        } catch (e) {
-          try { console.warn('Failed to update SMTC metadata:', e); } catch (err) {}
-        }
-      }
+    // Run tile update on init
+    try { updateLiveTileFromXml(); } catch (e) { }
 
-      try {
-        smtc.addEventListener('buttonpressed', function (ev) {
-          try {
-            var btn = ev.button;
-            switch (btn) {
-              case Media.SystemMediaTransportControlsButton.play:
-                if (audio && audio.play) { try { audio.play().catch(function(){}); } catch (e) { try { audio.play(); } catch (err) {} } }
-                break;
-              case Media.SystemMediaTransportControlsButton.pause:
-                if (audio && audio.pause) { try { audio.pause(); } catch (e) {} }
-                break;
-              case Media.SystemMediaTransportControlsButton.next:
-                if (typeof playNext === 'function') { try { playNext(); } catch (e) {} } else { try { playSong(currentIndex + 1); } catch (e) {} }
-                break;
-              case Media.SystemMediaTransportControlsButton.previous:
-                if (typeof playPrev === 'function') { try { playPrev(); } catch (e) {} } else { try { playSong(currentIndex - 1); } catch (e) {} }
-                break;
-              case Media.SystemMediaTransportControlsButton.fastForward:
-                if (audio && audio.duration && !isNaN(audio.duration)) {
-                  try { audio.currentTime = Math.min(audio.duration, (audio.currentTime || 0) + 10); } catch (e) {}
-                }
-                break;
-              case Media.SystemMediaTransportControlsButton.rewind:
-                if (audio) {
-                  try { audio.currentTime = Math.max(0, (audio.currentTime || 0) - 10); } catch (e) {}
-                }
-                break;
-              default:
-                break;
+    /* ---------- Accent color integration ---------- */
+    try {
+        if (ViewMgmt && ViewMgmt.UISettings) {
+            var uiSettings = new ViewMgmt.UISettings();
+
+            function toHexByte(n) {
+                var s = (n || 0).toString(16);
+                return s.length === 1 ? '0' + s : s;
             }
-            updateSmtcPlaybackStatus();
-          } catch (e) {
-            try { console.warn('Error handling SMTC button press:', e); } catch (err) {}
-          }
-        });
-      } catch (e) {
-        try { console.info('SMTC button event wiring failed:', e); } catch (err) {}
-      }
 
-      if (audio) {
-        var origPlaySong = window.playSong;
-        if (typeof origPlaySong === 'function') {
-          window.playSong = function (index) {
-            var ret;
-            try { ret = origPlaySong(index); } catch (e) {}
-            setTimeout(function () {
-              try { updateSmtcMetadata(); } catch (e) {}
-              try { updateSmtcPlaybackStatus(); } catch (e) {}
-              try {
-                if (smtc.timelineProperties) {
-                  smtc.timelineProperties.startTime = 0;
-                  smtc.timelineProperties.endTime = (audio && audio.duration) ? audio.duration : 0;
-                  smtc.timelineProperties.position = audio ? audio.currentTime : 0;
-                  if (typeof smtc.setTimelineProperties === 'function') {
-                    try { smtc.setTimelineProperties(smtc.timelineProperties); } catch (e) {}
-                  }
+            function winColorToHex(winColor) {
+                if (!winColor) return '#0078D7';
+                var r = winColor.r || 0;
+                var g = winColor.g || 0;
+                var b = winColor.b || 0;
+                return '#' + toHexByte(r) + toHexByte(g) + toHexByte(b);
+            }
+
+            function applyAccentFromUISettings() {
+                try {
+                    var winColor = uiSettings.getColorValue(ViewMgmt.UIColorType.accent);
+                    var hex = winColorToHex(winColor);
+                    try {
+                        document.documentElement.style.setProperty('--accent', hex);
+                        document.documentElement.classList.add('windows-uwp-accent');
+                    } catch (e) { }
+                    try { console.info('Applied Windows accent color:', hex); } catch (e) { }
+                } catch (e) {
+                    try { console.warn('Failed to read Windows accent color:', e); } catch (err) { }
                 }
-              } catch (e) {}
-            }, 200);
-            return ret;
-          };
-        }
+            }
 
-        try { audio.addEventListener('play', updateSmtcPlaybackStatus); } catch (e) {}
-        try { audio.addEventListener('pause', updateSmtcPlaybackStatus); } catch (e) {}
-        try {
-          audio.addEventListener('timeupdate', function () {
+            applyAccentFromUISettings();
+
             try {
-              if (smtc.timelineProperties) {
-                smtc.timelineProperties.position = audio.currentTime || 0;
-                if (typeof smtc.setTimelineProperties === 'function') {
-                  try { smtc.setTimelineProperties(smtc.timelineProperties); } catch (e) {}
-                }
-              }
-            } catch (e) {}
-          });
-        } catch (e) {}
-
-        try {
-          audio.addEventListener('loadedmetadata', function () {
-            try { updateSmtcMetadata(); } catch (e) {}
-            try { updateSmtcPlaybackStatus(); } catch (e) {}
-          });
-        } catch (e) {}
-      }
-
-      try { updateSmtcMetadata(); } catch (e) {}
-      try { updateSmtcPlaybackStatus(); } catch (e) {}
-    } else {
-      try { console.info('SystemMediaTransportControls not available in this host.'); } catch (e) {}
+                uiSettings.addEventListener('colorvalueschanged', function () {
+                    setTimeout(applyAccentFromUISettings, 0);
+                });
+            } catch (e) {
+                try { console.info('Could not attach color change listener:', e); } catch (err) { }
+            }
+        }
+    } catch (e) {
+        try { console.warn('Accent integration failed:', e); } catch (err) { }
     }
-  } catch (e) {
-    try { console.warn('SMTC integration failed:', e); } catch (err) {}
-  }
+
+    /* ---------- System Media Transport Controls (SMTC) integration ---------- */
+    try {
+        if (Media && Media.SystemMediaTransportControls) {
+            var smtc = Media.SystemMediaTransportControls.getForCurrentView();
+
+            try {
+                smtc.isEnabled = true;
+                smtc.isPlayEnabled = true;
+                smtc.isPauseEnabled = true;
+                smtc.isNextEnabled = true;
+                smtc.isPreviousEnabled = true;
+                smtc.isFastForwardEnabled = true;
+                smtc.isRewindEnabled = true;
+            } catch (e) { }
+
+            function updateSmtcPlaybackStatus() {
+                try {
+                    var status = (audio && !audio.paused) ? Media.MediaPlaybackStatus.playing : Media.MediaPlaybackStatus.paused;
+                    try {
+                        smtc.playbackStatus = status;
+                    } catch (err) {
+                        try { smtc.setPlaybackStatus && smtc.setPlaybackStatus(status); } catch (e) { }
+                    }
+                } catch (e) { }
+            }
+
+            function updateSmtcMetadata() {
+                try {
+                    var updater = smtc.displayUpdater;
+                    updater.type = Media.MediaPlaybackType.music;
+
+                    var song = (currentPlaylist && typeof currentPlaylist[currentIndex] !== 'undefined') ? currentPlaylist[currentIndex] : null;
+                    if (song) {
+                        try { updater.musicProperties.title = song.title || ''; } catch (e) { }
+                        try { updater.musicProperties.artist = song.artist || ''; } catch (e) { }
+                        try { updater.musicProperties.albumArtist = song.artist || ''; } catch (e) { }
+
+                        if (song.art) {
+                            try {
+                                var uri = new Foundation.Uri(song.art);
+                                var ras = Storage.Streams.RandomAccessStreamReference.createFromUri(uri);
+                                updater.thumbnail = ras;
+                            } catch (e) {
+                                try { updater.thumbnail = null; } catch (err) { }
+                            }
+                        } else {
+                            try { updater.thumbnail = null; } catch (e) { }
+                        }
+                    } else {
+                        try { updater.musicProperties.title = ''; } catch (e) { }
+                        try { updater.musicProperties.artist = ''; } catch (e) { }
+                        try { updater.thumbnail = null; } catch (e) { }
+                    }
+
+                    try { updater.update(); } catch (e) { }
+                } catch (e) {
+                    try { console.warn('Failed to update SMTC metadata:', e); } catch (err) { }
+                }
+            }
+
+            try {
+                smtc.addEventListener('buttonpressed', function (ev) {
+                    try {
+                        var btn = ev.button;
+                        switch (btn) {
+                            case Media.SystemMediaTransportControlsButton.play:
+                                if (audio && audio.play) { try { audio.play().catch(function () { }); } catch (e) { try { audio.play(); } catch (err) { } } }
+                                break;
+                            case Media.SystemMediaTransportControlsButton.pause:
+                                if (audio && audio.pause) { try { audio.pause(); } catch (e) { } }
+                                break;
+                            case Media.SystemMediaTransportControlsButton.next:
+                                if (typeof playNext === 'function') { try { playNext(); } catch (e) { } } else { try { playSong(currentIndex + 1); } catch (e) { } }
+                                break;
+                            case Media.SystemMediaTransportControlsButton.previous:
+                                if (typeof playPrev === 'function') { try { playPrev(); } catch (e) { } } else { try { playSong(currentIndex - 1); } catch (e) { } }
+                                break;
+                            case Media.SystemMediaTransportControlsButton.fastForward:
+                                if (audio && audio.duration && !isNaN(audio.duration)) {
+                                    try { audio.currentTime = Math.min(audio.duration, (audio.currentTime || 0) + 10); } catch (e) { }
+                                }
+                                break;
+                            case Media.SystemMediaTransportControlsButton.rewind:
+                                if (audio) {
+                                    try { audio.currentTime = Math.max(0, (audio.currentTime || 0) - 10); } catch (e) { }
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                        updateSmtcPlaybackStatus();
+                    } catch (e) {
+                        try { console.warn('Error handling SMTC button press:', e); } catch (err) { }
+                    }
+                });
+            } catch (e) {
+                try { console.info('SMTC button event wiring failed:', e); } catch (err) { }
+            }
+
+            if (audio) {
+                var origPlaySong = window.playSong;
+                if (typeof origPlaySong === 'function') {
+                    window.playSong = function (index) {
+                        var ret;
+                        try { ret = origPlaySong(index); } catch (e) { }
+                        setTimeout(function () {
+                            try { updateSmtcMetadata(); } catch (e) { }
+                            try { updateSmtcPlaybackStatus(); } catch (e) { }
+                            try {
+                                if (smtc.timelineProperties) {
+                                    smtc.timelineProperties.startTime = 0;
+                                    smtc.timelineProperties.endTime = (audio && audio.duration) ? audio.duration : 0;
+                                    smtc.timelineProperties.position = audio ? audio.currentTime : 0;
+                                    if (typeof smtc.setTimelineProperties === 'function') {
+                                        try { smtc.setTimelineProperties(smtc.timelineProperties); } catch (e) { }
+                                    }
+                                }
+                            } catch (e) { }
+                        }, 200);
+                        return ret;
+                    };
+                }
+
+                try { audio.addEventListener('play', updateSmtcPlaybackStatus); } catch (e) { }
+                try { audio.addEventListener('pause', updateSmtcPlaybackStatus); } catch (e) { }
+                try {
+                    audio.addEventListener('timeupdate', function () {
+                        try {
+                            if (smtc.timelineProperties) {
+                                smtc.timelineProperties.position = audio.currentTime || 0;
+                                if (typeof smtc.setTimelineProperties === 'function') {
+                                    try { smtc.setTimelineProperties(smtc.timelineProperties); } catch (e) { }
+                                }
+                            }
+                        } catch (e) { }
+                    });
+                } catch (e) { }
+
+                try {
+                    audio.addEventListener('loadedmetadata', function () {
+                        try { updateSmtcMetadata(); } catch (e) { }
+                        try { updateSmtcPlaybackStatus(); } catch (e) { }
+                    });
+                } catch (e) { }
+            }
+
+            try { updateSmtcMetadata(); } catch (e) { }
+            try { updateSmtcPlaybackStatus(); } catch (e) { }
+        } else {
+            try { console.info('SystemMediaTransportControls not available in this host.'); } catch (e) { }
+        }
+    } catch (e) {
+        try { console.warn('SMTC integration failed:', e); } catch (err) { }
+    }
 })();
 
 loadMusic();
