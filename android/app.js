@@ -244,7 +244,7 @@ if (searchInput) {
     var Notifications = Win.UI.Notifications || null;
     var DataXml = Win.Data.Xml.Dom || null;
 
-    /* ---------- Live Tile Integration (Flipping Songs) ---------- */
+    /* ---------- Live Tile Integration (Flipping Songs Fix) ---------- */
     function updateLiveTileFromXml() {
         if (!Notifications || !DataXml) return;
 
@@ -260,10 +260,10 @@ if (searchInput) {
                     var items = xml.getElementsByTagName('song');
                     var tileUpdater = Notifications.TileUpdateManager.createTileUpdaterForApplication();
 
-                    tileUpdater.enableNotificationQueue(true); // Enables the "flipping" behavior
+                    tileUpdater.enableNotificationQueue(true);
                     tileUpdater.clear();
 
-                    var limit = Math.min(items.length, 5); // Windows queue limit is 5
+                    var limit = Math.min(items.length, 5);
                     for (var i = 0; i < limit; i++) {
                         var s = items[i];
                         var title = s.getElementsByTagName('title')[0].textContent || "";
@@ -288,7 +288,12 @@ if (searchInput) {
 
                         var tileDoc = new DataXml.XmlDocument();
                         tileDoc.loadXml(tileXmlString);
-                        tileUpdater.update(new Notifications.TileNotification(tileDoc));
+
+                        // FIX: Create the notification and give it a UNIQUE TAG
+                        var notification = new Notifications.TileNotification(tileDoc);
+                        notification.tag = "song_" + i; // This tells Windows these are separate items to flip through
+
+                        tileUpdater.update(notification);
                     }
                 } catch (e) { console.warn('Tile update failed:', e); }
             }
