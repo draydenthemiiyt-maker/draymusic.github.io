@@ -264,40 +264,45 @@ if (searchInput) {
                     tileUpdater.enableNotificationQueue(true);
                     tileUpdater.clear();
 
+                    // Limit to 5 songs (Windows maximum for cycling)
                     var limit = Math.min(items.length, 5);
+
                     for (var i = 0; i < limit; i++) {
                         var s = items[i];
-                        var title = s.getElementsByTagName('title')[0].textContent || "";
-                        var artist = s.getElementsByTagName('artist')[0].textContent || "";
-                        var art = s.getElementsByTagName('albumArt')[0].textContent || "placeholder.png";
+                        var song = {
+                            title: s.getElementsByTagName('title')[0].textContent || "",
+                            artist: s.getElementsByTagName('artist')[0].textContent || "",
+                            albumArt: s.getElementsByTagName('albumArt')[0].textContent || "placeholder.png"
+                        };
 
-                        // 1. Setup Wide Template (310x150)
+                        // 1. Get Wide Template (310x150)
                         var wideXml = Notifications.TileUpdateManager.getTemplateContent(tileType.tileWide310x150ImageAndText01);
                         var wideText = wideXml.getElementsByTagName("text");
                         var wideImg = wideXml.getElementsByTagName("image");
 
-                        if (wideText[0]) wideText[0].innerText = title;
-                        if (wideText[1]) wideText[1].innerText = artist;
-                        if (wideImg[0]) wideImg[0].setAttribute("src", art);
+                        // Safety: Only append if the nodes actually exist
+                        if (wideText[0]) wideText[0].appendChild(wideXml.createTextNode(song.title));
+                        if (wideText[1]) wideText[1].appendChild(wideXml.createTextNode(song.artist));
+                        if (wideImg[0]) wideImg[0].setAttribute("src", song.albumArt);
 
-                        // 2. Setup Square Template (150x150)
+                        // 2. Get Square Template (150x150)
                         var squareXml = Notifications.TileUpdateManager.getTemplateContent(tileType.tileSquare150x150PeekImageAndText02);
                         var squareText = squareXml.getElementsByTagName("text");
                         var squareImg = squareXml.getElementsByTagName("image");
 
-                        if (squareText[0]) squareText[0].innerText = title;
-                        if (squareText[1]) squareText[1].innerText = artist;
-                        if (squareImg[0]) squareImg[0].setAttribute("src", art);
+                        if (squareText[0]) squareText[0].appendChild(squareXml.createTextNode(song.title));
+                        if (squareText[1]) squareText[1].appendChild(squareXml.createTextNode(song.artist));
+                        if (squareImg[0]) squareImg[0].setAttribute("src", song.albumArt);
 
-                        // 3. Combine Square into Wide for full support
+                        // 3. Combine Square into Wide so the Tile supports both sizes
                         var bindingNode = wideXml.importNode(squareXml.getElementsByTagName("binding").item(0), true);
                         wideXml.getElementsByTagName("visual").item(0).appendChild(bindingNode);
 
-                        // 4. Send the notification with the unique tag
-                        var notification = new Notifications.TileNotification(wideXml);
-                        notification.tag = "song_" + i;
+                        // 4. Send to Tile with unique tag to prevent overwriting
+                        var tileNotification = new Notifications.TileNotification(wideXml);
+                        tileNotification.tag = "song_" + i;
 
-                        tileUpdater.update(notification);
+                        tileUpdater.update(tileNotification);
                     }
                 } catch (e) {
                     try { console.warn('Tile update failed:', e); } catch (err) { }
