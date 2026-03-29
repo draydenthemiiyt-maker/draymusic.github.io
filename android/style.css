@@ -33,6 +33,10 @@ body.winxpclient * {
     -webkit-backdrop-filter: none !important;
 }
 
+body.winxpclient #body-bg {
+    display: none;
+}
+
 #body-bg {
     position: fixed;
     top: 0;
