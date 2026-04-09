@@ -19,34 +19,41 @@
 }
 
 /* 2. Detect Windows UWP Integration */
+/* 2. Detect Windows UWP Integration */
 .win-type-body .material-symbols-rounded {
-  /* Use Segoe Fluent Icons (Win 11) or Segoe MDL2 Assets (Win 10) */
-  font-family: 'Segoe MDL2 Assets';
-  font-size: 18px; /* Windows system icons usually look better slightly smaller */
-  
-  /* Hide the Material text (e.g., "play_arrow") */
-  text-indent: -9999px;
-  overflow: hidden;
-  width: 1em;
-  height: 1em;
-  position: relative;
-}
-
-/* 3. Map Material Names to Windows Unicode Glyphs */
-.win-type-body .material-symbols-rounded::before {
+  font-family: 'Segoe MDL2 Assets' !important; /* Force the system font */
+  font-size: 18px;
   text-indent: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  text-align: center;
+  overflow: visible;
+  width: auto;
+  height: auto;
 }
 
-/* Common Music Player Mapping */
-.win-type-body .material-symbols-rounded:contains-text("play_arrow")::before { content: '\E768'; }
-.win-type-body .material-symbols-rounded:contains-text("pause")::before      { content: '\E769'; }
-.win-type-body .material-symbols-rounded:contains-text("skip_next")::before  { content: '\E893'; }
-.win-type-body .material-symbols-rounded:contains-text("skip_previous")::before { content: '\E892'; }
-.win-type-body .material-symbols-rounded:contains-text("volume_up")::before  { content: '\E767'; }
-.win-type-body .material-symbols-rounded:contains-text("shuffle")::before    { content: '\E8B1'; }
-.win-type-body .material-symbols-rounded:contains-text("repeat")::before     { content: '\E8EE'; }
+/* Clear the original Material text so only the icon shows */
+.win-type-body .material-symbols-rounded {
+  color: transparent;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.win-type-body .material-symbols-rounded::before {
+  color: currentColor; /* Bring the color back for the icon */
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  text-indent: 0;
+  display: block;
+  font-family: 'Segoe MDL2 Assets';
+}
+
+/* Common Music Player Mapping using Data Attributes (More reliable than text-contains) */
+.win-type-body [data-icon="play_arrow"]::before { content: '\E768'; }
+.win-type-body [data-icon="pause"]::before      { content: '\E769'; }
+.win-type-body [data-icon="skip_next"]::before  { content: '\E893'; }
+.win-type-body [data-icon="skip_previous"]::before { content: '\E892'; }
+.win-type-body [data-icon="repeat"]::before     { content: '\E8EE'; }
+.win-type-body [data-icon="search"]::before     { content: '\E71E'; }
