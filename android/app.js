@@ -273,98 +273,73 @@ if (searchInput) {
     var Notifications = Win.UI.Notifications || null;
     var DataXml = Win.Data.Xml.Dom || null;
 
-/* ---------- Live Tile Integration (All Tile Sizes) ---------- */
-    function updateLiveTileFromXml() {
-        if (!Notifications || !DataXml) return;
+/* ---------- Minimal Windows 10 Live Tile Integration ---------- */
+function updateLiveTileMinimal() {
+    if (typeof window.Windows === 'undefined' || !window.Windows.UI.Notifications) return;
 
-        var url = 'https://draydenthemiiyt-maker.github.io/draymusic.github.io/music.xml?nocache=' + new Date().getTime();
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4 && xhr.status === 200) {
-                try {
-                    var xml = xhr.responseXML;
-                    if (!xml) xml = new DOMParser().parseFromString(xhr.responseText, 'text/xml');
+    var Notifications = window.Windows.UI.Notifications;
+    var DataXml = window.Windows.Data.Xml.Dom;
+    var url = 'https://draydenthemiiyt-maker.github.io/draymusic.github.io/music.xml?nocache=' + new Date().getTime();
 
-                    var items = xml.getElementsByTagName('song');
-                    var tileUpdater = Notifications.TileUpdateManager.createTileUpdaterForApplication();
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            try {
+                var xml = xhr.responseXML || new DOMParser().parseFromString(xhr.responseText, 'text/xml');
+                var song = xml.getElementsByTagName('song')[0]; // Just use the latest song for a clean look
+                if (!song) return;
 
-                    tileUpdater.enableNotificationQueue(true);
-                    tileUpdater.clear();
+                var title = escapeXml(song.getElementsByTagName('title')[0].textContent);
+                var artist = escapeXml(song.getElementsByTagName('artist')[0].textContent);
+                var art = song.getElementsByTagName('albumArt')[0].textContent.trim();
+                var albumArt = (art && art !== "placeholder.png") ? escapeXml(art) : "ms-appx:///Assets/StoreLogo.png";
 
-                    var limit = Math.min(items.length, 5);
+                var tileXmlString = 
+                    '<tile>' +
+                    '  <visual version="2">' +
+                    // Small: Minimal icon/text
+                    '    <binding template="TileSmall">' +
+                    '      <text hint-style="caption">' + title + '</text>' +
+                    '    </binding>' +
+                    // Medium: Image background + Text overlay
+                    '    <binding template="TileMedium" branding="none">' +
+                    '      <image src="' + albumArt + '" placement="background" hint-overlay="60"/>' +
+                    '      <text hint-style="body" hint-wrap="true" hint-align="center">' + title + '</text>' +
+                    '      <text hint-style="captionSubtle" hint-wrap="true" hint-align="center">' + artist + '</text>' +
+                    '    </binding>' +
+                    // Wide: Content side-by-side
+                    '    <binding template="TileWide" branding="name">' +
+                    '      <group>' +
+                    '        <subgroup hint-weight="33">' +
+                    '          <image src="' + albumArt + '" />' +
+                    '        </subgroup>' +
+                    '        <subgroup>' +
+                    '          <text hint-style="subtitle">' + title + '</text>' +
+                    '          <text hint-style="captionSubtle">' + artist + '</text>' +
+                    '        </subgroup>' +
+                    '      </group>' +
+                    '    </binding>' +
+                    // Large: Clean hero image
+                    '    <binding template="TileLarge" branding="nameAndLogo">' +
+                    '      <image src="' + albumArt + '" placement="background" hint-overlay="40"/>' +
+                    '      <text hint-style="header" hint-wrap="true">' + title + '</text>' +
+                    '      <text hint-style="subtitleSubtle" hint-wrap="true">' + artist + '</text>' +
+                    '    </binding>' +
+                    '  </visual>' +
+                    '</tile>';
 
-                    for (var i = 0; i < limit; i++) {
-                        var s = items[i];
-                        var rawTitle = s.getElementsByTagName('title')[0] ? s.getElementsByTagName('title')[0].textContent : "";
-                        var rawArtist = s.getElementsByTagName('artist')[0] ? s.getElementsByTagName('artist')[0].textContent : "";
-                        var rawArt = s.getElementsByTagName('albumArt')[0] ? s.getElementsByTagName('albumArt')[0].textContent.trim() : "";
+                var tileXml = new DataXml.XmlDocument();
+                tileXml.loadXml(tileXmlString);
+                Notifications.TileUpdateManager.createTileUpdaterForApplication().update(new Notifications.TileNotification(tileXml));
 
-                        var albumArt = (rawArt && rawArt !== "placeholder.png") 
-                                       ? escapeXml(rawArt) 
-                                       : "ms-appx:///Assets/Square150x150Logo.png";
+            } catch (e) { console.warn('Minimal tile update failed', e); }
+        }
+    };
+    xhr.send();
+}
 
-                        var title = escapeXml(rawTitle);
-                        var artist = escapeXml(rawArtist);
-
-                        // Comprehensive Adaptive XML for ALL sizes
-                        var adaptiveXmlString = 
-                            '<tile>' +
-                            '  <visual version="2">' +
-                            
-                            // 1. SMALL TILE (71x71) - Text only, no room for art
-                            '    <binding template="TileSmall">' +
-                            '      <text hint-style="caption">' + title + '</text>' +
-                            '    </binding>' +
-
-                            // 2. MEDIUM TILE (150x150) - Peek layout
-                            '    <binding template="TileMedium" branding="nameAndLogo">' +
-                            '      <image placement="peek" src="' + albumArt + '"/>' +
-                            '      <text hint-style="body" hint-wrap="true" hint-maxLines="2">' + title + '</text>' +
-                            '      <text hint-style="captionSubtle" hint-wrap="true">' + artist + '</text>' +
-                            '    </binding>' +
-
-                            // 3. WIDE TILE (310x150) - Side-by-side layout
-                            '    <binding template="TileWide" branding="nameAndLogo">' +
-                            '      <group>' +
-                            '        <subgroup hint-weight="1">' +
-                            '          <image src="' + albumArt + '" hint-crop="none"/>' +
-                            '        </subgroup>' +
-                            '        <subgroup hint-weight="2" hint-textStacking="top">' +
-                            '          <text hint-style="subtitle" hint-wrap="true" hint-maxLines="2">' + title + '</text>' +
-                            '          <text hint-style="captionSubtle" hint-wrap="true">' + artist + '</text>' +
-                            '        </subgroup>' +
-                            '      </group>' +
-                            '    </binding>' +
-
-                            // 4. LARGE TILE (310x310) - Hero image + text below
-                            '    <binding template="TileLarge" branding="nameAndLogo">' +
-                            '      <image src="' + albumArt + '" hint-crop="none"/>' +
-                            '      <text hint-style="title" hint-wrap="true">' + title + '</text>' +
-                            '      <text hint-style="subtitleSubtle" hint-wrap="true">' + artist + '</text>' +
-                            '    </binding>' +
-
-                            '  </visual>' +
-                            '</tile>';
-
-                        var tileXml = new DataXml.XmlDocument();
-                        tileXml.loadXml(adaptiveXmlString);
-
-                        var tileNotification = new Notifications.TileNotification(tileXml);
-                        tileNotification.tag = "song_" + i;
-
-                        tileUpdater.update(tileNotification);
-                    }
-                } catch (e) {
-                    try { console.warn('Tile update failed:', e); } catch (err) { }
-                }
-            }
-        };
-        xhr.send();
-    }
-
-    // Run tile update on init
-    try { updateLiveTileFromXml(); } catch (e) { }
+    try { updateLiveTileMinimal(); } catch (e) { }
 
     /* ---------- Accent color integration ---------- */
     try {
