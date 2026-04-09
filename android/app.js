@@ -253,6 +253,18 @@ if (searchInput) {
         return;
     }
 
+    // Apply the requested class to the body if UWP is detected
+    try {
+        if (document.body) {
+            document.body.classList.add('win-type-body');
+        } else {
+            // Fallback just in case the script runs before the body is parsed
+            document.addEventListener("DOMContentLoaded", function() {
+                document.body.classList.add('win-type-body');
+            });
+        }
+    } catch (e) { }
+
     var Win = window.Windows || {};
     var ViewMgmt = (Win.UI && Win.UI.ViewManagement) ? Win.UI.ViewManagement : null;
     var Media = Win.Media || null;
@@ -286,10 +298,16 @@ if (searchInput) {
 
                     for (var i = 0; i < limit; i++) {
                         var s = items[i];
+                        
+                        // Standard Web DOM parsing for the XHR response (bracket notation is fine here)
+                        var titleNode = s.getElementsByTagName('title')[0];
+                        var artistNode = s.getElementsByTagName('artist')[0];
+                        var artNode = s.getElementsByTagName('albumArt')[0];
+                        
                         var song = {
-                            title: s.getElementsByTagName('title')[0].textContent || "",
-                            artist: s.getElementsByTagName('artist')[0].textContent || "",
-                            albumArt: s.getElementsByTagName('albumArt')[0].textContent || "placeholder.png"
+                            title: titleNode ? titleNode.textContent : "",
+                            artist: artistNode ? artistNode.textContent : "",
+                            albumArt: artNode ? artNode.textContent : "placeholder.png"
                         };
 
                         // 1. Get Wide Template (310x150)
@@ -297,19 +315,19 @@ if (searchInput) {
                         var wideText = wideXml.getElementsByTagName("text");
                         var wideImg = wideXml.getElementsByTagName("image");
 
-                        // Safety: Only append if the nodes actually exist
-                        if (wideText[0]) wideText[0].appendChild(wideXml.createTextNode(song.title));
-                        if (wideText[1]) wideText[1].appendChild(wideXml.createTextNode(song.artist));
-                        if (wideImg[0]) wideImg[0].setAttribute("src", song.albumArt);
+                        // Fix: UWP XmlNodeList requires .item(index) instead of [index]
+                        if (wideText.length > 0) wideText.item(0).innerText = song.title;
+                        if (wideText.length > 1) wideText.item(1).innerText = song.artist;
+                        if (wideImg.length > 0) wideImg.item(0).setAttribute("src", song.albumArt);
 
                         // 2. Get Square Template (150x150)
                         var squareXml = Notifications.TileUpdateManager.getTemplateContent(tileType.tileSquare150x150PeekImageAndText02);
                         var squareText = squareXml.getElementsByTagName("text");
                         var squareImg = squareXml.getElementsByTagName("image");
 
-                        if (squareText[0]) squareText[0].appendChild(squareXml.createTextNode(song.title));
-                        if (squareText[1]) squareText[1].appendChild(squareXml.createTextNode(song.artist));
-                        if (squareImg[0]) squareImg[0].setAttribute("src", song.albumArt);
+                        if (squareText.length > 0) squareText.item(0).innerText = song.title;
+                        if (squareText.length > 1) squareText.item(1).innerText = song.artist;
+                        if (squareImg.length > 0) squareImg.item(0).setAttribute("src", song.albumArt);
 
                         // 3. Combine Square into Wide so the Tile supports both sizes
                         var bindingNode = wideXml.importNode(squareXml.getElementsByTagName("binding").item(0), true);
@@ -395,7 +413,7 @@ if (searchInput) {
 
             function updateSmtcPlaybackStatus() {
                 try {
-                    var status = (audio && !audio.paused) ? Media.MediaPlaybackStatus.playing : Media.MediaPlaybackStatus.paused;
+                    var status = (typeof audio !== 'undefined' && audio && !audio.paused) ? Media.MediaPlaybackStatus.playing : Media.MediaPlaybackStatus.paused;
                     try {
                         smtc.playbackStatus = status;
                     } catch (err) {
@@ -409,7 +427,7 @@ if (searchInput) {
                     var updater = smtc.displayUpdater;
                     updater.type = Media.MediaPlaybackType.music;
 
-                    var song = (currentPlaylist && typeof currentPlaylist[currentIndex] !== 'undefined') ? currentPlaylist[currentIndex] : null;
+                    var song = (typeof currentPlaylist !== 'undefined' && currentPlaylist && typeof currentPlaylist[currentIndex] !== 'undefined') ? currentPlaylist[currentIndex] : null;
                     if (song) {
                         try { updater.musicProperties.title = song.title || ''; } catch (e) { }
                         try { updater.musicProperties.artist = song.artist || ''; } catch (e) { }
@@ -444,24 +462,24 @@ if (searchInput) {
                         var btn = ev.button;
                         switch (btn) {
                             case Media.SystemMediaTransportControlsButton.play:
-                                if (audio && audio.play) { try { audio.play().catch(function () { }); } catch (e) { try { audio.play(); } catch (err) { } } }
+                                if (typeof audio !== 'undefined' && audio && audio.play) { try { audio.play().catch(function () { }); } catch (e) { try { audio.play(); } catch (err) { } } }
                                 break;
                             case Media.SystemMediaTransportControlsButton.pause:
-                                if (audio && audio.pause) { try { audio.pause(); } catch (e) { } }
+                                if (typeof audio !== 'undefined' && audio && audio.pause) { try { audio.pause(); } catch (e) { } }
                                 break;
                             case Media.SystemMediaTransportControlsButton.next:
-                                if (typeof playNext === 'function') { try { playNext(); } catch (e) { } } else { try { playSong(currentIndex + 1); } catch (e) { } }
+                                if (typeof playNext === 'function') { try { playNext(); } catch (e) { } } else if (typeof playSong === 'function' && typeof currentIndex !== 'undefined') { try { playSong(currentIndex + 1); } catch (e) { } }
                                 break;
                             case Media.SystemMediaTransportControlsButton.previous:
-                                if (typeof playPrev === 'function') { try { playPrev(); } catch (e) { } } else { try { playSong(currentIndex - 1); } catch (e) { } }
+                                if (typeof playPrev === 'function') { try { playPrev(); } catch (e) { } } else if (typeof playSong === 'function' && typeof currentIndex !== 'undefined') { try { playSong(currentIndex - 1); } catch (e) { } }
                                 break;
                             case Media.SystemMediaTransportControlsButton.fastForward:
-                                if (audio && audio.duration && !isNaN(audio.duration)) {
+                                if (typeof audio !== 'undefined' && audio && audio.duration && !isNaN(audio.duration)) {
                                     try { audio.currentTime = Math.min(audio.duration, (audio.currentTime || 0) + 10); } catch (e) { }
                                 }
                                 break;
                             case Media.SystemMediaTransportControlsButton.rewind:
-                                if (audio) {
+                                if (typeof audio !== 'undefined' && audio) {
                                     try { audio.currentTime = Math.max(0, (audio.currentTime || 0) - 10); } catch (e) { }
                                 }
                                 break;
@@ -477,7 +495,7 @@ if (searchInput) {
                 try { console.info('SMTC button event wiring failed:', e); } catch (err) { }
             }
 
-            if (audio) {
+            if (typeof audio !== 'undefined' && audio) {
                 var origPlaySong = window.playSong;
                 if (typeof origPlaySong === 'function') {
                     window.playSong = function (index) {
