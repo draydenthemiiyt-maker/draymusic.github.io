@@ -34,7 +34,6 @@
 
         WinJS.xhr({
             url: `${server}`,
-            headers: { "Cache-Control": "no-cache" }
         }).then(function (res) {
             try {
                 var parser = new DOMParser();
