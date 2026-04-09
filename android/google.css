@@ -1,3 +1,4 @@
+/* 1. Keep your original Material Symbols as the default */
 @font-face {
   font-family: 'Material Symbols Rounded';
   font-style: normal;
@@ -11,12 +12,41 @@
   font-style: normal;
   font-size: 24px;
   line-height: 1;
-  letter-spacing: normal;
-  text-transform: none;
   display: inline-block;
   white-space: nowrap;
-  word-wrap: normal;
   direction: ltr;
   -webkit-font-smoothing: antialiased;
-  cursor: default;
 }
+
+/* 2. Detect Windows UWP Integration */
+.win-type-body .material-symbols-rounded {
+  /* Use Segoe Fluent Icons (Win 11) or Segoe MDL2 Assets (Win 10) */
+  font-family: 'Segoe MDL2 Assets';
+  font-size: 18px; /* Windows system icons usually look better slightly smaller */
+  
+  /* Hide the Material text (e.g., "play_arrow") */
+  text-indent: -9999px;
+  overflow: hidden;
+  width: 1em;
+  height: 1em;
+  position: relative;
+}
+
+/* 3. Map Material Names to Windows Unicode Glyphs */
+.win-type-body .material-symbols-rounded::before {
+  text-indent: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+/* Common Music Player Mapping */
+.win-type-body .material-symbols-rounded:contains-text("play_arrow")::before { content: '\E768'; }
+.win-type-body .material-symbols-rounded:contains-text("pause")::before      { content: '\E769'; }
+.win-type-body .material-symbols-rounded:contains-text("skip_next")::before  { content: '\E893'; }
+.win-type-body .material-symbols-rounded:contains-text("skip_previous")::before { content: '\E892'; }
+.win-type-body .material-symbols-rounded:contains-text("volume_up")::before  { content: '\E767'; }
+.win-type-body .material-symbols-rounded:contains-text("shuffle")::before    { content: '\E8B1'; }
+.win-type-body .material-symbols-rounded:contains-text("repeat")::before     { content: '\E8EE'; }
