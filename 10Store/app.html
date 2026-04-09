@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link id="winjs-theme" href="" rel="stylesheet" />
+    <script src="ms-appx-web:///lib/winjs-4.0.1/js/base.js"></script>
+    <script src="ms-appx-web:///lib/winjs-4.0.1/js/ui.js"></script>
+    <style>
+        * {
+            outline: none !important;
+        }
+
+        html, body {
+            margin: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .app-screenshots {
+            background: transparent;
+            padding: 24px 28px 36px 28px;
+            box-sizing: border-box;
+        }
+
+            .app-screenshots .screenshots-inner {
+                max-width: 980px;
+                margin: 0 auto;
+                padding: 0 12px;
+                box-sizing: border-box;
+            }
+
+        .screenshots-title {
+            margin: 0 0 12px 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .carousel-viewer {
+            position: relative;
+            width: 100%;
+            max-width: 920px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            overflow: hidden;
+            background: rgba(0,0,0,0.12);
+            border-radius: 0;
+            border: none;
+        }
+
+            .carousel-viewer::before {
+                content: "";
+                display: block;
+                padding-top: 60%;
+            }
+
+            .carousel-viewer .carousel-inner {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+        .carousel-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            opacity: 0;
+            transition: opacity 320ms ease-in-out;
+            will-change: opacity;
+            border-radius: 0;
+        }
+
+        .carousel-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255,255,255,0.75);
+            background: rgba(0,0,0,0.12);
+            padding: 14px 18px;
+            border-radius: 0;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            padding: 8px 10px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+            .carousel-nav.left {
+                left: 8px;
+            }
+
+            .carousel-nav.right {
+                right: 8px;
+            }
+
+            .carousel-nav svg {
+                fill: currentColor;
+                width: 18px;
+                height: 18px;
+            }
+
+        .carousel-changer-space {
+            height: 14px;
+        }
+
+        .carousel-thumbs {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+            max-width: 920px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .carousel-thumb {
+            width: 110px;
+            height: 66px;
+            overflow: hidden;
+            border-radius: 0;
+            box-sizing: border-box;
+            border: 2px solid transparent;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 3px;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+            .carousel-thumb img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                display: block;
+            }
+
+            .carousel-thumb.selected {
+                border-color: var(--accent) !important;
+                border-color: #0078D7;
+                transform: scale(0.99)
+            }
+
+        .app-hero {
+            display: flex;
+            padding: 20px;
+            align-items: flex-start;
+        }
+
+        .app-logo-big {
+            width: 180px;
+            height: 180px;
+            background: var(--accent) !important;
+            background: #0078D7;
+            object-fit: cover;
+        }
+
+        .app-info-right {
+            margin-left: 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-title {
+            font-size: 36px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .app-publisher {
+            color: #0078D7;
+            text-decoration: none;
+            display: block;
+            margin: 5px 0 5px 0;
+            cursor: default;
+        }
+
+            .app-publisher:hover {
+                color: var(--accent) !important;
+                color: #31a3fe;
+            }
+
+        .app-version {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .app-description {
+            font-size: 15px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+
+        .btn-download {
+            background-color: var(--accent) !important;
+            background-color: #0078d7;
+        }
+
+            .btn-download:disabled {
+                display: none;
+            }
+
+        #dl-container {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+
+        progress {
+            width: 100%;
+            height: 4px;
+            display: block;
+            margin-top: 10px;
+            color: var(--accent) !important;
+            color: #0078d7;
+        }
+
+        @media (max-width: 800px) {
+            .app-hero {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .app-logo-big {
+                width: 150px;
+                height: 150px;
+                margin-bottom: 15px;
+            }
+
+            .carousel-thumbs {
+                display: none;
+            }
+
+            .app-info-right {
+                margin-left: 0;
+                width: 100%;
+                align-items: center;
+            }
+
+            .app-title {
+                font-size: 28px;
+                order: 1;
+            }
+
+            .app-publisher {
+                order: 2;
+                margin-bottom: 5px;
+            }
+
+            .app-version {
+                order: 3;
+                margin-bottom: 15px;
+            }
+
+            #dl-container {
+                order: 4;
+                width: 80%;
+                margin-bottom: 20px;
+                align-items: center;
+            }
+
+            .btn-download {
+                width: 100%;
+                align-self: stretch;
+            }
+
+            .app-description {
+                order: 5;
+                text-align: left;
+                padding: 0 15px;
+            }
+
+            .carousel-thumb {
+                width: 84px;
+                height: 50px;
+            }
+
+            .screenshots-title {
+                font-size: 18px;
+            }
+
+            .carousel-nav {
+                width: 50px;
+                height: 50px;
+                min-width: 50px;
+                min-height: 50px;
+                -webkit-backdrop-filter: none;
+            }
+        }
+    </style>
+</head>
+<body class="win-type-body">
+    <div id="app-content"></div>
+    <script src="ms-appx-web:///js/config.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
