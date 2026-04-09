@@ -175,11 +175,19 @@ function playSong(index) {
     var song = currentPlaylist[currentIndex];
     if (!song || !song.url) return;
 
-    audio.src = song.url;
-    audio.play().catch(function(err) {
-        console.warn('Playback failed:', err);
-    });
+    // Reset seek UI immediately for better UX
+    updateSeekUI(0);
 
+    audio.src = song.url;
+    var playPromise = audio.play();
+    
+    if (playPromise !== undefined) {
+        playPromise.catch(function(err) {
+            console.warn('Playback failed:', err);
+        });
+    }
+
+    // Update UI Elements
     var titleEl = document.getElementById('currentTitle');
     var artistEl = document.getElementById('currentArtist');
     var artEl = document.getElementById('currentArt');
@@ -189,6 +197,11 @@ function playSong(index) {
     if (artistEl) artistEl.innerText = song.artist;
     if (artEl) artEl.src = song.art;
     if (playBtn) playBtn.innerHTML = '<span class="material-symbols-rounded">pause</span>';
+
+    // Trigger Windows Tile Update if in UWP
+    if (typeof updateLiveTileMinimal === 'function') {
+        try { updateLiveTileMinimal(); } catch(e) {}
+    }
 }
 
 function playNext() { playSong(currentIndex + 1); }
