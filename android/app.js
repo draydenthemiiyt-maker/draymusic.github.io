@@ -248,17 +248,23 @@ if (searchInput) {
 
 /* ===== Windows UWP integration (ES5-safe) ===== */
 (function initWindowsIntegration() {
-    if (typeof window.Windows === 'undefined') {
-        try { console.info('Windows Runtime not available — skipping UWP integration.'); } catch (e) { }
-        return;
-    }
+    if (typeof window.Windows === 'undefined') return;
 
-    // Apply the requested class to the body if UWP is detected
+    // Helper to prevent XML from breaking on special characters (&, <, >, etc.)
+    function escapeXml(str) {
+        if (!str) return '';
+        return str.toString()
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&apos;');
+    }
+    
     try {
         if (document.body) {
             document.body.classList.add('win-type-body');
         } else {
-            // Fallback just in case the script runs before the body is parsed
             document.addEventListener("DOMContentLoaded", function() {
                 document.body.classList.add('win-type-body');
             });
@@ -273,73 +279,67 @@ if (searchInput) {
     var Notifications = Win.UI.Notifications || null;
     var DataXml = Win.Data.Xml.Dom || null;
 
-/* ---------- Minimal Windows 10 Live Tile Integration ---------- */
 function updateLiveTileMinimal() {
-    if (typeof window.Windows === 'undefined' || !window.Windows.UI.Notifications) return;
+        var Notifications = window.Windows.UI.Notifications;
+        var DataXml = window.Windows.Data.Xml.Dom;
+        
+        // Use the currently playing song if available, otherwise fetch the XML
+        var currentSong = (typeof currentPlaylist !== 'undefined' && currentPlaylist[currentIndex]) ? currentPlaylist[currentIndex] : null;
+        
+        // If no song is playing yet, we just exit or wait for playSong() to trigger this
+        if (!currentSong) return;
 
-    var Notifications = window.Windows.UI.Notifications;
-    var DataXml = window.Windows.Data.Xml.Dom;
-    var url = 'https://draydenthemiiyt-maker.github.io/draymusic.github.io/music.xml?nocache=' + new Date().getTime();
+        try {
+            var title = escapeXml(currentSong.title);
+            var artist = escapeXml(currentSong.artist);
+            var art = currentSong.art || "ms-appx:///Assets/StoreLogo.png";
+            var albumArt = escapeXml(art);
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            try {
-                var xml = xhr.responseXML || new DOMParser().parseFromString(xhr.responseText, 'text/xml');
-                var song = xml.getElementsByTagName('song')[0]; // Just use the latest song for a clean look
-                if (!song) return;
+            var tileXmlString = 
+                '<tile>' +
+                '  <visual version="2">' +
+                '    <binding template="TileSmall">' +
+                '      <text hint-style="caption">' + title + '</text>' +
+                '    </binding>' +
+                '    <binding template="TileMedium" branding="none">' +
+                '      <image src="' + albumArt + '" placement="background" hint-overlay="60"/>' +
+                '      <text hint-style="body" hint-wrap="true" hint-align="center">' + title + '</text>' +
+                '      <text hint-style="captionSubtle" hint-wrap="true" hint-align="center">' + artist + '</text>' +
+                '    </binding>' +
+                '    <binding template="TileWide" branding="name">' +
+                '      <group>' +
+                '        <subgroup hint-weight="33"><image src="' + albumArt + '" /></subgroup>' +
+                '        <subgroup>' +
+                '          <text hint-style="subtitle">' + title + '</text>' +
+                '          <text hint-style="captionSubtle">' + artist + '</text>' +
+                '        </subgroup>' +
+                '      </group>' +
+                '    </binding>' +
+                '    <binding template="TileLarge" branding="nameAndLogo">' +
+                '      <image src="' + albumArt + '" placement="background" hint-overlay="40"/>' +
+                '      <text hint-style="header" hint-wrap="true">' + title + '</text>' +
+                '      <text hint-style="subtitleSubtle" hint-wrap="true">' + artist + '</text>' +
+                '    </binding>' +
+                '  </visual>' +
+                '</tile>';
 
-                var title = escapeXml(song.getElementsByTagName('title')[0].textContent);
-                var artist = escapeXml(song.getElementsByTagName('artist')[0].textContent);
-                var art = song.getElementsByTagName('albumArt')[0].textContent.trim();
-                var albumArt = (art && art !== "placeholder.png") ? escapeXml(art) : "ms-appx:///Assets/StoreLogo.png";
-
-                var tileXmlString = 
-                    '<tile>' +
-                    '  <visual version="2">' +
-                    // Small: Minimal icon/text
-                    '    <binding template="TileSmall">' +
-                    '      <text hint-style="caption">' + title + '</text>' +
-                    '    </binding>' +
-                    // Medium: Image background + Text overlay
-                    '    <binding template="TileMedium" branding="none">' +
-                    '      <image src="' + albumArt + '" placement="background" hint-overlay="60"/>' +
-                    '      <text hint-style="body" hint-wrap="true" hint-align="center">' + title + '</text>' +
-                    '      <text hint-style="captionSubtle" hint-wrap="true" hint-align="center">' + artist + '</text>' +
-                    '    </binding>' +
-                    // Wide: Content side-by-side
-                    '    <binding template="TileWide" branding="name">' +
-                    '      <group>' +
-                    '        <subgroup hint-weight="33">' +
-                    '          <image src="' + albumArt + '" />' +
-                    '        </subgroup>' +
-                    '        <subgroup>' +
-                    '          <text hint-style="subtitle">' + title + '</text>' +
-                    '          <text hint-style="captionSubtle">' + artist + '</text>' +
-                    '        </subgroup>' +
-                    '      </group>' +
-                    '    </binding>' +
-                    // Large: Clean hero image
-                    '    <binding template="TileLarge" branding="nameAndLogo">' +
-                    '      <image src="' + albumArt + '" placement="background" hint-overlay="40"/>' +
-                    '      <text hint-style="header" hint-wrap="true">' + title + '</text>' +
-                    '      <text hint-style="subtitleSubtle" hint-wrap="true">' + artist + '</text>' +
-                    '    </binding>' +
-                    '  </visual>' +
-                    '</tile>';
-
-                var tileXml = new DataXml.XmlDocument();
-                tileXml.loadXml(tileXmlString);
-                Notifications.TileUpdateManager.createTileUpdaterForApplication().update(new Notifications.TileNotification(tileXml));
-
-            } catch (e) { console.warn('Minimal tile update failed', e); }
+            var tileXml = new DataXml.XmlDocument();
+            tileXml.loadXml(tileXmlString);
+            Notifications.TileUpdateManager.createTileUpdaterForApplication().update(new Notifications.TileNotification(tileXml));
+        } catch (e) { 
+            console.warn('Tile update failed:', e); 
         }
-    };
-    xhr.send();
-}
+    }
 
-    try { updateLiveTileMinimal(); } catch (e) { }
+    // Connect the Tile update to your playSong function
+    var originalPlaySong = window.playSong;
+    window.playSong = function(index) {
+        originalPlaySong(index);
+        // Delay slightly to ensure metadata is ready
+        setTimeout(updateLiveTileMinimal, 500);
+    };
+
+})();
 
     /* ---------- Accent color integration ---------- */
     try {
