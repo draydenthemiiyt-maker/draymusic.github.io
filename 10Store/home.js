@@ -215,11 +215,19 @@
     }
 
 
-    function isCompatible(appNode) {
-        var canPC = getVal(appNode, "pcCapable").toLowerCase().trim() === "true";
-        var canMobile = getVal(appNode, "mobileCapable").toLowerCase().trim() === "true";
-        return (isMobile && canMobile) || (isPC && canPC);
+function isCompatible(appNode) {
+    var canPC = getVal(appNode, "pcCapable").toLowerCase().trim() === "true";
+    var canMobile = getVal(appNode, "mobileCapable").toLowerCase().trim() === "true";
+    
+    // If the script detects we are on a small screen...
+    if (isMobile) {
+        // ONLY look at the mobile flag. Ignore the PC flag entirely.
+        return canMobile;
+    } else {
+        // If on a large screen, ONLY look at the PC flag.
+        return canPC;
     }
+}
 
     function fillGrid(grid, apps, filter) {
         var validApps = [];
