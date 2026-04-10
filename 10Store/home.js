@@ -4,9 +4,18 @@
     var featuredApps = [];
     var currentHeroIndex = 0;
     var heroTimer = null;
-    var ua = navigator.userAgent || navigator.vendor || window.opera;
-    var isMobile = /Mobi|Android|iPhone|iPad|Windows Phone|IEMobile/i.test(ua);
-    var isPC = !isMobile;
+    var deviceFamily = "Windows.Desktop";
+
+    try {
+        if (typeof Windows !== 'undefined') {
+            deviceFamily = Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily;
+        }
+    } catch (e) {
+        console.warn("WinRT namespaces not found.");
+    }
+
+    var isMobile = (deviceFamily === "Windows.Mobile");
+    var isPC = (deviceFamily === "Windows.Desktop");
 
     function getVal(parent, tag) {
         var el = parent.getElementsByTagName(tag)[0];
