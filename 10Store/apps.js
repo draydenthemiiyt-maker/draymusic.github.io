@@ -2,15 +2,14 @@
     "use strict";
 
     var deviceFamily = "Windows.Desktop";
-
-    try {
-        if (typeof Windows !== 'undefined') {
-            deviceFamily = Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily;
+     try {
+        var urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('platform')) {
+            deviceFamily = urlParams.get('platform');
         }
     } catch (e) {
-        console.warn("WinRT namespaces not found.");
+        console.warn("Could not determine platform from WinRT.");
     }
-
     var isMobile = (deviceFamily === "Windows.Mobile");
     var isPC = (deviceFamily === "Windows.Desktop");
 
