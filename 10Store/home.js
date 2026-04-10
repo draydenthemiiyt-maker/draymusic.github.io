@@ -7,11 +7,19 @@
     var deviceFamily = "Windows.Desktop";
      try {
         var urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('platform')) {
-            deviceFamily = urlParams.get('platform');
+        var platformQuery = urlParams.get('platform');
+        
+        if (platformQuery) {
+            if (platformQuery.toLowerCase().indexOf("mobile") !== -1) {
+                deviceFamily = "Windows.Mobile";
+            } else {
+                deviceFamily = "Windows.Desktop";
+            }
+        } else if (typeof Windows !== 'undefined') {
+            deviceFamily = Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily;
         }
     } catch (e) {
-        console.warn("Could not determine platform from WinRT.");
+        console.warn("Platform detection failed, defaulting to Desktop.");
     }
     var isMobile = (deviceFamily === "Windows.Mobile");
     var isPC = (deviceFamily === "Windows.Desktop");
