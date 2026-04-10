@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <link href="ms-appx-web:///lib/winjs-4.0.1/css/ui-light.css" rel="stylesheet" />
+    <link id="winjs-theme" href="" rel="stylesheet" />
     <script src="ms-appx-web:///lib/winjs-4.0.1/js/base.js"></script>
     <script src="ms-appx-web:///lib/winjs-4.0.1/js/ui.js"></script>
     <style>
@@ -30,7 +30,10 @@
             margin-top: 24px;
             display: flex;
             justify-content: center;
-            gap: 20px;
+        }
+
+        .btn-row button {
+            margin: 0 10px;
         }
     </style>
 </head>
