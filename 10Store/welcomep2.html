@@ -7,12 +7,24 @@
     <script src="ms-appx-web:///lib/winjs-4.0.1/js/base.js"></script>
     <script src="ms-appx-web:///lib/winjs-4.0.1/js/ui.js"></script>
     <style>
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
-            text-align: center;
-        }
+html, body {
+    margin: 0;
+    padding: 0;
+    /* Force scrolling to be allowed on the Y axis */
+    overflow-y: auto !important; 
+    /* Ensure the body can grow beyond the screen height */
+    height: auto; 
+    min-height: 100%;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+    text-align: center;
+    /* Extra padding at bottom so buttons aren't cut off when scrolling */
+    padding-bottom: 50px; 
+}
 
         .title {
             font-size: 38px;
