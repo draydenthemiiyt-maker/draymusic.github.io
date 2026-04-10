@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link id="winjs-theme" href="" rel="stylesheet" />
+    <script src="ms-appx-web:///lib/winjs-4.0.1/js/base.js"></script>
+    <script src="ms-appx-web:///lib/winjs-4.0.1/js/ui.js"></script>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .welcome-box {
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 42px;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+
+<body class="win-type-body">
+    <div class="welcome-box">
+        <div class="welcome-title">You're all set!</div>
+        <button id="nextBtn" class="win-button">Get Started</button>
+      <audio src="ms-appx-web:///assets/allset.wav" autoplay></audio>
+    </div>
+
+    <script>
+        document.getElementById("nextBtn").onclick = function () {
+            window.location.href = "home.html";
+        };
+    </script>
+</body>
+</html>
