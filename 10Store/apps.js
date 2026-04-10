@@ -5,7 +5,7 @@
     deviceFamily = (window.innerWidth < 800) ? "Windows.Mobile" : "Windows.Desktop";
 
     var isMobile = (deviceFamily === "Windows.Mobile");
-    var isPC = (deviceFamily === "Windows.Desktop");
+    var isPC = !isMobile;
 
     function getQueryParam(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
