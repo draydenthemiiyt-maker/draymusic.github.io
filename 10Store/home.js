@@ -4,8 +4,11 @@
     var featuredApps = [];
     var currentHeroIndex = 0;
     var heroTimer = null;
-    var isMobile = (window.innerWidth < 800);
-    var isPC = !isMobile;
+    var deviceFamily = "Windows.Desktop";
+    deviceFamily = (window.innerWidth < 800) ? "Windows.Mobile" : "Windows.Desktop";
+
+    var isMobile = (deviceFamily === "Windows.Mobile");
+    var isPC = (deviceFamily === "Windows.Desktop");
 
     function getVal(parent, tag) {
         var el = parent.getElementsByTagName(tag)[0];
