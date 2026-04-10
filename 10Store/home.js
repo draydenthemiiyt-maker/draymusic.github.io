@@ -1,26 +1,19 @@
-﻿(function () {
+(function () {
     "use strict";
 
     var featuredApps = [];
     var currentHeroIndex = 0;
     var heroTimer = null;
     var deviceFamily = "Windows.Desktop";
-     try {
-        var urlParams = new URLSearchParams(window.location.search);
-        var platformQuery = urlParams.get('platform');
-        
-        if (platformQuery) {
-            if (platformQuery.toLowerCase().indexOf("mobile") !== -1) {
-                deviceFamily = "Windows.Mobile";
-            } else {
-                deviceFamily = "Windows.Desktop";
-            }
-        } else if (typeof Windows !== 'undefined') {
+
+    try {
+        if (typeof Windows !== 'undefined') {
             deviceFamily = Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily;
         }
     } catch (e) {
-        console.warn("Platform detection failed, defaulting to Desktop.");
+        console.warn("WinRT namespaces not found.");
     }
+
     var isMobile = (deviceFamily === "Windows.Mobile");
     var isPC = (deviceFamily === "Windows.Desktop");
 
