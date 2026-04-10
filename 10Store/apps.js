@@ -1,18 +1,8 @@
 (function () {
     "use strict";
 
-    var deviceFamily = "Windows.Desktop";
-
-    try {
-        if (typeof Windows !== 'undefined') {
-            deviceFamily = Windows.System.Profile.AnalyticsInfo.versionInfo.deviceFamily;
-        }
-    } catch (e) {
-        console.warn("WinRT namespaces not found.");
-    }
-
-    var isMobile = (deviceFamily === "Windows.Mobile");
-    var isPC = (deviceFamily === "Windows.Desktop");
+    var isMobile = (window.innerWidth < 800);
+    var isPC = !isMobile;
 
     function getQueryParam(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
