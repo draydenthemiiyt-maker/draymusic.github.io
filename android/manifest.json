@@ -3,6 +3,7 @@
   "short_name": "DrayMusic",
   "start_url": "/",
   "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
   "background_color": "#640000",
   "theme_color": "#640000",
   "icons": [
