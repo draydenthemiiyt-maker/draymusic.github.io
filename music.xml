@@ -1,9 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
 <music>
   <song>
-    <title>Pee</title>
-    <artist>Pee</artist>
-    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/project_1775934945.png</albumArt>
-    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/Acid_House_1775934945.mp3</url>
+    <title>Midnight City Pulse</title>
+    <artist>Neon Dreams</artist>
+    <albumArt></albumArt>
+    <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3</url>
+  </song>
+  <song>
+    <title>Golden Era Beats</title>
+    <artist>The Vinyl Project</artist>
+    <albumArt></albumArt>
+    <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3</url>
+  </song>
+  <song>
+    <title>Digital Rain</title>
+    <artist>Binary Solo</artist>
+    <albumArt></albumArt>
+    <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3</url>
+  </song>
+  <song>
+    <title>Skyline Horizon</title>
+    <artist>Cloud Chasers</artist>
+    <albumArt></albumArt>
+    <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3</url>
+  </song>
+  <song>
+    <title>White Balcony</title>
+    <artist>Chris R, Lillo</artist>
+    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/portada%203000.jpg</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/1%20-%20White%20Balcony.mp3</url>
+  </song>
+    <song>
+    <title>Love &amp; Hate</title>
+    <artist>Chris R, Lillo</artist>
+    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/portada%203000.jpg</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/2%20-%20Love%20&amp;%20Hate.mp3</url>
+  </song>
+    <song>
+    <title>Behind The Line</title>
+    <artist>Chris R, Lillo</artist>
+    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/portada%203000.jpg</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/3%20-%20Behind%20The%20Line.mp3</url>
+  </song>
+    <song>
+    <title>Ghostly Touch</title>
+    <artist>Chris R, Lillo</artist>
+    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/portada%203000.jpg</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/4%20-%20Ghostly%20Touch.mp3</url>
+  </song>
+    <song>
+    <title>Decenso al Fuego</title>
+    <artist>Chris R, Lillo</artist>
+    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/portada%203000.jpg</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/5%20-%20Decenso%20al%20Fuego.mp3</url>
+  </song>
+    <song>
+    <title>Caos Y Miedo</title>
+    <artist>Chris R, Lillo</artist>
+    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/portada%203000.jpg</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/6%20-%20Caos%20Y%20Miedo.mp3</url>
+  </song>
+    <song>
+    <title>T2k</title>
+    <artist>Chris R, Lillo</artist>
+    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/portada%203000.jpg</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/7%20-%20T2k.mp3</url>
+  </song>
+    <song>
+    <title>Por Una Noche Más</title>
+    <artist>Chris R, Lillo</artist>
+    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/portada%203000.jpg</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/8%20-%20Por%20Una%20Noche%20Más.mp3</url>
+  </song>
+    <song>
+    <title>Don't Be Scared</title>
+    <artist>Chris R, Lillo</artist>
+    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/portada%203000.jpg</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/9%20-%20Don't%20Be%20Scared.mp3</url>
+  </song>
+  <song>
+    <title>Amor Fantasmal</title>
+    <artist>Chris R, Lillo</artist>
+    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/portada%203000.jpg</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/10%20-%20Amor%20Fantasmal.mp3</url>
+  </song>
+  <song>
+    <title>Stunshine - Cave Wave</title>
+    <artist>Gorilla Tag Original Soundtrack</artist>
+    <albumArt>https://draydenthemiiyt-maker.github.io/draymusic.github.io/Screenshot_20260304_155151_Chrome.jpg</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/04.%20Stunshine%20-%20Cave%20Wave%20(Gorilla%20Tag%20Original%20Soundtrack).mp3</url>
+  </song>
+  <song>
+    <title>Windows</title>
+    <artist>Microsoft</artist>
+    <albumArt></albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/windows.mp3</url>
+  </song>
+  <song>
+    <title>MayDay</title>
+    <artist>thefatrat and laura Brehm</artist>
+    <albumArt></albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/803971_TheFatRat---MAYDAY-feat-La.mp3</url>
+  </song>
+  <song>
+    <title>Windows 95</title>
+    <artist>Bloom</artist>
+    <albumArt></albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/pb_theme_midi.mp3</url>
+  </song>
+  <song>
+    <title>Windows 95 (HQ)</title>
+    <artist>Bloom</artist>
+    <albumArt></albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/pb_theme_midi_low.mp3</url>
+  </song>
+  <song>
+    <title>Infinite Amethyst</title>
+    <artist>Minecraft Bedrock Soundtrack</artist>
+    <albumArt>https://i.pinimg.com/originals/2b/9f/b9/2b9fb9043dc5fa89a89ccc23b88427b2.png</albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/infinite_amethyst.ogg</url>
+  </song>
+  <song>
+    <title>All I Ever Wanted</title>
+    <artist>Basshunter</artist>
+    <albumArt></albumArt>
+    <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/Basshunter_-_All_I_Ever_Wanted_54722431.mp3</url>
   </song>
 </music>
+
+
+
+
+
+
+
+
+
