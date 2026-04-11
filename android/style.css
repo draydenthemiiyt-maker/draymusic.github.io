@@ -50,7 +50,7 @@ body.widgetapp .track-info img {
     display: none;
 }
 
-body.widgetapp .text-group h4 {
+body.widgetapp .text-group p {
     display: none;
 }
 
@@ -78,6 +78,21 @@ body.widgetapp .action-btns {
 
 body.widgetapp .search-pill {
     display: none;
+}
+
+body.widgetapp .song-card {
+    border-radius: 0px;
+    padding: 3px 0;
+}
+
+body.widgetapp .main-play-btn:hover {
+    border: 2px #fff solid;
+}
+
+body.widgetapp .main-play-btn:active {
+    background: #fff;
+    color: #000;
+    border: 2px #fff solid;
 }
 
 #body-bg {
@@ -351,7 +366,7 @@ body.widgetapp .search-pill {
 .main-play-btn {
     background: var(--accent);
     color: #fff;
-    border: none;
+    border: 2px transparent solid;
     border-radius: 12px;
     width: 44px;
     height: 44px;
