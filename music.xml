@@ -144,4 +144,10 @@
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/a3857176869_5_1775936659.jpg</albumArt>
     <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Dark_Tide_1775936659.mp3</url>
   </song>
+  <song>
+    <title>Dash</title>
+    <artist>MDK</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/geometry-dash-icon-png-3_1775936792.png</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/mdk-dash_1775936792.mp3</url>
+  </song>
 </music>
