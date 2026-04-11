@@ -37,6 +37,36 @@ body.winxpclient #body-bg {
     display: none;
 }
 
+body.widgetapp .app-header {
+    padding: 0px 10px;
+    -webkit-app-region: drag;
+}
+
+body.widgetapp .app-header h1 {
+    font-weight: 100;
+}
+
+body.widgetapp .track-info {
+    display: none;
+}
+
+body.widgetapp .player-controls-row {
+    padding: 0px 16px;
+    display: block;
+}
+
+body.widgetapp .action-btns {
+    background: transparent;
+    border-radius: 0px;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 0px;
+}
+
+body.widgetapp .search-pill {
+    display: none;
+}
+
 #body-bg {
     position: fixed;
     top: 0;
