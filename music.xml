@@ -288,4 +288,10 @@
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Screenshot_2026-04-11_233639_1775943788.png</albumArt>
     <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/The_Sound_of_Nostalgia_1775943788.mp3</url>
   </song>
+  <song>
+    <title>Bubble Bath</title>
+    <artist>Alex</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/bubblebath_1775943830.png</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Bubble_Bath_1775943830.mp3</url>
+  </song>
 </music>
