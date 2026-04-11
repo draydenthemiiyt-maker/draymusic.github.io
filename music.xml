@@ -3,25 +3,25 @@
   <song>
     <title>Midnight City Pulse</title>
     <artist>Neon Dreams</artist>
-    <albumArt></albumArt>
+    <albumArt/>
     <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3</url>
   </song>
   <song>
     <title>Golden Era Beats</title>
     <artist>The Vinyl Project</artist>
-    <albumArt></albumArt>
+    <albumArt/>
     <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3</url>
   </song>
   <song>
     <title>Digital Rain</title>
     <artist>Binary Solo</artist>
-    <albumArt></albumArt>
+    <albumArt/>
     <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3</url>
   </song>
   <song>
     <title>Skyline Horizon</title>
     <artist>Cloud Chasers</artist>
-    <albumArt></albumArt>
+    <albumArt/>
     <url>https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3</url>
   </song>
   <song>
@@ -93,25 +93,25 @@
   <song>
     <title>Windows</title>
     <artist>Microsoft</artist>
-    <albumArt></albumArt>
+    <albumArt/>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/windows.mp3</url>
   </song>
   <song>
     <title>MayDay</title>
     <artist>thefatrat and laura Brehm</artist>
-    <albumArt></albumArt>
+    <albumArt/>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/803971_TheFatRat---MAYDAY-feat-La.mp3</url>
   </song>
   <song>
     <title>Windows 95</title>
     <artist>Bloom</artist>
-    <albumArt></albumArt>
+    <albumArt/>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/pb_theme_midi.mp3</url>
   </song>
   <song>
     <title>Windows 95 (HQ)</title>
     <artist>Bloom</artist>
-    <albumArt></albumArt>
+    <albumArt/>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/pb_theme_midi_low.mp3</url>
   </song>
   <song>
@@ -123,16 +123,7 @@
   <song>
     <title>All I Ever Wanted</title>
     <artist>Basshunter</artist>
-    <albumArt></albumArt>
+    <albumArt/>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/Basshunter_-_All_I_Ever_Wanted_54722431.mp3</url>
   </song>
-</music>
-
-
-
-
-
-
-
-
-
+<song><title>esa6u</title><artist>aywrh</artist><albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/project_1775935851.png</albumArt><url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Class_66_passing_grantham_1775935851.mp3</url></song></music>
