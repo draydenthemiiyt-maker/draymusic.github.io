@@ -270,4 +270,10 @@
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Screenshot_2026-04-11_224047_1775940114.png</albumArt>
     <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/ninjatuna_1775940114.mp3</url>
   </song>
+  <song>
+    <title>Wachtmuziek</title>
+    <artist>Joost Klein</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Screenshot_20260411_224009_NewPipe_1775940247.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Wachtmuziek_1775940247.mp3</url>
+  </song>
 </music>
