@@ -216,6 +216,9 @@ body.widgetapp .main-play-btn:active {
     margin: 0;
     font-size: 16px;
     font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .song-card .info p {
@@ -223,6 +226,9 @@ body.widgetapp .main-play-btn:active {
     color: var(--text-dim);
     font-size: 14px;
     cursor: default;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .mini-player {
