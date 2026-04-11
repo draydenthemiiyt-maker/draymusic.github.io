@@ -177,7 +177,7 @@ body.widgetapp .main-play-btn:active {
     flex: 1;
     overflow-y: auto;
     padding: 0 16px 120px;
-    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
 }
 
 .song-card {
