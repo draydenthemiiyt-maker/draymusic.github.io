@@ -1,7 +1,7 @@
 {
   "name": "DrayMusic",
   "short_name": "DrayMusic",
-  "start_url": "/",
+  "start_url": "/android/index.html",
   "display": "standalone",
   "display_override": ["window-controls-overlay", "standalone"],
   "background_color": "#640000",
