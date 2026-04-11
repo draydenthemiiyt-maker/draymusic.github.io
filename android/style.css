@@ -95,6 +95,12 @@ body.widgetapp .main-play-btn:active {
     border: 2px #fff solid;
 }
 
+body.widgetapp #body-bg {
+    filter: blur(50px);
+    opacity: 0.6;
+    transform: scale(1.15);
+}
+
 #body-bg {
     position: fixed;
     top: 0;
