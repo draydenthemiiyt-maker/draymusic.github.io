@@ -202,6 +202,7 @@ body.widgetapp #body-bg {
     animation: fadeUp 0.5s ease-out forwards;
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
     border-radius: 20px;
+    cursor: default;
 }
 
 .song-card > * {
