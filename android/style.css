@@ -439,4 +439,8 @@ body.widgetapp #body-bg {
         border-radius: 0px;
         border-top-left-radius: 20px !important;
     }
+    
+    .scroll-area {
+        padding: 0 16px 0px;
+    }
 }
