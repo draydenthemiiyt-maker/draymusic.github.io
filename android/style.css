@@ -412,3 +412,30 @@ body.widgetapp #body-bg {
     background: rgba(255, 255, 255, 0.10);
     border-radius: 50%;
 }
+
+@media (min-width: 800px) {
+    .app-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .app-header h1 {
+        margin: 0;
+        font-weight: 450;
+    }
+
+    .search-pill {
+        width: 280px;
+        margin-top: 0;
+    }
+
+    .mini-player {
+        bottom: 0px;
+        left: auto;
+        width: 500px;
+        right: 0px;
+        border-radius: 0px;
+        border-top-left-radius: 20px !important;
+    }
+}
