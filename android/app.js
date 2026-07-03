@@ -51,6 +51,8 @@ var DOM = {
     menuBtnFavorite: document.getElementById('menuBtnFavorite')
 };
 
+window.audio = DOM.audio;
+
 var allSongs = [];
 var currentPlaylist = [];
 var currentIndex = -1;
@@ -255,6 +257,38 @@ function applySeekToAudio(percent) {
     pendingSeekPercent = null;
 }
 
+function updateMediaSession(song) {
+    if (!song) return;
+    if ('mediaSession' in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: song.title || '',
+            artist: song.artist || '',
+            album: song.album || 'DrayMusic',
+            artwork: [
+                { src: song.art || 'placeholder.png', sizes: '512x512', type: 'image/png' }
+            ]
+        });
+
+        navigator.mediaSession.setActionHandler('play', function () {
+            safePlay(DOM.audio);
+        });
+        navigator.mediaSession.setActionHandler('pause', function () {
+            DOM.audio.pause();
+        });
+        navigator.mediaSession.setActionHandler('previoustrack', function () {
+            playSong(currentIndex - 1);
+        });
+        navigator.mediaSession.setActionHandler('nexttrack', function () {
+            playSong(currentIndex + 1);
+        });
+        navigator.mediaSession.setActionHandler('stop', function () {
+            DOM.audio.pause();
+            DOM.audio.currentTime = 0;
+            if (DOM.btnPlayPause) DOM.btnPlayPause.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
+        });
+    }
+}
+
 function playSong(index) {
     if (!DOM.audio || currentPlaylist.length === 0) return;
 
@@ -282,6 +316,8 @@ function playSong(index) {
         }
     }
 
+    updateMediaSession(song);
+    if (window.audio !== DOM.audio) window.audio = DOM.audio;
     syncSongOffline(song.url);
 
     var bg = document.getElementById('body-bg');
@@ -763,14 +799,35 @@ function bindEvents() {
             if (pendingSeekPercent !== null) applySeekToAudio(pendingSeekPercent);
             if (isFinite(DOM.audio.duration)) updateSeekUI((DOM.audio.currentTime / DOM.audio.duration) * 100);
             updatePlayback();
+            if ('mediaSession' in navigator && typeof navigator.mediaSession.setPositionState === 'function') {
+                try {
+                    navigator.mediaSession.setPositionState({
+                        duration: DOM.audio.duration || 0,
+                        position: DOM.audio.currentTime || 0,
+                        playbackRate: DOM.audio.playbackRate || 1
+                    });
+                } catch (e) {}
+            }
         });
 
         DOM.audio.addEventListener('timeupdate', function () {
             if (DOM.progressWrapper && DOM.progressWrapper.classList.contains('seeking')) return;
             if (isFinite(DOM.audio.duration)) updateSeekUI((DOM.audio.currentTime / DOM.audio.duration) * 100);
+            if ('mediaSession' in navigator && typeof navigator.mediaSession.setPositionState === 'function') {
+                try {
+                    navigator.mediaSession.setPositionState({
+                        duration: DOM.audio.duration || 0,
+                        position: DOM.audio.currentTime || 0,
+                        playbackRate: DOM.audio.playbackRate || 1
+                    });
+                } catch (e) {}
+            }
         });
 
         DOM.audio.addEventListener('ended', function () {
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.playbackState = 'none';
+            }
             if (isLooping) {
                 DOM.audio.currentTime = 0;
                 safePlay(DOM.audio);
@@ -783,6 +840,11 @@ function bindEvents() {
             initAudioEngine();
             if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
             updatePlayback();
+            if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'playing';
+        });
+
+        DOM.audio.addEventListener('pause', function () {
+            if ('mediaSession' in navigator) navigator.mediaSession.playbackState = 'paused';
         });
     }
 

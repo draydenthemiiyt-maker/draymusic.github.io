@@ -3,6 +3,11 @@
     src: url("Roboto_Condensed/RobotoCondensed-VariableFont_wght.ttf") format("truetype");
 }
 
+@font-face {
+    font-family: "win10-icon";
+    src: url("segmdl2.ttf") format("truetype");
+}
+
 :root {
     --bg: #000000;
     --surface: #121212;
@@ -512,7 +517,8 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
     body.widgetapp .search-pill {
         width: 180px;
         padding: 6px 8px;
-        margin-left: 8px
+        margin-left: 8px;
+        -webkit-app-region: no-drag;
     }
 
         body.widgetapp .search-pill > * {
@@ -526,6 +532,11 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
 
     body.widgetapp .wigdisable {
         display: none !important;
+    }
+
+    body.widgetapp #window-controls {
+        right: unset;
+        left: 0;
     }
 
 #body-bg {
@@ -595,12 +606,11 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
         body.win32-client #window-controls {
             display: flex;
             position: absolute;
-            font-family: "Segoe MDL2 Assets";
+            font-family: "win10-icon";
             font-size: 10px;
             z-index: 9999999;
             right: 0;
             top: 0;
-            -webkit-app-region: no-drag;
         }
 
         body.win32-client .btn {
@@ -610,6 +620,7 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
             align-items: center;
             justify-content: center;
             transition: none;
+            -webkit-app-region: no-drag;
         }
 
             body.win32-client .btn:hover {

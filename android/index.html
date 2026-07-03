@@ -15,9 +15,10 @@
     <header class="app-header">
         <h1>DrayMusic</h1>
         <div id="window-controls">
-            <div class="btn" id="min-btn">&#xE921;</div>
-            <div class="btn" id="max-btn">&#xE922;</div>
-            <div class="btn close" id="close-btn">&#xE8BB;</div>
+            <div class="btn" id="popout-btn">&#xE8A7;</div>
+            <div class="btn wigdisable" id="min-btn">&#xE921;</div>
+            <div class="btn wigdisable" id="max-btn">&#xE922;</div>
+            <div class="btn close wigdisable" id="close-btn">&#xE8BB;</div>
         </div>
         <div class="search-pill">
             <span class="material-symbols-rounded">search</span>
@@ -187,6 +188,7 @@
             document.body.classList.add('win32-client');
 
             const maxBtn = document.getElementById('max-btn');
+            document.getElementById('popout-btn').onclick = () => window.api.popout();
             document.getElementById('min-btn').onclick = () => window.api.minimize();
             document.getElementById('max-btn').onclick = () => window.api.maximize();
             document.getElementById('close-btn').onclick = () => window.api.close();
