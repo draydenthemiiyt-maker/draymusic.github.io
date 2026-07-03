@@ -1,9 +1,4 @@
 @font-face {
-    font-family: "win10-icon";
-    src: url("segmdl2.ttf") format("truetype");
-}
-
-@font-face {
     font-family: "Roboto Condensed";
     src: url("Roboto_Condensed/RobotoCondensed-VariableFont_wght.ttf") format("truetype");
 }
@@ -33,15 +28,14 @@ img {
     pointer-events: none;
 }
 
-.icon-windows {
-    font-family: "win10-icon";
-    font-size: 20px;
+html, body {
+    border-radius: 20px;
 }
 
 body {
     margin: 0;
     padding: 0;
-    font-family: system-ui,-apple-system,Segoe UI,Ubuntu,Cantarell,Noto Sans,sans-serif,"Segoe UI",Roboto;
+    font-family: system-ui,-apple-system,Segoe UI,Ubuntu,Cantarell,Noto Sans,sans-serif, "Segoe UI", Roboto;
     background-color: #000000;
     background-color: var(--bg);
     color: #e6e1e5;
@@ -282,8 +276,8 @@ body {
 
     body.SamsungExperience * {
         font-family: "Roboto Condensed";
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
     }
 
     body.SamsungExperience #body-bg {
@@ -297,12 +291,12 @@ body {
         padding: 12px 16px;
     }
 
-        body.SamsungExperience .app-header h1 {
-            font-size: 25px !important;
-            margin: 0 0 8px 0;
-            font-weight: 500 !important;
-            text-transform: uppercase !important;
-        }
+    body.SamsungExperience .app-header h1 {
+        font-size: 25px !important;
+        margin: 0 0 8px 0;
+        font-weight: 500 !important;
+        text-transform: uppercase !important;
+    }
 
     body.SamsungExperience .song-card {
         padding: 8px 0 !important;
@@ -326,7 +320,8 @@ body {
         -webkit-backdrop-filter: none !important;
     }
 
-    body.SamsungExperience .icon-btn, body.SamsungExperience .main-play-btn {
+    body.SamsungExperience .icon-btn,
+    body.SamsungExperience .main-play-btn {
         background: transparent !important;
         border-radius: 0px !important;
         display: flex !important;
@@ -360,25 +355,25 @@ body {
         border-radius: 8px !important;
     }
 
-        body.SamsungExperience .context-menu h4 {
-            color: #000000 !important;
-            font-size: 15px !important;
-            text-transform: uppercase !important;
-        }
-
-        body.SamsungExperience .context-menu li {
-            color: #000000 !important;
-            border-radius: 0px !important;
-        }
-
-            body.SamsungExperience .context-menu li:hover {
-                background: rgb(225 225 225);
-            }
-
-    body.SamsungExperience .context-actions input {
-        background: rgb(200 200 200);
-        border: none;
+    body.SamsungExperience .context-menu h4 {
+        color: #000000 !important;
+        font-size: 15px !important;
+        text-transform: uppercase !important;
     }
+
+    body.SamsungExperience .context-menu li {
+        color: #000000 !important;
+        border-radius: 0px !important;
+    }
+
+        body.SamsungExperience .context-menu li:hover {
+            background: rgb(225 225 225);
+        }
+
+        body.SamsungExperience .context-actions input {
+            background: rgb(200 200 200);
+            border: none;
+        }
 
     body.SamsungExperience .context-btn {
         background: rgb(225 225 225);
@@ -393,47 +388,46 @@ body {
         display: none;
     }
 
-    body.SamsungExperience .side-pane {
-        background: rgb(255 255 255) !important;
-        padding: 0px !important;
-        transition: right 0.4s cubic-bezier(0.22,0.61,0.36,1) !important;
+body.SamsungExperience .side-pane {
+    background: rgb(255 255 255) !important;
+    padding: 0px !important;
+    transition: right 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+}
+
+body.SamsungExperience .pane-header {
+    justify-content: flex-start !important;
+    padding: 6px !important;
+    margin-bottom: 0px !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+    body.SamsungExperience .pane-header h2 {
+        color: black !important;
+        font-size: 20px !important;
+        font-weight: 500 !important;
+        text-transform: uppercase !important;
     }
 
-    body.SamsungExperience .pane-header {
-        justify-content: flex-start !important;
-        padding: 6px !important;
-        margin-bottom: 0px !important;
-        border-bottom: 1px solid #e0e0e0 !important;
+body.SamsungExperience #btnCloseEQ {
+    color: var(--accent) !important;
+    order: -1 !important;
+    margin-right: 8px !important;
+}
+
+body.SamsungExperience .control-group {
+    margin-bottom: 0px !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 0px !important;
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+    body.SamsungExperience .control-group h3 {
+        color: #999999 !important;
+        margin-bottom: 5px !important;
+        font-size: 15px !important;
+        font-weight: 500 !important;
+        text-transform: uppercase !important;
     }
-
-        body.SamsungExperience .pane-header h2 {
-            color: black !important;
-            font-size: 20px !important;
-            font-weight: 500 !important;
-            text-transform: uppercase !important;
-        }
-
-    body.SamsungExperience #btnCloseEQ {
-        color: #00a0ff !important;
-        color: var(--accent) !important;
-        order: -1 !important;
-        margin-right: 8px !important;
-    }
-
-    body.SamsungExperience .control-group {
-        margin-bottom: 0px !important;
-        background: rgba(255,255,255,0.05) !important;
-        border-radius: 0px !important;
-        border-bottom: 1px solid #e0e0e0 !important;
-    }
-
-        body.SamsungExperience .control-group h3 {
-            color: #999999 !important;
-            margin-bottom: 5px !important;
-            font-size: 15px !important;
-            font-weight: 500 !important;
-            text-transform: uppercase !important;
-        }
 
     body.SamsungExperience .eq-slider-col label {
         font-size: 13px !important;
@@ -445,18 +439,17 @@ body {
         color: #000000 !important;
     }
 
-    body.SamsungExperience .page::-webkit-scrollbar-thumb {
-        background: rgba(255,255,255,0.25) !important;
-    }
+body.SamsungExperience .page::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25) !important;
+}
 
-        body.SamsungExperience .page::-webkit-scrollbar-thumb:hover {
-            background: rgba(255,255,255,0.50) !important;
-        }
+    body.SamsungExperience .page::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.50) !important;
+    }
 
     body.widgetapp .app-header {
         padding: 0px 10px;
-        -webkit-app-region: drag;
-        background: rgba(255,255,255,0);
+        background: rgba(255, 255, 255, 0);
         backdrop-filter: blur(3px);
         -webkit-backdrop-filter: blur(3px);
         display: flex;
@@ -499,7 +492,7 @@ body {
         display: none;
     }
 
-    body.win-type-body .mini-player, body.widgetapp .mini-player {
+    body.widgetapp .mini-player {
         bottom: 0px !important;
         border-radius: 0px;
         left: 0px;
@@ -510,7 +503,7 @@ body {
         padding: 0px 6px 0px 16px;
     }
 
-    body.win-type-body .action-btns, body.widgetapp .action-btns {
+    body.widgetapp .action-btns {
         background: transparent;
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
@@ -581,11 +574,12 @@ body {
     top: 0;
     left: 0;
     right: 0;
-    background: rgba(255,255,255,0.10);
+    background: rgba(255, 255, 255, 0.10);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     z-index: 1;
     padding: 20px 20px;
+    -webkit-app-region: drag;
 }
 
     .app-header h1 {
@@ -594,8 +588,49 @@ body {
         font-weight: 700;
     }
 
+        #window-controls {
+            display: none;
+        }
+
+        body.win32-client #window-controls {
+            display: flex;
+            position: absolute;
+            font-family: "Segoe MDL2 Assets";
+            font-size: 10px;
+            z-index: 9999999;
+            right: 0;
+            top: 0;
+            -webkit-app-region: no-drag;
+        }
+
+        body.win32-client .btn {
+            width: 46px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: none;
+        }
+
+            body.win32-client .btn:hover {
+                background: #191919;
+            }
+
+            body.win32-client .btn:active {
+                background: #333333;
+            }
+
+            body.win32-client .btn.close:hover {
+                background: #E81123;
+            }
+
+            body.win32-client .btn.close:active {
+                background: #f1707a;
+                color: #000;
+            }
+
 .search-pill {
-    background: rgba(255,255,255,0.10);
+    background: rgba(255, 255, 255, 0.10);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 28px;
@@ -604,7 +639,8 @@ body {
     display: -ms-flexbox;
     align-items: center;
     -ms-flex-align: center;
-    transition: transform 0.2s cubic-bezier(0.175,0.885,0.32,1.275);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    -webkit-app-region: no-drag;
 }
 
     .search-pill > * {
@@ -643,7 +679,7 @@ body {
     transform: translateY(10px);
     -ms-transform: translateY(10px);
     animation: fadeUp 0.5s ease-out forwards;
-    transition: transform 0.2s cubic-bezier(0.175,0.885,0.32,1.275),background 0.2s;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
     border-radius: 20px;
 }
 
@@ -666,7 +702,7 @@ body {
         border-radius: 8px;
         -o-object-fit: cover;
         object-fit: cover;
-        background: rgba(255,255,255,0.10);
+        background: rgba(255, 255, 255, 0.10);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
     }
@@ -695,7 +731,7 @@ body {
     bottom: 20px;
     left: 10px;
     right: 10px;
-    background: rgba(255,255,255,0.10);
+    background: rgba(255, 255, 255, 0.10);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 20px;
@@ -711,7 +747,7 @@ body {
     width: 100%;
     height: 8px;
     background: #333;
-    transition: height 0.2s cubic-bezier(0.175,0.885,0.32,1.275);
+    transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 20;
 }
 
@@ -732,7 +768,8 @@ body {
     cursor: pointer !important;
 }
 
-    #seekBar:active, .progress-wrapper.seeking #seekBar {
+    #seekBar:active,
+    .progress-wrapper.seeking #seekBar {
         height: 60px;
         top: -25px;
     }
@@ -753,6 +790,7 @@ body {
     -ms-flex-pack: justify;
     align-items: center;
     -ms-flex-align: center;
+    -webkit-app-region: drag;
 }
 
     .player-controls-row > * {
@@ -785,7 +823,7 @@ body {
         width: 44px;
         height: 44px;
         border-radius: 6px;
-        background: rgba(255,255,255,0.10);
+        background: rgba(255, 255, 255, 0.10);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
     }
@@ -819,11 +857,12 @@ body {
     -ms-flex-align: center;
     flex-shrink: 0;
     -ms-flex-negative: 0;
-    background: rgba(255,255,255,0.10);
+    background: rgba(255, 255, 255, 0.10);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-radius: 20px;
     padding: 3px;
+    -webkit-app-region: no-drag;
 }
 
     .action-btns > * {
@@ -835,7 +874,7 @@ body {
         }
 
 .icon-btn, .main-play-btn {
-    transition: transform 0.2s cubic-bezier(0.175,0.885,0.32,1.275);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .icon-btn {
@@ -843,6 +882,7 @@ body {
     border: none;
     color: white;
     padding: 8px;
+    -webkit-app-region: no-drag;
 }
 
 .main-play-btn {
@@ -869,7 +909,7 @@ body {
 .song-card:active {
     transform: scale(0.94) !important;
     -ms-transform: scale(0.94) !important;
-    background: rgba(255,255,255,0.10);
+    background: rgba(255, 255, 255, 0.10);
 }
 
 .search-pill:focus-within {
@@ -880,7 +920,7 @@ body {
 #btnLoop.active {
     color: #00a0ff;
     color: var(--accent);
-    background: rgba(255,255,255,0.10);
+    background: rgba(255, 255, 255, 0.10);
     border-radius: 50%;
 }
 
@@ -892,7 +932,7 @@ body {
     height: 100vh;
     backdrop-filter: blur(25px);
     -webkit-backdrop-filter: blur(25px);
-    transition: right 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+    transition: right 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 100;
     display: flex;
     display: -ms-flexbox;
@@ -902,6 +942,7 @@ body {
 
     .side-pane.open {
         right: 0;
+        -webkit-app-region: no-drag;
     }
 
 .pane-header {
@@ -912,6 +953,7 @@ body {
     align-items: center;
     -ms-flex-align: center;
     margin-bottom: 30px;
+    -webkit-app-region: drag;
 }
 
     .pane-header h2 {
@@ -929,7 +971,7 @@ body {
 
 .control-group {
     margin-bottom: 25px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     padding: 15px;
     border-radius: 15px;
 }
@@ -990,17 +1032,17 @@ body {
 .playlist-grid-layout {
     display: grid;
     display: -ms-grid;
-    grid-template-columns: repeat(auto-fill,minmax(140px,1fr));
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
     grid-gap: 16px;
     gap: 16px;
     padding-top: 10px;
 }
 
 .playlist-card {
-    background: rgba(255,255,255,0.05);
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 12px;
     padding: 12px;
-    transition: transform 0.2s cubic-bezier(0.175,0.885,0.32,1.275),background 0.2s;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
 }
 
     .playlist-card:active {
@@ -1017,10 +1059,11 @@ body {
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 12px;
-    background: rgba(0,0,0,0.15);
+    background: rgba(0, 0, 0, 0.15);
 }
 
-    .playlist-art-grid img, .playlist-art-grid {
+    .playlist-art-grid img,
+    .playlist-art-grid {
         width: 100%;
     }
 
@@ -1062,7 +1105,7 @@ body {
     display: -ms-flexbox;
     width: 300%;
     height: 100%;
-    transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.1);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
     will-change: transform;
     overflow: hidden;
 }
@@ -1110,7 +1153,7 @@ body {
     opacity: 0;
     visibility: hidden;
     transform: translateY(15px);
-    transition: opacity 0.25s cubic-bezier(0.4,0,0.2,1),transform 0.25s cubic-bezier(0.4,0,0.2,1),visibility 0.25s ease;
+    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.25s ease;
 }
 
 #contextMenu.show {
@@ -1218,12 +1261,12 @@ body {
 .nav-arrow {
     position: fixed;
     top: 50%;
-    transform: translateY(-50%) scale(0.5) !important;
-    -ms-transform: translateY(-50%) scale(0.5) !important;
-    background: rgba(255,255,255,0.15);
+    transform: translateY(-50%) scale(0.5);
+    -ms-transform: translateY(-50%) scale(0.5);
+    background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
-    border: 2px solid rgba(255,255,255,0.1);
+    border: 2px solid rgba(255, 255, 255, 0.1);
     color: white;
     width: 54px;
     height: 54px;
@@ -1236,7 +1279,7 @@ body {
     justify-content: center;
     -ms-flex-pack: center;
     opacity: 0.3;
-    transition: opacity 300ms ease,transform 300ms ease;
+    transition: opacity 300ms ease, transform 300ms ease;
 }
 
     .nav-arrow:hover {
@@ -1260,7 +1303,6 @@ input {
 }
 
 #btnLoop.active, #menuBtnLoop.active {
-    color: #00a0ff;
     color: var(--accent) !important;
 }
 
@@ -1268,7 +1310,9 @@ input {
     color: #ffeb3b !important;
 }
 
-    #btnFavorite.fav-active .material-symbols-rounded, .star-btn.fav-active .material-symbols-rounded, #menuBtnFavorite.fav-active .material-symbols-rounded {
+    #btnFavorite.fav-active .material-symbols-rounded,
+    .star-btn.fav-active .material-symbols-rounded,
+    #menuBtnFavorite.fav-active .material-symbols-rounded {
         font-variation-settings: 'FILL' 1;
     }
 
@@ -1281,9 +1325,9 @@ input {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0,0,0,0.3);
+    background-color: rgba(0, 0, 0, 0.3);
     z-index: 9998;
-    transition: opacity 0.3s ease,visibility 0.3s ease;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
     .context-menu-backdrop.show {
@@ -1292,7 +1336,7 @@ input {
         pointer-events: auto;
     }
 
-@media (max-width:799px) {
+@media (max-width: 799px) {
     #btnLoop, #btnEQ, #btnStop, #btnFavorite {
         display: none !important;
     }
@@ -1304,7 +1348,7 @@ input {
     }
 }
 
-@media (min-width:800px) {
+@media (min-width: 800px) {
     body.win-type-body .search-pill input {
         width: 212px;
     }
@@ -1316,7 +1360,7 @@ input {
     body.SamsungExperience .side-pane {
         border: none !important;
     }
-
+    
     .app-header {
         display: flex;
         display: -ms-flexbox;
@@ -1330,6 +1374,14 @@ input {
             margin: 0 !important;
         }
 
+    body.win32-client .app-header {
+        padding: 10px 20px;
+    }
+    
+    body.win32-client .search-pill {
+        margin-top: 30px;
+    }
+    
     .search-pill {
         width: 280px;
         margin-top: 0;
@@ -1350,7 +1402,7 @@ input {
     .side-pane {
         width: 300px;
         box-shadow: -5px 0 25px rgba(0,0,0,0.5);
-        border-left: 2px solid rgba(255,255,255,0.1);
+        border-left: 2px solid rgba(255, 255, 255, 0.1);
     }
 
     .control-group {
@@ -1375,7 +1427,7 @@ input {
     .song-card:active {
         transform: scale(0.99) !important;
         -ms-transform: scale(0.99) !important;
-        background: rgba(255,255,255,0.10);
+        background: rgba(255, 255, 255, 0.10);
     }
 
     .page {

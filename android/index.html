@@ -14,14 +14,19 @@
     <img id="body-bg" src="placeholder.png" aria-hidden="true">
     <header class="app-header">
         <h1>DrayMusic</h1>
+        <div id="window-controls">
+            <div class="btn" id="min-btn">&#xE921;</div>
+            <div class="btn" id="max-btn">&#xE922;</div>
+            <div class="btn close" id="close-btn">&#xE8BB;</div>
+        </div>
         <div class="search-pill">
-            <span class="icon-windows"></span>
+            <span class="material-symbols-rounded">search</span>
             <input type="text" id="searchInput" placeholder="Search songs or artists...">
         </div>
     </header>
 
-    <button id="navLeft" class="nav-arrow left"><span class="icon-windows"></span></button>
-    <button id="navRight" class="nav-arrow right"><span class="icon-windows"></span></button>
+    <button id="navLeft" class="nav-arrow left" style="display: none;"><span class="material-symbols-rounded">chevron_left</span></button>
+    <button id="navRight" class="nav-arrow right"><span class="material-symbols-rounded">chevron_right</span></button>
 
     <main class="scroll-area page-viewport">
         <div id="pageContainer" class="page-container">
@@ -51,7 +56,7 @@
 
                 <div id="playlistDetailView" style="display: none;">
                     <div style="padding: 10px 0 20px 0; display: flex; align-items: center; gap: 15px;">
-                        <button id="btnBackToPlaylists" class="icon-btn" style="background: rgba(255,255,255,0.1); border-radius: 50%;"><span class="icon-windows"></span></button>
+                        <button id="btnBackToPlaylists" class="icon-btn" style="background: rgba(255,255,255,0.1); border-radius: 50%;"><span class="material-symbols-rounded">arrow_back</span></button>
                         <h3 id="detailPlaylistTitle" style="margin:0; color: white;">Playlist Name</h3>
                     </div>
                     <div id="playlistSongsContainer"></div>
@@ -75,10 +80,10 @@
             <button id="btnDeletePlaylist" class="context-btn" style="color: #ff5252;">Delete Playlist</button>
         </div>
         <div id="contextPlayerOptions" style="display: none;">
-            <button id="menuBtnLoop" class="context-btn"><span class="icon-windows"></span></button>
-            <button id="menuBtnEQ" class="context-btn"><span class="icon-windows"></span></button>
-            <button id="menuBtnStop" class="context-btn"><span class="icon-windows"></span></button>
-            <button id="menuBtnFavorite" class="context-btn"><span class="icon-windows"></span></button>
+            <button id="menuBtnLoop" class="context-btn"><span class="material-symbols-rounded">repeat</span></button>
+            <button id="menuBtnEQ" class="context-btn"><span class="material-symbols-rounded">tune</span></button>
+            <button id="menuBtnStop" class="context-btn"><span class="material-symbols-rounded">stop</span></button>
+            <button id="menuBtnFavorite" class="context-btn"><span class="material-symbols-rounded">star</span></button>
         </div>
     </div>
 
@@ -98,14 +103,14 @@
             </div>
 
             <div class="action-btns">
-                <button id="btnEQ" class="icon-btn wigdisable"><span class="icon-windows"></span></button>
-                <button id="btnFavorite" class="icon-btn wigdisable"><span class="icon-windows"></span></button>
-                <button id="btnLoop" class="icon-btn wigdisable"><span class="icon-windows"></span></button>
-                <button id="btnPrev" class="icon-btn"><span class="icon-windows"></span></button>
-                <button id="btnPlayPause" class="main-play-btn"><span class="icon-windows"></span></button>
-                <button id="btnNext" class="icon-btn"><span class="icon-windows"></span></button>
-                <button id="btnStop" class="icon-btn wigdisable"><span class="icon-windows"></span></button>
-                <button id="btnOverflowMenu" class="icon-btn wigdisable"><span class="icon-windows"></span></button>
+                <button id="btnEQ" class="icon-btn wigdisable"><span class="material-symbols-rounded">tune</span></button>
+                <button id="btnFavorite" class="icon-btn wigdisable"><span class="material-symbols-rounded">star</span></button>
+                <button id="btnLoop" class="icon-btn wigdisable"><span class="material-symbols-rounded">repeat</span></button>
+                <button id="btnPrev" class="icon-btn"><span class="material-symbols-rounded">skip_previous</span></button>
+                <button id="btnPlayPause" class="main-play-btn"><span class="material-symbols-rounded">play_arrow</span></button>
+                <button id="btnNext" class="icon-btn"><span class="material-symbols-rounded">skip_next</span></button>
+                <button id="btnStop" class="icon-btn wigdisable"><span class="material-symbols-rounded">stop</span></button>
+                <button id="btnOverflowMenu" class="icon-btn wigdisable"><span class="material-symbols-rounded">more_vert</span></button>
             </div>
         </div>
     </section>
@@ -113,7 +118,7 @@
     <div id="eqPane" class="side-pane">
         <div class="pane-header">
             <h2>Audio Settings</h2>
-            <button id="btnCloseEQ" class="icon-btn"><span class="icon-windows"></span></button>
+            <button id="btnCloseEQ" class="icon-btn"><span class="material-symbols-rounded">close</span></button>
         </div>
 
         <div class="pane-content">
@@ -133,7 +138,7 @@
                 </div>
             </div>
 
-            <div class="control-group uwpdisable">
+            <div class="control-group">
                 <h3>Playback</h3>
                 <div class="slider-row">
                     <label>Speed</label>
@@ -171,6 +176,27 @@
                 navigator.serviceWorker.register('sw.js')['catch'](function (e) {
                     console.log('SW reg failed', e);
                 });
+            });
+        }
+    </script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const isWindowsClient = params.get('windowsclient') === '1';
+
+        if (isWindowsClient) {
+            document.body.classList.add('win32-client');
+
+            const maxBtn = document.getElementById('max-btn');
+            document.getElementById('min-btn').onclick = () => window.api.minimize();
+            document.getElementById('max-btn').onclick = () => window.api.maximize();
+            document.getElementById('close-btn').onclick = () => window.api.close();
+
+            window.api.onMaximize(() => {
+                maxBtn.innerHTML = '&#xE923;';
+            });
+
+            window.api.onUnmaximize(() => {
+                maxBtn.innerHTML = '&#xE922;';
             });
         }
     </script>

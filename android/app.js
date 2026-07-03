@@ -271,7 +271,7 @@ function playSong(index) {
     if (DOM.currentTitle) DOM.currentTitle.textContent = song.title;
     if (DOM.currentArtist) DOM.currentArtist.textContent = song.artist;
     if (DOM.currentArt) DOM.currentArt.src = song.art;
-    if (DOM.btnPlayPause) DOM.btnPlayPause.innerHTML = '<span class="icon-windows">\uE103</span>';
+    if (DOM.btnPlayPause) DOM.btnPlayPause.innerHTML = '<span class="material-symbols-rounded">pause</span>';
     if (DOM.btnFavorite) {
         if (favoriteUrls.indexOf(song.url) !== -1) {
             DOM.btnFavorite.classList.add('fav-active');
@@ -353,7 +353,7 @@ function renderList(data, container) {
             '<p>' + escapeHTML(song.artist) + '</p>' +
             '</div>' +
             '<button class="' + starClass + '" title="Favorite">' +
-            '<span class="icon-windows">\uE00A</span>' +
+            '<span class="material-symbols-rounded">star</span>' +
             '</button>' +
             '</div>';
     }
@@ -493,7 +493,7 @@ function renderPlaylistDetail(playlistName) {
             '<p>' + escapeHTML(s.artist) + '</p>' +
             '</div>' +
             '<button class="remove-btn icon-btn" data-url="' + escapeHTML(s.url) + '">' +
-            '<span class="icon-windows">\uE10A</span>' +
+            '<span class="material-symbols-rounded">delete</span>' +
             '</button>' +
             '</div>';
     }
@@ -582,11 +582,11 @@ function showSongContextMenu(x, y, song) {
     for (var i = 0; i < playlistNames.length; i++) {
         var pName = playlistNames[i];
         var hasSong = (userPlaylists[pName].indexOf(song.url) !== -1);
-        var icon = hasSong ? '\uE10B' : '\uE109';
+        var icon = hasSong ? 'check_box' : 'check_box_outline_blank';
         var accentColor = '#00a0ff';
 
         html += '<li data-name="' + escapeHTML(pName) + '">' + escapeHTML(pName) +
-            '<span class="icon-windows" style="color:' + accentColor + '">' + icon + '</span></li>';
+            '<span class="material-symbols-rounded" style="color:' + accentColor + '">' + icon + '</span></li>';
     }
     DOM.contextPlaylistItems.innerHTML = html;
 
@@ -716,10 +716,10 @@ function bindEvents() {
         DOM.btnPlayPause.addEventListener('click', function () {
             if (DOM.audio.paused) {
                 safePlay(DOM.audio);
-                DOM.btnPlayPause.innerHTML = '<span class="icon-windows">\uE103</span>';
+                DOM.btnPlayPause.innerHTML = '<span class="material-symbols-rounded">pause</span>';
             } else {
                 DOM.audio.pause();
-                DOM.btnPlayPause.innerHTML = '<span class="icon-windows">\uE102</span>';
+                DOM.btnPlayPause.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
             }
         });
     }
@@ -883,7 +883,7 @@ function bindEvents() {
             DOM.audio.currentTime = 0;
 
             if (DOM.btnPlayPause)
-                DOM.btnPlayPause.innerHTML = '<span class="icon-windows">\uE102</span>';
+                DOM.btnPlayPause.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
 
             document.querySelector('.mini-player').classList.add('notplaying');
 
