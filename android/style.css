@@ -1345,7 +1345,41 @@ input {
         opacity: 1;
         visibility: visible;
         pointer-events: auto;
+        -webkit-app-region: no-drag;
     }
+
+.theme-list {
+    display: flex;
+    display: -ms-flexbox;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.theme-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    text-align: left;
+    font-size: 14px;
+    cursor: pointer !important;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.theme-btn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.theme-btn.active-theme {
+    background: var(--accent);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
+    font-weight: 500;
+}
 
 @media (max-width: 799px) {
     #btnLoop, #btnEQ, #btnStop, #btnFavorite {

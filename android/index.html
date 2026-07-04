@@ -8,6 +8,7 @@
     <title>DrayMusic</title>
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="style.css">
+    <link id="theme-stylesheet" rel="stylesheet" href="">
     <link href="google.css" rel="stylesheet">
 </head>
 <body>
@@ -118,11 +119,17 @@
 
     <div id="eqPane" class="side-pane">
         <div class="pane-header">
-            <h2>Audio Settings</h2>
+            <h2>Settings</h2>
             <button id="btnCloseEQ" class="icon-btn"><span class="material-symbols-rounded">close</span></button>
         </div>
 
-        <div class="pane-content">
+    <div class="pane-content">
+        <div class="control-group">
+            <h3>Themes</h3>
+            <div id="themeListContainer" class="theme-list">
+        </div>
+    </div>
+
             <div class="control-group">
                 <h3>Equalizer</h3>
                 <div class="eq-sliders 10-band">

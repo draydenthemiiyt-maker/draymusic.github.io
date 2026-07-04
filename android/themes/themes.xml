@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<themes>
+    <theme>
+        <name>Clean</name>
+        <stylesheet>clean.css</stylesheet>
+    </theme>
+    <theme>
+        <name>Basic</name>
+        <stylesheet>basic.css</stylesheet>
+    </theme>
+</themes>

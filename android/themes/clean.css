@@ -1,0 +1,125 @@
+#body-bg {
+    filter: none;
+    transform: scale(1);
+    -ms-transform: scale(1);
+    animation: none;
+    transition: none;
+}
+
+.app-header {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 10px 20px;
+}
+
+    .app-header h1 {
+        font-weight: 100;
+    }
+
+.search-pill {
+    background: rgb(180 180 180 / 20%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+    .song-card img {
+        background: rgb(140 140 140 / 50%);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .song-card .info h4 {
+        font-weight: 400;
+    }
+
+    .song-card .info p {
+        color: #c5c5c5;
+        font-size: 13px;
+    }
+
+.mini-player {
+    background: #54545480;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.progress-wrapper {
+    background: #545454;
+}
+
+    .track-info img {
+        background: rgb(140 140 140 / 50%);
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .text-group h4 {
+        font-size: 15px;
+        font-weight: 400;
+    }
+
+    .text-group p {
+        font-size: 13px;
+        color: #c5c5c5;
+    }
+
+.action-btns {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-radius: 0px;
+}
+
+.song-card:active {
+    background: rgb(50 50 50);
+}
+
+.side-pane {
+    background: rgb(64 64 64);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+    .pane-header h2 {
+        font-size: 30px;
+        font-weight: 400;
+    }
+
+    .control-group h3 {
+        font-weight: 400;
+    }
+
+.playlist-card {
+    background: rgb(140 140 140 / 50%);
+}
+
+.page {
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+    .page-container {
+        padding-top: 165px;
+    }
+
+.context-menu {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgb(50 50 50 / 85%);
+}
+
+.nav-arrow {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+@media (min-width: 800px) {
+    .page {
+        padding-top: 0px;
+    }
+
+    .page-container {
+        padding-top: 80px;
+    }
+}

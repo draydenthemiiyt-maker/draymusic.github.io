@@ -1459,6 +1459,120 @@ function bootMusic() {
     }
 })();
 
+// --- Theme System ---
+
+var availableThemes = [];
+var savedTheme = localStorage.getItem('drayTheme');
+
+// Applies the stylesheet and optionally saves it to localStorage
+function applyTheme(stylesheetName, saveToStorage) {
+    var themeLink = document.getElementById('theme-stylesheet');
+    if (!themeLink) return;
+
+    if (!stylesheetName) {
+        // Apply Default
+        themeLink.removeAttribute('href');
+        if (saveToStorage) localStorage.removeItem('drayTheme');
+    } else {
+        // Apply Custom Theme
+        themeLink.setAttribute('href', 'themes/' + stylesheetName);
+        if (saveToStorage) localStorage.setItem('drayTheme', stylesheetName);
+    }
+}
+
+// Builds the UI buttons based on the XML data
+function renderThemes() {
+    var container = document.getElementById('themeListContainer');
+    if (!container) return;
+
+    // Create the Default option
+    var html = '<button class="theme-btn ' + (!savedTheme ? 'active-theme' : '') + '" data-sheet="">Default</button>';
+
+    // Loop through parsed XML themes
+    for (var i = 0; i < availableThemes.length; i++) {
+        var theme = availableThemes[i];
+        var isActive = (savedTheme === theme.stylesheet) ? 'active-theme' : '';
+        html += '<button class="theme-btn ' + isActive + '" data-sheet="' + escapeHTML(theme.stylesheet) + '">' + escapeHTML(theme.name) + '</button>';
+    }
+
+    container.innerHTML = html;
+
+    // Attach click listeners to the dynamically created buttons
+    var btns = container.querySelectorAll('.theme-btn');
+    for (var j = 0; j < btns.length; j++) {
+        (function(btn) {
+            btn.addEventListener('click', function() {
+                var sheet = btn.getAttribute('data-sheet');
+                
+                // Apply and save
+                applyTheme(sheet, true);
+                savedTheme = sheet; 
+                
+                // Update active button styling
+                for (var k = 0; k < btns.length; k++) {
+                    btns[k].classList.remove('active-theme');
+                }
+                btn.classList.add('active-theme');
+            });
+        })(btns[j]);
+    }
+}
+
+// Fetches the XML file and parses it
+function loadThemes() {
+    // 1. Immediately apply the saved theme so the UI doesn't flash unstyled on boot
+    if (savedTheme) {
+        applyTheme(savedTheme, false);
+    }
+
+    // 2. Fetch the XML file
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', 'themes/themes.xml?nocache=' + new Date().getTime(), true);
+    
+    xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+            var xml;
+            try {
+                xml = new window.DOMParser().parseFromString(xhr.responseText, 'text/xml');
+            } catch (e) { 
+                console.error('Theme XML Parse Error', e); 
+                return; 
+            }
+
+            var items = xml.getElementsByTagName('theme');
+            availableThemes = []; // Reset array
+
+            for (var i = 0; i < items.length; i++) {
+                var t = items[i];
+                var nameEl = t.getElementsByTagName('name')[0];
+                var sheetEl = t.getElementsByTagName('stylesheet')[0];
+                
+                if (nameEl && sheetEl) {
+                    availableThemes.push({
+                        name: nameEl.textContent,
+                        stylesheet: sheetEl.textContent
+                    });
+                }
+            }
+            
+            // Build the menu now that we have the data
+            renderThemes();
+        } else {
+            console.warn('Could not load themes.xml. Status:', xhr.status);
+            renderThemes(); // Render the "Default" button even if XML fails
+        }
+    };
+    
+    xhr.onerror = function() { 
+        console.warn('Network error loading themes.xml'); 
+        renderThemes(); 
+    };
+    
+    xhr.send();
+}
+
+// Initialize the theme system
+loadThemes();
 updateNavArrows();
 bindEvents();
 bootMusic();
