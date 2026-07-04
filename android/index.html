@@ -195,7 +195,12 @@
             document.body.classList.add('win32-client');
 
             const maxBtn = document.getElementById('max-btn');
-            document.getElementById('popout-btn').onclick = () => window.api.popout();
+            document.getElementById('popout-btn').onclick = () => {
+                window.api.popout();
+                if (typeof goToPage === 'function') {
+                    goToPage(0);
+                }
+            };
             document.getElementById('min-btn').onclick = () => window.api.minimize();
             document.getElementById('max-btn').onclick = () => window.api.maximize();
             document.getElementById('close-btn').onclick = () => window.api.close();
