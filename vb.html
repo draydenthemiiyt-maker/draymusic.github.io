@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tap to Vibrate</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background: #111;
+    color: #fff;
+    font-family: system-ui, sans-serif;
+    overflow: hidden;
+  }
+
+  .page {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    user-select: none;
+    touch-action: manipulation;
+  }
+
+  .text {
+    font-size: 1.6rem;
+  }
+
+  /* shake animation for whole page */
+  .shake {
+    animation: shake 0.15s infinite;
+  }
+
+  @keyframes shake {
+    0%   { transform: translate(2px, 0); }
+    25%  { transform: translate(-2px, 0); }
+    50%  { transform: translate(2px, 0); }
+    75%  { transform: translate(-2px, 0); }
+    100% { transform: translate(2px, 0); }
+  }
+</style>
+</head>
+<body>
+<div class="page" id="page">
+  <div class="text">Tap anywhere to vibrate<br>Hold to shake the page</div>
+</div>
+
+<script>
+  const page = document.getElementById('page');
+  let holdTimer = null;
+
+  function vibrateOnce() {
+    if (navigator.vibrate) {
+      navigator.vibrate(100); // short vibration
+    }
+  }
+
+  function startHold() {
+    // start shaking after a short hold
+    if (holdTimer) clearTimeout(holdTimer);
+    holdTimer = setTimeout(() => {
+      document.body.classList.add('shake');
+      if (navigator.vibrate) {
+        // continuous pattern while holding
+        navigator.vibrate([100, 50, 100, 50, 100, 50]);
+      }
+    }, 200); // hold threshold (ms)
+  }
+
+  function endHold() {
+    if (holdTimer) clearTimeout(holdTimer);
+    document.body.classList.remove('shake');
+    if (navigator.vibrate) {
+      navigator.vibrate(0); // stop vibration pattern
+    }
+  }
+
+  // tap: click / quick touch
+  page.addEventListener('click', vibrateOnce);
+
+  // hold: pointer/touch down & up
+  page.addEventListener('pointerdown', startHold);
+  page.addEventListener('pointerup', endHold);
+  page.addEventListener('pointerleave', endHold);
+</script>
+</body>
+</html>
