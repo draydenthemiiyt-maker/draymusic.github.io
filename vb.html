@@ -29,9 +29,8 @@
     font-size: 1.6rem;
   }
 
-  /* shake animation for whole page */
   .shake {
-    animation: shake 0.15s infinite;
+    animation: shake 0.12s infinite;
   }
 
   @keyframes shake {
@@ -50,41 +49,36 @@
 
 <script>
   const page = document.getElementById('page');
-  let holdTimer = null;
+  let holding = false;
 
-  function vibrateOnce() {
-    if (navigator.vibrate) {
-      navigator.vibrate(100); // short vibration
-    }
-  }
+  // Single tap vibration
+  page.addEventListener('click', () => {
+    if (navigator.vibrate) navigator.vibrate(100);
+  });
 
-  function startHold() {
-    // start shaking after a short hold
-    if (holdTimer) clearTimeout(holdTimer);
-    holdTimer = setTimeout(() => {
-      document.body.classList.add('shake');
-      if (navigator.vibrate) {
-        // continuous pattern while holding
-        navigator.vibrate([100, 50, 100, 50, 100, 50]);
-      }
-    }, 200); // hold threshold (ms)
-  }
+  // Start constant vibration + shake
+  page.addEventListener('pointerdown', () => {
+    holding = true;
+    document.body.classList.add('shake');
 
-  function endHold() {
-    if (holdTimer) clearTimeout(holdTimer);
+    // Constant vibration loop
+    const loop = () => {
+      if (!holding) return;
+      navigator.vibrate(100);
+      requestAnimationFrame(loop);
+    };
+    loop();
+  });
+
+  // Stop vibration + shake
+  const stop = () => {
+    holding = false;
     document.body.classList.remove('shake');
-    if (navigator.vibrate) {
-      navigator.vibrate(0); // stop vibration pattern
-    }
-  }
+    navigator.vibrate(0);
+  };
 
-  // tap: click / quick touch
-  page.addEventListener('click', vibrateOnce);
-
-  // hold: pointer/touch down & up
-  page.addEventListener('pointerdown', startHold);
-  page.addEventListener('pointerup', endHold);
-  page.addEventListener('pointerleave', endHold);
+  page.addEventListener('pointerup', stop);
+  page.addEventListener('pointerleave', stop);
 </script>
 </body>
 </html>
