@@ -11,6 +11,12 @@
     var currentContextText = "";
     var currentMode = "fast";
     var synthesizer = window.speechSynthesis;
+    var GEMINI_API_KEY = (typeof process !== "undefined" && process.env && process.env.GEMINI_API_KEY) 
+        || localStorage.getItem("drayAiGeminiKey") 
+        || "";
+    var YOUTUBE_API_KEY = (typeof process !== "undefined" && process.env && process.env.YOUTUBE_API_KEY) 
+        || localStorage.getItem("drayAiYoutubeKey") 
+        || "";
 
     function getModeSuffix() {
         switch (currentMode) {
@@ -403,7 +409,11 @@ document.addEventListener("contextmenu", function (e) {
     }
 
     function callAI(prompt) {
-        var geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=AQ.Ab8RN6KpmtZmWPXSsU0-0QaXks7t3eKm4D8a29m8VlAlv8WvxQ";
+        if (!GEMINI_API_KEY) {
+            return;
+        }
+
+        var geminiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=" + GEMINI_API_KEY;
 
         var recentHistory = JSON.parse(JSON.stringify(chatHistory.slice(-20)));
         var suffix = getModeSuffix();
@@ -488,7 +498,11 @@ document.addEventListener("contextmenu", function (e) {
     }
 
     function playMusic(query) {
-        var searchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=" + encodeURIComponent(query) + "&type=video&key=AIzaSyBR9fo5d4MVEt_Z3Xr4COa2HXDFhlwP4bk";
+        if (!YOUTUBE_API_KEY) {
+            return;
+        }
+
+        var searchUrl = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=" + encodeURIComponent(query) + "&type=video&key=" + YOUTUBE_API_KEY;
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", searchUrl, true);
