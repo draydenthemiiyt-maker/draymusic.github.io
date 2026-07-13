@@ -1,0 +1,16 @@
+{
+  "name": "DrayMusic",
+  "short_name": "DrayMusic",
+  "start_url": "https://draydenthemiiyt-maker.github.io/draymusic.github.io/android/index.html",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "background_color": "#000000",
+  "theme_color": "#640000",
+  "icons": [
+    {
+      "src": "placeholder.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

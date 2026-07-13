@@ -1,0 +1,95 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/png" href="icon.png">
+    <title>DrayAi BETA</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link id="theme-stylesheet" rel="stylesheet" href="">
+    <link href="google.css" rel="stylesheet">
+</head>
+<body>
+    <header class="app-header">
+        <h1>DrayAi BETA</h1>
+        <div id="window-controls">
+            <div class="btn wigdisable" id="bgBtn">&#xEB9F;</div>
+            <div class="btn" id="popout-btn" style="display: none;">&#xE8A7;</div>
+            <div class="btn wigdisable" id="min-btn">&#xE921;</div>
+            <div class="btn wigdisable" id="max-btn">&#xE922;</div>
+            <div class="btn close wigdisable" id="close-btn">&#xE8BB;</div>
+        </div>
+    </header>
+
+    <div id="chatContainer">
+        <div id="chatList"></div>
+    </div>
+    
+    <section class="mini-player">
+        <div class="player-controls-row">
+            <input type="text" id="msgInput" placeholder="Ask me anything" autocomplete="off" />
+            <div class="action-btns">
+                <button id="uploadBtn" class="icon-btn"><span class="material-symbols-rounded">add_photo_alternate</span></button>
+                <button id="sendBtn" class="main-play-btn"><span class="material-symbols-rounded">send</span></button>
+                <button id="modeBtn" class="icon-btn"><span class="material-symbols-rounded">tune</span></button>
+                <button id="voiceBtn" class="icon-btn"><span class="material-symbols-rounded">mic</span></button>
+                <input type="file" id="imageInput" accept="image/png, image/jpeg, image/webp" style="display: none;" />
+                <input type="file" id="bgFileInput" accept="image/png, image/jpeg" style="display: none;" />
+            </div>
+        </div>
+    </section>
+    <iframe id="musicPlayer" style="display: none;" src="about:blank"></iframe>
+    <audio id="pingSound" src="ping.mp3"></audio>
+    <div id="modeMenu" class="glass-menu hidden">
+        <button class="menu-item active" data-mode="fast">Fast</button>
+        <button class="menu-item" data-mode="pro">Pro</button>
+        <button class="menu-item" data-mode="study">Study</button>
+        <button class="menu-item" data-mode="thinking">Thinking</button>
+    </div>
+    <div id="voiceMenu" class="glass-menu hidden"></div>
+    <div id="msgContextMenu" class="glass-menu hidden">
+        <button id="cmdCopy" class="menu-item"><span class="material-symbols-rounded">content_copy</span> Copy</button>
+        <button id="cmdReadAloud" class="menu-item"><span class="material-symbols-rounded">record_voice_over</span> Read Aloud</button>
+    </div>
+    <div id="menuOverlay" class="hidden"></div>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('sw.js')['catch'](function (e) {
+                    console.log('SW reg failed', e);
+                });
+            });
+        }
+    </script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const isWindowsClient = params.get('windowsclient') === '1';
+
+        if (isWindowsClient) {
+            document.body.classList.add('win32-client');
+
+            const maxBtn = document.getElementById('max-btn');
+            document.getElementById('popout-btn').onclick = () => {
+                window.api.popout();
+                if (typeof goToPage === 'function') {
+                    goToPage(0);
+                }
+            };
+            document.getElementById('min-btn').onclick = () => window.api.minimize();
+            document.getElementById('max-btn').onclick = () => window.api.maximize();
+            document.getElementById('close-btn').onclick = () => window.api.close();
+
+            window.api.onMaximize(() => {
+                maxBtn.innerHTML = '&#xE923;';
+            });
+
+            window.api.onUnmaximize(() => {
+                maxBtn.innerHTML = '&#xE922;';
+            });
+        }
+    </script>
+</body>
+</html>

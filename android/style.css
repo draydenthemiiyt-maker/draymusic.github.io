@@ -33,10 +33,6 @@ img {
     pointer-events: none;
 }
 
-html, body {
-    border-radius: 20px;
-}
-
 body {
     margin: 0;
     padding: 0;
