@@ -384,7 +384,7 @@ function renderList(data, container) {
         var starClass = isFav ? 'star-btn fav-active' : 'star-btn';
 
         html += '<div class="song-card" data-index="' + i + '" data-url="' + escapeHTML(song.url) + '" style="animation-delay: ' + (i * 0.05) + 's">' +
-            '<img src="' + escapeHTML(song.art) + '" alt="art">' +
+            '<img class="glass-background" src="' + escapeHTML(song.art) + '" alt="art">' +
             '<div class="info" style="flex:1;">' +
             '<h4>' + escapeHTML(song.title) + '</h4>' +
             '<p>' + escapeHTML(song.artist) + '</p>' +

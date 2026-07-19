@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="icon.png">
     <title>DrayMusic</title>
@@ -89,7 +89,7 @@
         </div>
         <div class="player-controls-row">
             <div class="track-info" id="openFullPlayer">
-                <img id="currentArt" src="placeholder.png">
+                <img class="glass-background" id="currentArt" src="placeholder.png">
                 <div class="text-group">
                     <h4 id="currentTitle">Not Playing</h4>
                     <p id="currentArtist">Select a song</p>
@@ -168,7 +168,6 @@
     </div>
     <audio id="audioElement" msAudioCategory="BackgroundCapableMedia" crossorigin="anonymous"></audio>
     <script src="app.js"></script>
-    <script src="bouncebackv1.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
