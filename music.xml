@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <music>
   <song>
     <title>Stunshine - Cave Wave</title>
@@ -9,25 +9,25 @@
   <song>
     <title>Windows</title>
     <artist>Microsoft</artist>
-    <albumArt/>
+    <albumArt />
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/windows.mp3</url>
   </song>
   <song>
     <title>MayDay</title>
     <artist>thefatrat and laura Brehm</artist>
-    <albumArt/>
+    <albumArt />
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/803971_TheFatRat---MAYDAY-feat-La.mp3</url>
   </song>
   <song>
     <title>Windows 95</title>
     <artist>Bloom</artist>
-    <albumArt/>
+    <albumArt />
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/pb_theme_midi.mp3</url>
   </song>
   <song>
     <title>Windows 95 (HQ)</title>
     <artist>Bloom</artist>
-    <albumArt/>
+    <albumArt />
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/pb_theme_midi_low.mp3</url>
   </song>
   <song>
@@ -39,7 +39,7 @@
   <song>
     <title>All I Ever Wanted</title>
     <artist>Basshunter</artist>
-    <albumArt/>
+    <albumArt />
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/Basshunter_-_All_I_Ever_Wanted_54722431.mp3</url>
   </song>
   <song>
@@ -623,5 +623,639 @@
     <artist>Wicsur</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/unnamed_1783286792.jpg</albumArt>
     <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Wicsur_-_YAMTK_79835911_1783286792.mp3</url>
+  </song>
+  <song>
+    <title>- Back In Black</title>
+    <artist>AC／DC</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1e/14/58/1e145814-281a-58e0-3ab1-145f5d1af421/886443673441.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Highway to Hell</title>
+    <artist>AC／DC</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b9/c8/ef/b9c8ef42-bbc9-64df-11f8-717571f6730f/886443673458.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Let There Be Rock</title>
+    <artist>AC／DC</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/d3/26/63/d32663dc-f5a0-090b-d249-fd24cd47a8ab/dj.eynsaemm.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Thunderstruck</title>
+    <artist>AC／DC</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Features114/v4/fc/c2/f8/fcc2f850-1d81-7440-c0a0-de7fcef1e911/dj.rrgizfic.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Skyfall</title>
+    <artist>Adele</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/b3/fe/cf/b3fecf76-0359-8e14-0651-4b101fc68a3f/886443673632.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- I Don't Want to Miss a Thing</title>
+    <artist>Aerosmith</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/08/3f/fb/083ffb78-ce26-bd3f-d13d-e066b7eb708d/22UM1IM35761.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Cooper - Feed My Frankenstein</title>
+    <artist>Alice</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music18/v4/3b/d3/4c/3bd34cd1-ca6e-2595-3d9e-ea3af14bc2d2/dj.zvaniikp.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Cooper - Poison</title>
+    <artist>Alice</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/20/86/46/208646e0-5959-1699-1db5-5e2b9a4c3e5f/mzi.kvmupcyx.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Sabbath - War Pigs</title>
+    <artist>Black</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/27/d2/22/27d222de-b53e-eafe-c1ed-1d36c5c9ac3f/603497870318.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Jovi - Bad Medicine</title>
+    <artist>Bon</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/c6/f4/50/c6f4505e-d0a2-30fa-50e2-f0c407a5e234/14UMGIM23221.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Jovi - Livin' On A Prayer</title>
+    <artist>Bon</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/3c/96/b3/3c96b3cb-59c0-9641-cfad-a33346ab87f9/24UMGIM83177.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Jovi - You Give Love A Bad Name</title>
+    <artist>Bon</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/9a/ed/d0/9aedd0b6-e815-9f20-19b8-58b93fa9b1d0/06UMGIM04503.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- The Final Countdown</title>
+    <artist>Europe</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/00/4d/a9/004da9d2-9b4f-99f4-d396-72ec786fb88c/696998575721.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Bring Me To Life</title>
+    <artist>Evanescence</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/10/4c/21/104c21e6-9ef0-4d3a-d1bd-d47167f121e5/00601501406300.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- I Want To Know What Love Is</title>
+    <artist>Foreigner</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/af/7b/a2/af7ba295-c0c0-ba8d-17da-5cc52959a602/mzi.ykpmzuxm.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>N' Roses - Sweet Child O' Mine</title>
+    <artist>Guns</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/56/47/b7/5647b700-6b9d-9e72-ec9f-51140b6d4492/00602567673781.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>N' Roses - Welcome To The Jungle</title>
+    <artist>Guns</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Alone</title>
+    <artist>Heart</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/86/2b/7a/862b7a60-5b32-1153-33ca-25f5a339d40d/13UABIM59256.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Priest - Breaking The Law</title>
+    <artist>Judas</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music3/v4/3e/ce/c7/3ecec7e6-66a3-7ca8-d70f-5a4512aa21ba/dj.stjulnox.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Skynyrd - Sweet Home Alabama</title>
+    <artist>Lynyrd</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/80/dc/13/80dc136a-ba3d-a13e-f2ce-5c3c43960efe/06UMGIM04103.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Enter Sandman</title>
+    <artist>Metallica</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/9e/80/1b/9e801b06-67fa-0990-2d15-85480ad3cd46/850007452025.png/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>No tresspass</title>
+    <artist>
+    </artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/65/18/c4/6518c427-89e1-01d2-de0e-605b63ed67d7/artwork.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- I Want to Break Free (Official Lyric Video) - Queen Official</title>
+    <artist>Queen</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4d/08/2a/4d082a9e-7898-1aa1-a02f-339810058d9e/14DMGIM05632.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Movie - Aus dem Leben eines Spurkranzes - Jochen Boy</title>
+    <artist>Rad</artist>
+    <albumArt>
+    </albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>see it say it sorted on train</title>
+    <artist>
+    </artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/79/08/a4/7908a425-3bed-3f20-6726-2aad9828714d/5063011831075_cover.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>see it say it sorted</title>
+    <artist>
+    </artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/c8/5c/a4/c85ca480-d892-61eb-2ea2-36788ad16289/633842220925_cover.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Xperia XZ2 Alarm #1 - The Sitting Dutchman</title>
+    <artist>Sony</artist>
+    <albumArt>
+    </albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>xperia_alarm_part1</title>
+    <artist>
+    </artist>
+    <albumArt>
+    </albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>xperia_alarm_part2</title>
+    <artist>
+    </artist>
+    <albumArt>
+    </albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Yorkshire Railfan</title>
+    <artist>
+    </artist>
+    <albumArt>
+    </albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Yorky at Grantham</title>
+    <artist>
+    </artist>
+    <albumArt>
+    </albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Smells Like Teen Spirit</title>
+    <artist>Nirvana</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/7b/58/c2/7b58c21a-2b51-2bb2-e59a-9bb9b96ad8c3/00602567924166.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Wonderwall</title>
+    <artist>Oasis</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/34/2e/cb/342ecb17-ef19-816a-4ce5-e60b9ceec161/5051961073164.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Osbourne - Crazy Train</title>
+    <artist>Ozzy</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/ea/b7/c8/eab7c877-a4d3-9d3d-5789-2576f6e8f4e5/886444776660.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Queen – Bohemian Rhapsody</title>
+    <artist>
+    </artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4d/08/2a/4d082a9e-7898-1aa1-a02f-339810058d9e/14DMGIM05632.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- I Want It All</title>
+    <artist>Queen</artist>
+    <albumArt>
+    </albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- I Want to Break Free</title>
+    <artist>Queen</artist>
+    <albumArt>
+    </albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Radio Ga Ga</title>
+    <artist>Queen</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/51/50/2c/51502c9e-de70-1100-569e-6b50cec92150/196874612422.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- The Show Must Go On</title>
+    <artist>Queen</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4d/08/2a/4d082a9e-7898-1aa1-a02f-339810058d9e/14DMGIM05632.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- We Are The Champions</title>
+    <artist>Queen</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b7/79/fe/b779fe89-7981-c76d-ffd4-dbd29ca52de7/14DMGIM05601.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- We Will Rock You</title>
+    <artist>Queen</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/b7/79/fe/b779fe89-7981-c76d-ffd4-dbd29ca52de7/14DMGIM05601.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Blitzkrieg Bop</title>
+    <artist>Ramones</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/62/2a/c9/622ac9c4-7950-49d4-58d5-dca5ff695a48/603497873029.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Hot Chili Peppers - Can't Stop</title>
+    <artist>Red</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/c1/7f/25/c17f25d9-c5fa-5a70-5e76-122caf132bc1/093624931966.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Hot Chili Peppers - Under The Bridge</title>
+    <artist>Red</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music3/v4/3f/eb/2e/3feb2e17-0dbf-11f9-f552-5f79d013b40c/093624931973.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Miles - Children</title>
+    <artist>Robert</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/38/42/63/3842637b-c554-df9c-f338-b6594e9f3ab7/828768796559.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Kiss From A Rose</title>
+    <artist>Seal</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/9c/b5/79/9cb579e1-0b40-3fd1-961e-2e0a65e69f4a/s06.mfkmyngx.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Born To Be Wild</title>
+    <artist>Steppenwolf</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/ec/b2/63/ecb263f0-55dd-6430-a916-f8c6d14430a6/00602537845194.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>- Eye Of The Tiger</title>
+    <artist>Survivor</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Features115/v4/49/21/4d/49214d77-2eb5-60a1-75d3-67d30b449326/dj.szkhyuyj.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>For Fears - Shout</title>
+    <artist>Tears</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/74/41/43/744143ae-afad-8380-106e-1c1bc48922e4/14UMGIM34762.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Police - Every Breath You Take</title>
+    <artist>The</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/a4/67/ba/a467ba62-87df-9d10-98d2-c517f68ac870/16UMGIM60882.rgb.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Lizzy - Boys Are Back In Town</title>
+    <artist>Thin</artist>
+    <albumArt>
+    </albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Halen - Jump</title>
+    <artist>Van</artist>
+    <albumArt>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/79/98/f7/7998f761-20e0-aa8e-4fb2-190062af1638/603497894161.jpg/600x600bb.jpg</albumArt>
+    <url>
+    </url>
+  </song>
+  <song>
+    <title>Back In Black</title>
+    <artist>AC／DC</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/AC_DC_-_Back_In_Black.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/AC%EF%BC%8FDC%20-%20Back%20In%20Black.mp3</url>
+  </song>
+  <song>
+    <title>Highway to Hell</title>
+    <artist>AC／DC</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/AC_DC_-_Highway_to_Hell.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/AC%EF%BC%8FDC%20-%20Highway%20to%20Hell.mp3</url>
+  </song>
+  <song>
+    <title>Let There Be Rock</title>
+    <artist>AC／DC</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/AC_DC_-_Let_There_Be_Rock.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/AC%EF%BC%8FDC%20-%20Let%20There%20Be%20Rock.mp3</url>
+  </song>
+  <song>
+    <title>Thunderstruck</title>
+    <artist>AC／DC</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/AC_DC_-_Thunderstruck.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/AC%EF%BC%8FDC%20-%20Thunderstruck.mp3</url>
+  </song>
+  <song>
+    <title>Skyfall</title>
+    <artist>Adele</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Adele_-_Skyfall.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Adele%20-%20Skyfall.mp3</url>
+  </song>
+  <song>
+    <title>I Don't Want to Miss a Thing</title>
+    <artist>Aerosmith</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Aerosmith_-_I_Don_t_Want_to_Miss_a_Thing.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Aerosmith%20-%20I%20Don't%20Want%20to%20Miss%20a%20Thing.mp3</url>
+  </song>
+  <song>
+    <title>Feed My Frankenstein</title>
+    <artist>Alice Cooper</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Alice_Cooper_-_Feed_My_Frankenstein.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Alice%20Cooper%20-%20Feed%20My%20Frankenstein.mp3</url>
+  </song>
+  <song>
+    <title>Poison</title>
+    <artist>Alice Cooper</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Alice_Cooper_-_Poison.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Alice%20Cooper%20-%20Poison.mp3</url>
+  </song>
+  <song>
+    <title>War Pigs</title>
+    <artist>Black Sabbath</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Black_Sabbath_-_War_Pigs.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Black%20Sabbath%20-%20War%20Pigs.mp3</url>
+  </song>
+  <song>
+    <title>Bad Medicine</title>
+    <artist>Bon Jovi</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Bon_Jovi_-_Bad_Medicine.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Bon%20Jovi%20-%20Bad%20Medicine.mp3</url>
+  </song>
+  <song>
+    <title>Livin' On A Prayer</title>
+    <artist>Bon Jovi</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Bon_Jovi_-_Livin_On_A_Prayer.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Bon%20Jovi%20-%20Livin'%20On%20A%20Prayer.mp3</url>
+  </song>
+  <song>
+    <title>You Give Love A Bad Name</title>
+    <artist>Bon Jovi</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Bon_Jovi_-_You_Give_Love_A_Bad_Name.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Bon%20Jovi%20-%20You%20Give%20Love%20A%20Bad%20Name.mp3</url>
+  </song>
+  <song>
+    <title>The Final Countdown</title>
+    <artist>Europe</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Europe_-_The_Final_Countdown.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Europe%20-%20The%20Final%20Countdown.mp3</url>
+  </song>
+  <song>
+    <title>Bring Me To Life</title>
+    <artist>Evanescence</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Evanescence_-_Bring_Me_To_Life.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Evanescence%20-%20Bring%20Me%20To%20Life.mp3</url>
+  </song>
+  <song>
+    <title>I Want To Know What Love Is</title>
+    <artist>Foreigner</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Foreigner_-_I_Want_To_Know_What_Love_Is.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Foreigner%20-%20I%20Want%20To%20Know%20What%20Love%20Is.mp3</url>
+  </song>
+  <song>
+    <title>Sweet Child O' Mine</title>
+    <artist>Guns N' Roses</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Guns_N_Roses_-_Sweet_Child_O_Mine.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Guns%20N'%20Roses%20-%20Sweet%20Child%20O'%20Mine.mp3</url>
+  </song>
+  <song>
+    <title>Welcome To The Jungle</title>
+    <artist>Guns N' Roses</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Guns_N_Roses_-_Welcome_To_The_Jungle.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Guns%20N'%20Roses%20-%20Welcome%20To%20The%20Jungle.mp3</url>
+  </song>
+  <song>
+    <title>Alone</title>
+    <artist>Heart</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Heart_-_Alone.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Heart%20-%20Alone.mp3</url>
+  </song>
+  <song>
+    <title>Breaking The Law</title>
+    <artist>Judas Priest</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Judas_Priest_-_Breaking_The_Law.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Judas%20Priest%20-%20Breaking%20The%20Law.mp3</url>
+  </song>
+  <song>
+    <title>Sweet Home Alabama</title>
+    <artist>Lynyrd Skynyrd</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Lynyrd_Skynyrd_-_Sweet_Home_Alabama.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Lynyrd%20Skynyrd%20-%20Sweet%20Home%20Alabama.mp3</url>
+  </song>
+  <song>
+    <title>Enter Sandman</title>
+    <artist>Metallica</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Metallica_-_Enter_Sandman.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Metallica%20-%20Enter%20Sandman.mp3</url>
+  </song>
+  <song>
+    <title>Smells Like Teen Spirit</title>
+    <artist>Nirvana</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Nirvana_-_Smells_Like_Teen_Spirit.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Nirvana%20-%20Smells%20Like%20Teen%20Spirit.mp3</url>
+  </song>
+  <song>
+    <title>Wonderwall</title>
+    <artist>Oasis</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Oasis_-_Wonderwall.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Oasis%20-%20Wonderwall.mp3</url>
+  </song>
+  <song>
+    <title>Crazy Train</title>
+    <artist>Ozzy Osbourne</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Ozzy_Osbourne_-_Crazy_Train.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Ozzy%20Osbourne%20-%20Crazy%20Train.mp3</url>
+  </song>
+  <song>
+    <title>Queen – Bohemian Rhapsody</title>
+    <artist>
+    </artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/-_Queen_Bohemian_Rhapsody.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen%20%E2%80%93%20Bohemian%20Rhapsody.mp3</url>
+  </song>
+  <song>
+    <title>I Want It All</title>
+    <artist>Queen</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen_-_I_Want_It_All.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen%20-%20I%20Want%20It%20All.mp3</url>
+  </song>
+  <song>
+    <title>I Want to Break Free</title>
+    <artist>Queen</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen_-_I_Want_to_Break_Free.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen%20-%20I%20Want%20to%20Break%20Free.mp3</url>
+  </song>
+  <song>
+    <title>Radio Ga Ga</title>
+    <artist>Queen</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen_-_Radio_Ga_Ga.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen%20-%20Radio%20Ga%20Ga.mp3</url>
+  </song>
+  <song>
+    <title>The Show Must Go On</title>
+    <artist>Queen</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen_-_The_Show_Must_Go_On.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen%20-%20The%20Show%20Must%20Go%20On.mp3</url>
+  </song>
+  <song>
+    <title>We Are The Champions</title>
+    <artist>Queen</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen_-_We_Are_The_Champions.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen%20-%20We%20Are%20The%20Champions.mp3</url>
+  </song>
+  <song>
+    <title>We Will Rock You</title>
+    <artist>Queen</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen_-_We_Will_Rock_You.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Queen%20-%20We%20Will%20Rock%20You.mp3</url>
+  </song>
+  <song>
+    <title>Blitzkrieg Bop</title>
+    <artist>Ramones</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Ramones_-_Blitzkrieg_Bop.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Ramones%20-%20Blitzkrieg%20Bop.mp3</url>
+  </song>
+  <song>
+    <title>Can't Stop</title>
+    <artist>Red Hot Chili Peppers</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Red_Hot_Chili_Peppers_-_Can_t_Stop.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Red%20Hot%20Chili%20Peppers%20-%20Can't%20Stop.mp3</url>
+  </song>
+  <song>
+    <title>Under The Bridge</title>
+    <artist>Red Hot Chili Peppers</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Red_Hot_Chili_Peppers_-_Under_The_Bridge.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Red%20Hot%20Chili%20Peppers%20-%20Under%20The%20Bridge.mp3</url>
+  </song>
+  <song>
+    <title>Children</title>
+    <artist>Robert Miles</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Robert_Miles_-_Children.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Robert%20Miles%20-%20Children.mp3</url>
+  </song>
+  <song>
+    <title>Kiss From A Rose</title>
+    <artist>Seal</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Seal_-_Kiss_From_A_Rose.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Seal%20-%20Kiss%20From%20A%20Rose.mp3</url>
+  </song>
+  <song>
+    <title>Born To Be Wild</title>
+    <artist>Steppenwolf</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Steppenwolf_-_Born_To_Be_Wild.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Steppenwolf%20-%20Born%20To%20Be%20Wild.mp3</url>
+  </song>
+  <song>
+    <title>Eye Of The Tiger</title>
+    <artist>Survivor</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Survivor_-_Eye_Of_The_Tiger.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Survivor%20-%20Eye%20Of%20The%20Tiger.mp3</url>
+  </song>
+  <song>
+    <title>Shout</title>
+    <artist>Tears For Fears</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Tears_For_Fears_-_Shout.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Tears%20For%20Fears%20-%20Shout.mp3</url>
+  </song>
+  <song>
+    <title>Every Breath You Take</title>
+    <artist>The Police</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/The_Police_-_Every_Breath_You_Take.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/The%20Police%20-%20Every%20Breath%20You%20Take.mp3</url>
+  </song>
+  <song>
+    <title>Boys Are Back In Town</title>
+    <artist>Thin Lizzy</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Thin_Lizzy_-_Boys_Are_Back_In_Town.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Thin%20Lizzy%20-%20Boys%20Are%20Back%20In%20Town.mp3</url>
+  </song>
+  <song>
+    <title>Jump</title>
+    <artist>Van Halen</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Van_Halen_-_Jump.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Van%20Halen%20-%20Jump.mp3</url>
   </song>
 </music>
