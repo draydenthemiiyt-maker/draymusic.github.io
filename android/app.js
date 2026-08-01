@@ -61,7 +61,7 @@ var pendingSeekPercent = null;
 var activeTargetSong = null;
 var activeTargetPlaylist = null;
 var currentPage = 0;
-var totalPages = 3;
+var totalPages = 4;
 var favoriteUrls = JSON.parse(localStorage.getItem('drayFavorites') || '[]');
 var userPlaylists = JSON.parse(localStorage.getItem('drayPlaylists') || '{}');
 var audioCtx = null;
@@ -320,9 +320,10 @@ function playSong(index) {
     if (window.audio !== DOM.audio) window.audio = DOM.audio;
     syncSongOffline(song.url);
 
-    var bg = document.getElementById('body-bg');
+var bg = document.getElementById('body-bg');
     if (bg) {
         bg.src = song.art;
+        applyDynamicAccent(song.art); // <-- Add this line
     }
 }
 
@@ -383,7 +384,7 @@ function renderList(data, container) {
         var starClass = isFav ? 'star-btn fav-active' : 'star-btn';
 
         html += '<div class="song-card" data-index="' + i + '" data-url="' + escapeHTML(song.url) + '" style="animation-delay: ' + (i * 0.05) + 's">' +
-            '<img src="' + escapeHTML(song.art) + '" alt="art">' +
+            '<img class="glass-background" src="' + escapeHTML(song.art) + '" alt="art">' +
             '<div class="info" style="flex:1;">' +
             '<h4>' + escapeHTML(song.title) + '</h4>' +
             '<p>' + escapeHTML(song.artist) + '</p>' +
@@ -950,7 +951,10 @@ function bindEvents() {
             document.querySelector('.mini-player').classList.add('notplaying');
 
             var bg = document.getElementById('body-bg');
-            if (bg) bg.src = "placeholder.png";
+            if (bg) {
+                bg.src = "placeholder.png";
+                document.documentElement.style.setProperty('--accent', '#00a0ff');
+            }
         });
     }
 
@@ -1260,51 +1264,6 @@ function bootMusic() {
     updateLiveTileFromXml();
 
     try {
-        if (ViewMgmt && ViewMgmt.UISettings) {
-            var uiSettings = new ViewMgmt.UISettings();
-
-            function toHexByte(n) {
-                var s = (n || 0).toString(16);
-                return s.length === 1 ? '0' + s : s;
-            }
-
-            function winColorToHex(winColor) {
-                if (!winColor) return '#0078D7';
-                var r = winColor.r || 0;
-                var g = winColor.g || 0;
-                var b = winColor.b || 0;
-                return '#' + toHexByte(r) + toHexByte(g) + toHexByte(b);
-            }
-
-            function applyAccentFromUISettings() {
-                try {
-                    var winColor = uiSettings.getColorValue(ViewMgmt.UIColorType.accent);
-                    var hex = winColorToHex(winColor);
-                    try {
-                        document.documentElement.style.setProperty('--accent', hex);
-                        document.documentElement.classList.add('windows-uwp-accent');
-                    } catch (e) { }
-                    try { console.info('Applied Windows accent color:', hex); } catch (e) { }
-                } catch (e) {
-                    try { console.warn('Failed to read Windows accent color:', e); } catch (err) { }
-                }
-            }
-
-            applyAccentFromUISettings();
-
-            try {
-                uiSettings.addEventListener('colorvalueschanged', function () {
-                    setTimeout(applyAccentFromUISettings, 0);
-                });
-            } catch (e) {
-                try { console.info('Could not attach color change listener:', e); } catch (err) { }
-            }
-        }
-    } catch (e) {
-        try { console.warn('Accent integration failed:', e); } catch (err) { }
-    }
-
-    try {
         if (Media && Media.SystemMediaTransportControls) {
             var smtc = Media.SystemMediaTransportControls.getForCurrentView();
 
@@ -1459,36 +1418,28 @@ function bootMusic() {
     }
 })();
 
-// --- Theme System ---
-
 var availableThemes = [];
 var savedTheme = localStorage.getItem('drayTheme');
 
-// Applies the stylesheet and optionally saves it to localStorage
 function applyTheme(stylesheetName, saveToStorage) {
     var themeLink = document.getElementById('theme-stylesheet');
     if (!themeLink) return;
 
     if (!stylesheetName) {
-        // Apply Default
         themeLink.removeAttribute('href');
         if (saveToStorage) localStorage.removeItem('drayTheme');
     } else {
-        // Apply Custom Theme
         themeLink.setAttribute('href', 'themes/' + stylesheetName);
         if (saveToStorage) localStorage.setItem('drayTheme', stylesheetName);
     }
 }
 
-// Builds the UI buttons based on the XML data
 function renderThemes() {
     var container = document.getElementById('themeListContainer');
     if (!container) return;
 
-    // Create the Default option
     var html = '<button class="theme-btn ' + (!savedTheme ? 'active-theme' : '') + '" data-sheet="">Default</button>';
 
-    // Loop through parsed XML themes
     for (var i = 0; i < availableThemes.length; i++) {
         var theme = availableThemes[i];
         var isActive = (savedTheme === theme.stylesheet) ? 'active-theme' : '';
@@ -1497,18 +1448,13 @@ function renderThemes() {
 
     container.innerHTML = html;
 
-    // Attach click listeners to the dynamically created buttons
     var btns = container.querySelectorAll('.theme-btn');
     for (var j = 0; j < btns.length; j++) {
         (function(btn) {
             btn.addEventListener('click', function() {
                 var sheet = btn.getAttribute('data-sheet');
-                
-                // Apply and save
                 applyTheme(sheet, true);
                 savedTheme = sheet; 
-                
-                // Update active button styling
                 for (var k = 0; k < btns.length; k++) {
                     btns[k].classList.remove('active-theme');
                 }
@@ -1518,14 +1464,11 @@ function renderThemes() {
     }
 }
 
-// Fetches the XML file and parses it
 function loadThemes() {
-    // 1. Immediately apply the saved theme so the UI doesn't flash unstyled on boot
     if (savedTheme) {
         applyTheme(savedTheme, false);
     }
 
-    // 2. Fetch the XML file
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'themes/themes.xml?nocache=' + new Date().getTime(), true);
     
@@ -1540,7 +1483,7 @@ function loadThemes() {
             }
 
             var items = xml.getElementsByTagName('theme');
-            availableThemes = []; // Reset array
+            availableThemes = [];
 
             for (var i = 0; i < items.length; i++) {
                 var t = items[i];
@@ -1555,11 +1498,10 @@ function loadThemes() {
                 }
             }
             
-            // Build the menu now that we have the data
             renderThemes();
         } else {
             console.warn('Could not load themes.xml. Status:', xhr.status);
-            renderThemes(); // Render the "Default" button even if XML fails
+            renderThemes();
         }
     };
     
@@ -1571,8 +1513,79 @@ function loadThemes() {
     xhr.send();
 }
 
-// Initialize the theme system
 loadThemes();
 updateNavArrows();
 bindEvents();
 bootMusic();
+
+function applyDynamicAccent(imageSrc) {
+    if (!imageSrc || imageSrc.indexOf('placeholder.png') !== -1) {
+        document.documentElement.style.setProperty('--accent', '#00a0ff');
+        return;
+    }
+
+    var img = new Image();
+    img.crossOrigin = "Anonymous"; 
+    img.src = imageSrc;
+
+    img.onload = function() {
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        try {
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var data = imageData.data;
+            var r = 0, g = 0, b = 0;
+            var count = 0;
+            var step = 4 * 10;
+
+            for (var i = 0; i < data.length; i += step) {
+                if ((data[i] > 250 && data[i+1] > 250 && data[i+2] > 250) || 
+                    (data[i] < 15 && data[i+1] < 15 && data[i+2] < 15)) {
+                    continue;
+                }
+                
+                r += data[i];
+                g += data[i + 1];
+                b += data[i + 2];
+                count++;
+            }
+
+            if (count > 0) {
+                r = Math.floor(r / count);
+                g = Math.floor(g / count);
+                b = Math.floor(b / count);
+                
+                document.documentElement.style.setProperty('--accent', 'rgb(' + r + ', ' + g + ', ' + b + ')');
+            } else {
+                document.documentElement.style.setProperty('--accent', '#00a0ff');
+            }
+        } catch (e) {
+            console.warn("CORS prevented color extraction. Using default accent.");
+            document.documentElement.style.setProperty('--accent', '#00a0ff');
+        }
+    };
+}
+
+var noVfxToggle = document.getElementById('noVfxToggle');
+var savedNoVfx = localStorage.getItem('drayNoVfx') === 'true';
+
+if (savedNoVfx) {
+    document.body.classList.add('novfx');
+}
+
+if (noVfxToggle) {
+    noVfxToggle.checked = savedNoVfx;
+    noVfxToggle.addEventListener('change', function () {
+        if (noVfxToggle.checked) {
+            document.body.classList.add('novfx');
+        } else {
+            document.body.classList.remove('novfx');
+        }
+        localStorage.setItem('drayNoVfx', noVfxToggle.checked ? 'true' : 'false');
+    });
+}

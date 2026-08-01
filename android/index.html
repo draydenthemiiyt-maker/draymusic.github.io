@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" type="image/png" href="icon.png">
     <title>DrayMusic</title>
@@ -13,7 +13,7 @@
 </head>
 <body>
     <img id="body-bg" src="placeholder.png" aria-hidden="true">
-    <header class="app-header">
+    <header class="app-header glass-background">
         <h1>DrayMusic</h1>
         <div id="window-controls">
             <div class="btn" id="popout-btn">&#xE8A7;</div>
@@ -21,41 +21,33 @@
             <div class="btn wigdisable" id="max-btn">&#xE922;</div>
             <div class="btn close wigdisable" id="close-btn">&#xE8BB;</div>
         </div>
-        <div class="search-pill">
+        <div class="search-pill glass-background">
             <span class="material-symbols-rounded">search</span>
             <input type="text" id="searchInput" placeholder="Search songs or artists...">
         </div>
     </header>
-
-    <button id="navLeft" class="nav-arrow left" style="display: none;"><span class="material-symbols-rounded">chevron_left</span></button>
-    <button id="navRight" class="nav-arrow right"><span class="material-symbols-rounded">chevron_right</span></button>
-
+    <button id="navLeft" class="nav-arrow left glass-background" style="display: none;"><span class="material-symbols-rounded">chevron_left</span></button>
+    <button id="navRight" class="nav-arrow right glass-background"><span class="material-symbols-rounded">chevron_right</span></button>
     <main class="scroll-area page-viewport">
         <div id="pageContainer" class="page-container">
             <section class="page" id="songList"></section>
-
             <section class="page" id="favoritesList">
                 <div style="text-align: center;">
                     <h3>Your Favorites</h3>
                 </div>
                 <div id="favoritesContainer"></div>
             </section>
-
             <section class="page" id="playlistsList">
-
                 <div id="playlistMainView">
                     <div style="padding: 0 0 20px 0;text-align: center;">
                         <h3>Playlists</h3>
-
                         <div style="padding: 0px 10px; margin-top: 15px; display: flex; justify-content: center;">
                             <input type="text" id="pageNewPlaylistInput" placeholder="New Playlist Name" style="flex:1; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px 12px; border-radius: 8px; outline: none; max-width: 500px; margin-right: 8px;">
                             <button id="btnPageCreatePlaylist" style="background: #00a0ff; background: var(--accent); color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 500; font-size: 20px;">+</button>
                         </div>
                     </div>
-
                     <div id="playlistsContainer" class="playlist-grid-layout"></div>
                 </div>
-
                 <div id="playlistDetailView" style="display: none;">
                     <div style="padding: 10px 0 20px 0; display: flex; align-items: center; gap: 15px;">
                         <button id="btnBackToPlaylists" class="icon-btn" style="background: rgba(255,255,255,0.1); border-radius: 50%;"><span class="material-symbols-rounded">arrow_back</span></button>
@@ -64,10 +56,12 @@
                     <div id="playlistSongsContainer"></div>
                 </div>
             </section>
+<section class="page" id="iframeList" style="overflow: hidden;align-items: center;justify-content: center;display: flex;">
+    <iframe class="glass-background" src="https://draymusic-private.onrender.com?app=1" style="width: 310px;height: 357px;border: none;border-radius: 12px;margin-bottom: 100px;"></iframe>
+</section>
         </div>
     </main>
-
-    <div id="contextMenu" class="context-menu" style="display: none;">
+    <div id="contextMenu" class="context-menu glass-background" style="display: none;">
         <div id="contextSongOptions">
             <h4>Add to Playlist</h4>
             <ul id="contextPlaylistItems"></ul>
@@ -88,23 +82,20 @@
             <button id="menuBtnFavorite" class="context-btn"><span class="material-symbols-rounded">star</span></button>
         </div>
     </div>
-
-    <section class="mini-player notplaying">
+    <section class="mini-player glass-background notplaying">
         <div class="progress-wrapper">
             <input type="range" id="seekBar" value="0" step="0.1">
             <div class="progress-fill" id="progressFill"></div>
         </div>
-
         <div class="player-controls-row">
             <div class="track-info" id="openFullPlayer">
-                <img id="currentArt" src="placeholder.png">
+                <img class="glass-background" id="currentArt" src="placeholder.png">
                 <div class="text-group">
                     <h4 id="currentTitle">Not Playing</h4>
                     <p id="currentArtist">Select a song</p>
                 </div>
             </div>
-
-            <div class="action-btns">
+            <div class="action-btns glass-background">
                 <button id="btnEQ" class="icon-btn wigdisable"><span class="material-symbols-rounded">tune</span></button>
                 <button id="btnFavorite" class="icon-btn wigdisable"><span class="material-symbols-rounded">star</span></button>
                 <button id="btnLoop" class="icon-btn wigdisable"><span class="material-symbols-rounded">repeat</span></button>
@@ -116,21 +107,24 @@
             </div>
         </div>
     </section>
-
-    <div id="eqPane" class="side-pane">
+    <div id="eqPane" class="side-pane glass-background">
         <div class="pane-header">
             <h2>Settings</h2>
             <button id="btnCloseEQ" class="icon-btn"><span class="material-symbols-rounded">close</span></button>
         </div>
-
     <div class="pane-content">
         <div class="control-group">
             <h3>Themes</h3>
             <div id="themeListContainer" class="theme-list">
         </div>
+            <div class="toggle-row">
+                <label class="win-switch">
+                    <input type="checkbox" id="noVfxToggle">
+                    <span class="win-switch-label">Disable Liquid Glass</span>
+                </label>
+            </div>
     </div>
-
-            <div class="control-group">
+            <div class="control-group glass-background">
                 <h3>Equalizer</h3>
                 <div class="eq-sliders 10-band">
                     <div class="eq-slider-col"><input type="range" class="eq-slider" id="eqSlider0" min="-12" max="12" value="0"><label>31</label></div>
@@ -145,15 +139,13 @@
                     <div class="eq-slider-col"><input type="range" class="eq-slider" id="eqSlider9" min="-12" max="12" value="0"><label>16k</label></div>
                 </div>
             </div>
-
-            <div class="control-group">
+            <div class="control-group glass-background">
                 <h3>Playback</h3>
                 <div class="slider-row">
                     <label>Speed</label>
                     <input type="range" id="speedSlider" min="0.5" max="2" step="0.05" value="1">
                     <span id="speedLabel">1.00x</span>
                 </div>
-
                 <div class="toggle-row">
                     <label class="win-switch">
                         <input type="checkbox" id="preservePitch" checked>
@@ -161,8 +153,7 @@
                     </label>
                 </div>
             </div>
-
-            <div class="control-group">
+            <div class="control-group glass-background">
                 <h3>Reverb</h3>
                 <div class="slider-row">
                     <label>Dry</label>
@@ -175,7 +166,6 @@
             </div>
         </div>
     </div>
-
     <audio id="audioElement" msAudioCategory="BackgroundCapableMedia" crossorigin="anonymous"></audio>
     <script src="app.js"></script>
     <script>
