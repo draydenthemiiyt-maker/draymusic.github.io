@@ -1,0 +1,47 @@
+<html>
+<head>
+    <title>Dard is a poo poo</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>DARD IS A POO POO</h1>
+    </header>
+    <div>
+        <button id="fartButton" type="button">Click to make dard fart</button>
+    </div>
+    <audio id="fartSound" preload="auto">
+        <source src="fart.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const fartButton = document.getElementById('fartButton');
+        const fartSound = document.getElementById('fartSound');
+
+        fartButton.addEventListener('click', async () => {
+            try {
+                fartSound.currentTime = 0;
+                await fartSound.play();
+            } catch (error) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                const audioContext = new AudioContextClass();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(180, audioContext.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(60, audioContext.currentTime + 0.2);
+
+                gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.4);
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.4);
+            }
+        });
+    </script>
+</body>
+</html>
