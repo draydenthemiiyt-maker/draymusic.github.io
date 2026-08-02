@@ -176,24 +176,32 @@ function syncSongOffline(songUrl) {
             console.log('Updated offline flags for:', songUrl);
         } else {
             if (song && navigator.onLine) {
-                fetch(songUrl).then(function (res) {
-                    return res.blob();
-                }).then(function (blob) {
-                    var newRecord = {
-                        url: songUrl,
-                        title: song.title,
-                        artist: song.artist,
-                        art: song.art,
-                        favorite: isFav,
-                        playlists: containingPlaylists,
-                        blob: blob
-                    };
-                    var insertTx = offlineDB.transaction(['songs'], 'readwrite');
-                    insertTx.objectStore('songs').put(newRecord);
-                    console.log('Cached new song offline:', songUrl);
-                })['catch'](function (err) {
+                var xhrDownload = new XMLHttpRequest();
+                xhrDownload.open('GET', songUrl, true);
+                xhrDownload.responseType = 'blob';
+                xhrDownload.onload = function () {
+                    if (xhrDownload.status >= 200 && xhrDownload.status < 300) {
+                        var blob = xhrDownload.response;
+                        var newRecord = {
+                            url: songUrl,
+                            title: song.title,
+                            artist: song.artist,
+                            art: song.art,
+                            favorite: isFav,
+                            playlists: containingPlaylists,
+                            blob: blob
+                        };
+                        var insertTx = offlineDB.transaction(['songs'], 'readwrite');
+                        insertTx.objectStore('songs').put(newRecord);
+                        console.log('Cached new song offline:', songUrl);
+                    } else {
+                        console.error('Offline cache download failed', xhrDownload.status);
+                    }
+                };
+                xhrDownload.onerror = function (err) {
                     console.error('Offline cache download failed', err);
-                });
+                };
+                xhrDownload.send();
             }
         }
     };
@@ -913,7 +921,8 @@ function bindEvents() {
             var idx = favoriteUrls.indexOf(url);
 
             var cards = document.querySelectorAll('.song-card');
-            cards.forEach(function (card) {
+            for (var ci = 0; ci < cards.length; ci++) {
+                var card = cards[ci];
                 if (card.getAttribute('data-url') === url) {
                     var star = card.querySelector('.star-btn');
                     if (star) {
@@ -921,7 +930,7 @@ function bindEvents() {
                         else star.classList.remove('fav-active');
                     }
                 }
-            });
+            }
 
             if (idx === -1) {
                 favoriteUrls.push(url);
@@ -1573,13 +1582,25 @@ function applyDynamicAccent(imageSrc) {
 
 var noVfxToggle = document.getElementById('noVfxToggle');
 var savedNoVfx = localStorage.getItem('drayNoVfx') === 'true';
+var supportsBackdrop = false;
+if (window.CSS && window.CSS.supports) {
+    supportsBackdrop = window.CSS.supports('backdrop-filter', 'blur(1px)') || 
+                       window.CSS.supports('-webkit-backdrop-filter', 'blur(1px)');
+}
 
-if (savedNoVfx) {
+var shouldDisableVfx = !supportsBackdrop || savedNoVfx;
+
+if (shouldDisableVfx) {
     document.body.classList.add('novfx');
 }
 
 if (noVfxToggle) {
-    noVfxToggle.checked = savedNoVfx;
+    noVfxToggle.checked = shouldDisableVfx;
+    
+    if (!supportsBackdrop) {
+        noVfxToggle.disabled = true;
+    }
+
     noVfxToggle.addEventListener('change', function () {
         if (noVfxToggle.checked) {
             document.body.classList.add('novfx');
