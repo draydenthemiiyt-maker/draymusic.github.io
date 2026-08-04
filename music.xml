@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <music>
   <song>
     <title>Stunshine - Cave Wave</title>
@@ -9,25 +9,25 @@
   <song>
     <title>Windows</title>
     <artist>Microsoft</artist>
-    <albumArt />
+    <albumArt/>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/windows.mp3</url>
   </song>
   <song>
     <title>MayDay</title>
     <artist>thefatrat and laura Brehm</artist>
-    <albumArt />
+    <albumArt/>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/803971_TheFatRat---MAYDAY-feat-La.mp3</url>
   </song>
   <song>
     <title>Windows 95</title>
     <artist>Bloom</artist>
-    <albumArt />
+    <albumArt/>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/pb_theme_midi.mp3</url>
   </song>
   <song>
     <title>Windows 95 (HQ)</title>
     <artist>Bloom</artist>
-    <albumArt />
+    <albumArt/>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/pb_theme_midi_low.mp3</url>
   </song>
   <song>
@@ -39,7 +39,7 @@
   <song>
     <title>All I Ever Wanted</title>
     <artist>Basshunter</artist>
-    <albumArt />
+    <albumArt/>
     <url>https://draydenthemiiyt-maker.github.io/draymusic.github.io/Basshunter_-_All_I_Ever_Wanted_54722431.mp3</url>
   </song>
   <song>
@@ -815,5 +815,11 @@
     <artist>Van Halen</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Van_Halen_-_Jump.jpg</albumArt>
     <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Van%20Halen%20-%20Jump.mp3</url>
+  </song>
+  <song>
+    <title>golden hour</title>
+    <artist>JVKE</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/ab67616d0000b273134d5ec418af466391502905_1785882124.png</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/JVKE_-_golden_hour__Lyrics__-_Dan_Music_1785882124.mp3</url>
   </song>
 </music>
