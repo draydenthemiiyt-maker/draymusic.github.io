@@ -1,0 +1,123 @@
+@font-face {
+  font-family: 'font';
+  src: url('assets/font.otf') format('opentype');
+}
+
+* {
+    font-family: 'font';
+    user-select: none;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+#game-container {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+#game-bg {
+    background-image: url('assets/clouds.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    transition: 1s ease-out;
+}
+
+#welcome-screen {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo h1 {
+    font-size: 50px
+}
+
+.logo img {
+    width: 50px;
+    height: 50px;
+    margin-right: 20px;
+    transition: transform 0.1s ease-out;
+}
+
+.logo img:hover {
+  transform: scale(1.025);
+}
+
+.logo img:active {
+  transform: scale(0.9);
+}
+
+#donut {
+  width: 200px;
+  height: 200px;
+  transition: transform 0.1s ease-out;
+}
+
+#donut:hover {
+  transform: scale(1.025);
+}
+
+#donut:active {
+  transform: scale(0.9);
+}
+
+#score {
+    transition: transform 0.5s ease-out;
+    color: white;
+}
+
+#score:hover {
+    transform: scale(1.025);
+}
+
+#startButton {
+    padding: 10px 20px;
+    background: yellow;
+    color: black;
+    border: 3px solid black;
+    border-radius: 15px;
+    transition: transform 0.1s ease-out;
+    font-size: large;
+    font-weight: 600;
+}
+
+#startButton:hover {
+    transform: scale(1.025);
+}
+
+#startButton:active {
+    background: #00beff;
+    color: white;
+    border-color: white;
+    transform: scale(0.9);
+}
+
+#homer {
+    transition: 0.1s ease-out;
+}
+
+#homer:active {
+  transform: scale(1.1);
+}

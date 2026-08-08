@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="assets/dohnut.png" type="image/png">
+    <title>The Simpsons: Donut Clicker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-bg" style="opacity: 0.3; filter: blur(8px);"></div>
+    <div id="welcome-screen">
+        <div class="logo">
+            <img id="logo-donut" src="assets/dohnut.png" draggable="false" alt="Homer dropped his donut DOH!">
+            <h1>The Simpsons: Donut Clicker</h1>
+        </div>
+        <button id="startButton">Start Game</button>
+    </div>
+    <div id="game-container" style="display: none;">
+        <img id="donut" title="Donut" src="assets/dohnut.png" draggable="false" alt="Homer dropped his donut DOH!">
+        <p id="score">Donuts Eaten: 0</p>
+        <img id="homer" title="Homer" src="assets/homer.png" draggable="false" alt="Homer Simpson" style="width: 90px; height: 190px;">
+    </div>
+    <audio id="intro" src="assets/intro.mp3"></audio>
+    <audio id="eat" src="assets/doh2.mp3"></audio>
+    <audio id="poke" src="assets/doh.mp3"></audio>
+    <audio id="theme" src="assets/theme.mp3" loop></audio>
+    <script src="script.js"></script>
+</body>
+</html>
