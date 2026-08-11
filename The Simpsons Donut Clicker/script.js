@@ -12,10 +12,26 @@ var welcomeScreen = document.getElementById('welcome-screen');
 var startGame = document.getElementById('startButton');
 var introText = document.getElementById('intro-text');
 
+// Detect WinRT flag in URL (?WinRT=true)
+var urlParams = new URL(window.location.href).searchParams;
+var isWinRT = urlParams.get('WinRT') === 'true';
+
+function reportScoreToHost(value) {
+  if (!isWinRT) return;
+  try {
+    // Post a message to the host page of the webview
+    window.parent.postMessage({ type: 'score', score: value }, '*');
+  } catch (e) {
+    // ignore failures
+  }
+}
+
 donut.addEventListener('click', function() {
   eat.currentTime = 0; 
   eat.play();
-  score.textContent = 'Donuts Eaten: ' + (parseInt(score.textContent.split(': ')[1]) + 1);
+  var newScore = parseInt(score.textContent.split(': ')[1]) + 1;
+  score.textContent = 'Donuts Eaten: ' + newScore;
+  reportScoreToHost(newScore);
   homer.style.width = (parseInt(homer.style.width) + 5) + 'px';
 });
 
