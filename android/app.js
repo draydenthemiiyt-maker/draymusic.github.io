@@ -67,6 +67,7 @@ var userPlaylists = JSON.parse(localStorage.getItem('drayPlaylists') || '{}');
 var audioCtx = null;
 var filters = [];
 var reverbNode, dryGain, wetGain;
+var analyser = null;
 
 var offlineDB = null;
 
@@ -305,6 +306,7 @@ function playSong(index) {
     if (DOM.currentTitle) DOM.currentTitle.textContent = song.title;
     if (DOM.currentArtist) DOM.currentArtist.textContent = song.artist;
     if (DOM.currentArt) DOM.currentArt.src = song.art;
+    applyDynamicAccent(song.art);
     if (DOM.btnPlayPause) DOM.btnPlayPause.innerHTML = '<span class="material-symbols-rounded">pause</span>';
     if (DOM.btnFavorite) {
         if (favoriteUrls.indexOf(song.url) !== -1) {
@@ -685,8 +687,18 @@ function initAudioEngine() {
 
         audioCtx = new AudioContextClass();
         var source = audioCtx.createMediaElementSource(DOM.audio);
+        
+        // --- 1. CREATE THE ANALYSER ---
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 256; // Defines how many data points you get back
+        // ------------------------------
+        
         var freqs = [31, 62, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
-        var lastNode = source;
+        
+        // --- 2. CONNECT SOURCE TO ANALYSER FIRST ---
+        source.connect(analyser);
+        var lastNode = analyser; 
+        // -------------------------------------------
 
         for (var i = 0; i < freqs.length; i++) {
             var f = audioCtx.createBiquadFilter();
@@ -711,6 +723,11 @@ function initAudioEngine() {
         reverbNode.connect(wetGain);
         dryGain.connect(audioCtx.destination);
         wetGain.connect(audioCtx.destination);
+        
+        // --- 3. START THE ANIMATION LOOP ---
+        startLiveWaveform();
+        // -----------------------------------
+
     } catch (e) {
         console.warn("Audio Engine Init Failed (Normal for IE11):", e);
     }
@@ -1179,286 +1196,116 @@ function bootMusic() {
     observer.observe(menu, { attributes: true, attributeFilter: ['style'] });
 })();
 
-(function initWindowsIntegration() {
-    if (typeof window.Windows === 'undefined') {
-        try { console.info('Windows Runtime not available — skipping UWP integration.'); } catch (e) { }
-        return;
-    }
-
-    try {
-        if (document.body) {
-            document.body.classList.add('win-type-body');
-        } else {
-            document.addEventListener("DOMContentLoaded", function () {
-                document.body.classList.add('win-type-body');
-            });
-        }
-    } catch (e) { }
-
-    var Win = window.Windows || {};
-    var ViewMgmt = (Win.UI && Win.UI.ViewManagement) ? Win.UI.ViewManagement : null;
-    var Media = Win.Media || null;
-    var Storage = Win.Storage || null;
-    var Foundation = Win.Foundation || null;
-    var Notifications = Win.UI.Notifications || null;
-    var DataXml = Win.Data.Xml.Dom || null;
-
-    function updateLiveTileFromXml() {
-        if (!Notifications) return;
-        var url = 'https://draydenthemiiyt-maker.github.io/draymusic.github.io/music.xml?nocache=' + new Date().getTime();
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.onload = function () {
-            try {
-                var xml = new window.DOMParser().parseFromString(xhr.responseText, 'text/xml');
-                var items = xml.getElementsByTagName('song');
-                var tileUpdater = Notifications.TileUpdateManager.createTileUpdaterForApplication();
-                var tileType = Notifications.TileTemplateType;
-
-                tileUpdater.enableNotificationQueue(true);
-                tileUpdater.clear();
-
-                for (var i = 0; i < Math.min(items.length, 5); i++) {
-                    var songNode = items[i];
-                    var getT = function (tag) {
-                        var el = songNode.getElementsByTagName(tag)[0];
-                        return el ? el.textContent : '';
-                    };
-
-                    var title = getT('title');
-                    var artist = getT('artist');
-                    var albumArt = getT('albumArt');
-
-                    var wideXml = Notifications.TileUpdateManager.getTemplateContent(tileType.tileWide310x150ImageAndText01);
-                    var wideText = wideXml.getElementsByTagName("text");
-                    var wideImg = wideXml.getElementsByTagName("image");
-
-                    if (wideText[0]) wideText[0].appendChild(wideXml.createTextNode(title));
-                    if (wideText[1]) wideText[1].appendChild(wideXml.createTextNode(artist));
-                    if (wideImg[0]) wideImg[0].setAttribute("src", albumArt);
-
-                    var squareXml = Notifications.TileUpdateManager.getTemplateContent(tileType.tileSquare150x150PeekImageAndText02);
-                    var squareText = squareXml.getElementsByTagName("text");
-                    var squareImg = squareXml.getElementsByTagName("image");
-
-                    if (squareText[0]) squareText[0].appendChild(squareXml.createTextNode(title));
-                    if (squareText[1]) squareText[1].appendChild(squareXml.createTextNode(artist));
-                    if (squareImg[0]) squareImg[0].setAttribute("src", albumArt);
-
-                    var bindingNode = wideXml.importNode(squareXml.getElementsByTagName("binding").item(0), true);
-                    wideXml.getElementsByTagName("visual").item(0).appendChild(bindingNode);
-
-                    tileUpdater.update(new Notifications.TileNotification(wideXml));
-                }
-            } catch (e) {
-                console.warn('Tile update failed:', e);
-            }
-        };
-        xhr.send();
-    }
-
-    updateLiveTileFromXml();
-
-    try {
-        if (ViewMgmt && ViewMgmt.UISettings) {
-            var uiSettings = new ViewMgmt.UISettings();
-
-            function toHexByte(n) {
-                var s = (n || 0).toString(16);
-                return s.length === 1 ? '0' + s : s;
-            }
-
-            function winColorToHex(winColor) {
-                if (!winColor) return '#0078D7';
-                var r = winColor.r || 0;
-                var g = winColor.g || 0;
-                var b = winColor.b || 0;
-                return '#' + toHexByte(r) + toHexByte(g) + toHexByte(b);
-            }
-
-            function applyAccentFromUISettings() {
-                try {
-                    var winColor = uiSettings.getColorValue(ViewMgmt.UIColorType.accent);
-                    var hex = winColorToHex(winColor);
-                    try {
-                        document.documentElement.style.setProperty('--accent', hex);
-                        document.documentElement.classList.add('windows-uwp-accent');
-                    } catch (e) { }
-                    try { console.info('Applied Windows accent color:', hex); } catch (e) { }
-                } catch (e) {
-                    try { console.warn('Failed to read Windows accent color:', e); } catch (err) { }
-                }
-            }
-
-            applyAccentFromUISettings();
-
-            try {
-                uiSettings.addEventListener('colorvalueschanged', function () {
-                    setTimeout(applyAccentFromUISettings, 0);
-                });
-            } catch (e) {
-                try { console.info('Could not attach color change listener:', e); } catch (err) { }
-            }
-        }
-    } catch (e) {
-        try { console.warn('Accent integration failed:', e); } catch (err) { }
-    }
-
-    try {
-        if (Media && Media.SystemMediaTransportControls) {
-            var smtc = Media.SystemMediaTransportControls.getForCurrentView();
-
-            try {
-                smtc.isEnabled = true;
-                smtc.isPlayEnabled = true;
-                smtc.isPauseEnabled = true;
-                smtc.isNextEnabled = true;
-                smtc.isPreviousEnabled = true;
-                smtc.isFastForwardEnabled = true;
-                smtc.isRewindEnabled = true;
-            } catch (e) { }
-
-            function updateSmtcPlaybackStatus() {
-                try {
-                    var status = (typeof audio !== 'undefined' && audio && !audio.paused) ? Media.MediaPlaybackStatus.playing : Media.MediaPlaybackStatus.paused;
-                    try {
-                        smtc.playbackStatus = status;
-                    } catch (err) {
-                        try { smtc.setPlaybackStatus && smtc.setPlaybackStatus(status); } catch (e) { }
-                    }
-                } catch (e) { }
-            }
-
-            function updateSmtcMetadata() {
-                try {
-                    var updater = smtc.displayUpdater;
-                    updater.type = Media.MediaPlaybackType.music;
-
-                    var song = (typeof currentPlaylist !== 'undefined' && currentPlaylist && typeof currentPlaylist[currentIndex] !== 'undefined') ? currentPlaylist[currentIndex] : null;
-                    if (song) {
-                        try { updater.musicProperties.title = song.title || ''; } catch (e) { }
-                        try { updater.musicProperties.artist = song.artist || ''; } catch (e) { }
-                        try { updater.musicProperties.albumArtist = song.artist || ''; } catch (e) { }
-
-                        if (song.art) {
-                            try {
-                                var uri = new Foundation.Uri(song.art);
-                                var ras = Storage.Streams.RandomAccessStreamReference.createFromUri(uri);
-                                updater.thumbnail = ras;
-                            } catch (e) {
-                                try { updater.thumbnail = null; } catch (err) { }
-                            }
-                        } else {
-                            try { updater.thumbnail = null; } catch (e) { }
-                        }
-                    } else {
-                        try { updater.musicProperties.title = ''; } catch (e) { }
-                        try { updater.musicProperties.artist = ''; } catch (e) { }
-                        try { updater.thumbnail = null; } catch (e) { }
-                    }
-
-                    try { updater.update(); } catch (e) { }
-                } catch (e) {
-                    try { console.warn('Failed to update SMTC metadata:', e); } catch (err) { }
-                }
-            }
-
-            try {
-                smtc.addEventListener('buttonpressed', function (ev) {
-                    try {
-                        var btn = ev.button;
-                        switch (btn) {
-                            case Media.SystemMediaTransportControlsButton.play:
-                                if (typeof audio !== 'undefined' && audio && audio.play) { try { audio.play().catch(function () { }); } catch (e) { try { audio.play(); } catch (err) { } } }
-                                break;
-                            case Media.SystemMediaTransportControlsButton.pause:
-                                if (typeof audio !== 'undefined' && audio && audio.pause) { try { audio.pause(); } catch (e) { } }
-                                break;
-                            case Media.SystemMediaTransportControlsButton.next:
-                                if (typeof playNext === 'function') { try { playNext(); } catch (e) { } } else if (typeof playSong === 'function' && typeof currentIndex !== 'undefined') { try { playSong(currentIndex + 1); } catch (e) { } }
-                                break;
-                            case Media.SystemMediaTransportControlsButton.previous:
-                                if (typeof playPrev === 'function') { try { playPrev(); } catch (e) { } } else if (typeof playSong === 'function' && typeof currentIndex !== 'undefined') { try { playSong(currentIndex - 1); } catch (e) { } }
-                                break;
-                            case Media.SystemMediaTransportControlsButton.fastForward:
-                                if (typeof audio !== 'undefined' && audio && audio.duration && !isNaN(audio.duration)) {
-                                    try { audio.currentTime = Math.min(audio.duration, (audio.currentTime || 0) + 10); } catch (e) { }
-                                }
-                                break;
-                            case Media.SystemMediaTransportControlsButton.rewind:
-                                if (typeof audio !== 'undefined' && audio) {
-                                    try { audio.currentTime = Math.max(0, (audio.currentTime || 0) - 10); } catch (e) { }
-                                }
-                                break;
-                            default:
-                                break;
-                        }
-                        updateSmtcPlaybackStatus();
-                    } catch (e) {
-                        try { console.warn('Error handling SMTC button press:', e); } catch (err) { }
-                    }
-                });
-            } catch (e) {
-                try { console.info('SMTC button event wiring failed:', e); } catch (err) { }
-            }
-
-            if (typeof audio !== 'undefined' && audio) {
-                var origPlaySong = window.playSong;
-                if (typeof origPlaySong === 'function') {
-                    window.playSong = function (index) {
-                        var ret;
-                        try { ret = origPlaySong(index); } catch (e) { }
-                        setTimeout(function () {
-                            try { updateSmtcMetadata(); } catch (e) { }
-                            try { updateSmtcPlaybackStatus(); } catch (e) { }
-                            try {
-                                if (smtc.timelineProperties) {
-                                    smtc.timelineProperties.startTime = 0;
-                                    smtc.timelineProperties.endTime = (audio && audio.duration) ? audio.duration : 0;
-                                    smtc.timelineProperties.position = audio ? audio.currentTime : 0;
-                                    if (typeof smtc.setTimelineProperties === 'function') {
-                                        try { smtc.setTimelineProperties(smtc.timelineProperties); } catch (e) { }
-                                    }
-                                }
-                            } catch (e) { }
-                        }, 200);
-                        return ret;
-                    };
-                }
-
-                try { audio.addEventListener('play', updateSmtcPlaybackStatus); } catch (e) { }
-                try { audio.addEventListener('pause', updateSmtcPlaybackStatus); } catch (e) { }
-                try {
-                    audio.addEventListener('timeupdate', function () {
-                        try {
-                            if (smtc.timelineProperties) {
-                                smtc.timelineProperties.position = audio.currentTime || 0;
-                                if (typeof smtc.setTimelineProperties === 'function') {
-                                    try { smtc.setTimelineProperties(smtc.timelineProperties); } catch (e) { }
-                                }
-                            }
-                        } catch (e) { }
-                    });
-                } catch (e) { }
-
-                try {
-                    audio.addEventListener('loadedmetadata', function () {
-                        try { updateSmtcMetadata(); } catch (e) { }
-                        try { updateSmtcPlaybackStatus(); } catch (e) { }
-                    });
-                } catch (e) { }
-            }
-
-            try { updateSmtcMetadata(); } catch (e) { }
-            try { updateSmtcPlaybackStatus(); } catch (e) { }
-        } else {
-            try { console.info('SystemMediaTransportControls not available in this host.'); } catch (e) { }
-        }
-    } catch (e) {
-        try { console.warn('SMTC integration failed:', e); } catch (err) { }
-    }
-})();
-
 updateNavArrows();
 bindEvents();
 bootMusic();
+
+function startLiveWaveform() {
+    var canvas = document.getElementById("live-waveform");
+    var c = canvas.getContext("2d");
+
+    function resize() {
+        var dpr = window.devicePixelRatio || 1;
+        var displayWidth = canvas.offsetWidth;
+        var displayHeight = canvas.offsetHeight;
+        canvas.width = displayWidth * dpr;
+        canvas.height = displayHeight * dpr;
+        c.scale(dpr, dpr);
+    }
+
+    window.addEventListener("resize", resize);
+    resize();
+
+    (function draw() {
+        requestAnimationFrame(draw);
+        c.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+        if (!analyser) return;
+
+        var arr = new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(arr);
+
+        var visibleBands = 100;
+        var gap = 3;
+        var barWidth = (canvas.offsetWidth / visibleBands) - gap;
+        var barHeight;
+        var x = 0;
+        var centerY = canvas.offsetHeight / 2;
+
+        // Fetch the accent color dynamically. Fallback to default blue if not set yet.
+        var accentColor = document.documentElement.style.getPropertyValue('--accent') || '#00a0ff';
+
+        for (var i = 0; i < visibleBands; i++) {
+            var amplitude = arr[i];
+            barHeight = (amplitude / 255.0) * canvas.offsetHeight;
+
+            // The "low wave darken thing": 
+            // Normalizes amplitude to a 0.0 - 1.0 scale. 
+            // Math.max(0.35, ...) ensures the lowest waves still have a baseline visibility
+            // (similar to your old 100 red intensity base).
+            var intensity = Math.max(0.35, amplitude / 255.0);
+
+            c.globalAlpha = intensity;
+            c.fillStyle = accentColor;
+            
+            c.fillRect(x, centerY - (barHeight / 2), barWidth, barHeight);
+
+            x += barWidth + gap;
+        }
+        
+        // Reset global alpha so the canvas clearRect on the next frame isn't affected
+        c.globalAlpha = 1.0; 
+    })();
+}
+
+function applyDynamicAccent(imageSrc) {
+    if (!imageSrc || imageSrc.indexOf('placeholder.png') !== -1) {
+        document.documentElement.style.setProperty('--accent', '#00a0ff');
+        return;
+    }
+
+    var img = new Image();
+    img.crossOrigin = "Anonymous"; 
+    img.src = imageSrc;
+
+    img.onload = function() {
+        var canvas = document.createElement('canvas');
+        var ctx = canvas.getContext('2d');
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+        try {
+            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            var data = imageData.data;
+            var r = 0, g = 0, b = 0;
+            var count = 0;
+            var step = 4 * 10;
+
+            for (var i = 0; i < data.length; i += step) {
+                if ((data[i] > 250 && data[i+1] > 250 && data[i+2] > 250) || 
+                    (data[i] < 15 && data[i+1] < 15 && data[i+2] < 15)) {
+                    continue;
+                }
+                
+                r += data[i];
+                g += data[i + 1];
+                b += data[i + 2];
+                count++;
+            }
+
+            if (count > 0) {
+                r = Math.floor(r / count);
+                g = Math.floor(g / count);
+                b = Math.floor(b / count);
+                
+                document.documentElement.style.setProperty('--accent', 'rgb(' + r + ', ' + g + ', ' + b + ')');
+            } else {
+                document.documentElement.style.setProperty('--accent', '#00a0ff');
+            }
+        } catch (e) {
+            console.warn("CORS prevented color extraction. Using default accent.");
+            document.documentElement.style.setProperty('--accent', '#00a0ff');
+        }
+    };
+}

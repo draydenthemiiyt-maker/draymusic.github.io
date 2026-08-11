@@ -4,29 +4,31 @@
 }
 
 @font-face {
-    font-family: "win10-icon";
+    font-family: win10-icon;
     src: url("segmdl2.ttf") format("truetype");
 }
 
 :root {
     --bg: #000000;
-    --surface: #121212;
     --accent: #00a0ff;
-    --on-surface: #e6e1e5;
-    --text-dim: #938f99;
+    --on-surface: #ffffff;
+    --text-dim: #999999;
+}
+
+body.light {
+    --bg: #ffffff;
+    --on-surface: #000000;
+    --text-dim: #606060;
 }
 
 * {
     box-sizing: border-box;
-    -webkit-user-select: none;
-    -moz-user-select: none;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
-    transition: all 0.5s ease;
-    outline: none !important;
-    box-shadow: none !important;
+    transition: 0.5s;
     cursor: default;
+    outline: none !important;
 }
 
 img {
@@ -38,756 +40,354 @@ html, body {
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: system-ui,-apple-system,Segoe UI,Ubuntu,Cantarell,Noto Sans,sans-serif, "Segoe UI", Roboto;
-    background-color: #000000;
-    background-color: var(--bg);
-    color: #e6e1e5;
+    margin: 0px;
+    padding: 0px;
+    font-family: system-ui, -apple-system, "Segoe UI", Ubuntu, Cantarell, "Noto Sans", sans-serif, "Segoe UI", Roboto;
+    background: color-mix(in srgb, var(--accent) 5%, var(--bg) 95%);
     color: var(--on-surface);
     height: 100vh;
     display: flex;
-    display: -ms-flexbox;
     flex-direction: column;
     overflow: hidden;
 }
 
-    body.win-type-body * {
-        transition: none;
-        border-radius: 0px !important;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-        filter: none;
-        -webkit-filter: none;
-    }
-
-    body.win-type-body .app-header {
-        background: #000000 !important;
-    }
-
-        body.win-type-body .app-header h1 {
-            font-size: 60px;
-            font-weight: 100 !important;
-        }
-
-    body.win-type-body .mini-player {
-        background: #00a0ff;
-        background: var(--accent);
-    }
-
-    body.win-type-body #body-bg, body.win-type-body #btnStop, body.win-type-body #menuBtnStop {
-        display: none;
-    }
-
-    body.win-type-body .progress-wrapper {
-        background: #000000;
-        height: 10px;
-    }
-
-        body.win-type-body .progress-wrapper:hover {
-            background: #505050;
-        }
-
-    body.win-type-body #seekBar {
-        top: 0px;
-        height: 10px;
-        cursor: default !important;
-    }
-
-        body.win-type-body #seekBar:active, body.win-type-body .progress-wrapper.seeking #seekBar {
-            height: 0px !important;
-            top: 0px !important;
-        }
-
-    body.win-type-body .progress-fill {
-        background: #ffffff;
-    }
-
-    body.win-type-body .text-group h4 {
-        font-size: 30px;
-        font-weight: 100;
-        color: #ffffff;
-    }
-
-    body.win-type-body .text-group p {
-        margin-bottom: 8px;
-        font-size: 15px;
-        font-weight: 100;
-        color: #ffffff;
-    }
-
-    body.win-type-body .track-info img {
-        width: 64px;
-        height: 64px;
-        background: #000000;
-    }
-
-    body.win-type-body .song-card {
-        background: #202020;
-        padding: 12px !important;
-        opacity: 1 !important;
-        transform: translateY(10px) !important;
-        -ms-transform: translateY(10px) !important;
-        animation: fadeUp 0s ease-out forwards !important;
-        margin-bottom: 8px !important;
-        border: 2px solid transparent;
-    }
-
-        body.win-type-body .song-card:hover {
-            background: #2b2b2b;
-            border-color: #3a3a3a;
-        }
-
-        body.win-type-body .song-card:active {
-            background: #505050;
-            border-color: #6a6a6a;
-        }
-
-    body.win-type-body .search-pill {
-        display: flex;
-        background: transparent;
-        padding: 0px;
-        transform: none;
-    }
-
-        body.win-type-body .search-pill input {
-            font-size: 15px;
-            padding: 10px;
-            height: 32px;
-            background: transparent;
-            border: 2px solid #666666;
-            margin-left: auto;
-        }
-
-            body.win-type-body .search-pill input:hover {
-                border-color: #999999;
-            }
-
-            body.win-type-body .search-pill input:focus {
-                color: #000000;
-                background: #ffffff;
-                border-color: #00a0ff;
-                border-color: var(--accent);
-            }
-
-            body.win-type-body .search-pill input::placeholder {
-                font-family: system-ui,-apple-system,Segoe UI,Ubuntu,Cantarell,Noto Sans,sans-serif,"Segoe UI",Roboto;
-                color: #666666;
-            }
-
-            body.win-type-body .search-pill input:hover::placeholder {
-                color: #999999;
-            }
-
-            body.win-type-body .search-pill input:focus::placeholder {
-                color: transparent;
-            }
-
-        body.win-type-body .search-pill .icon-windows {
-            display: none;
-        }
-
-    body.win-type-body .context-menu {
-        background: #000000;
-        position: fixed;
-        border: 2px solid;
-        border-color: #00a0ff;
-        border-color: var(--accent);
-        padding: 0px;
-        box-shadow: none;
-        min-width: 220px;
-    }
-
-        body.win-type-body .context-menu h4 {
-            margin: 10px;
-            color: #ffffff;
-            font-size: 18px;
-            font-weight: 100;
-        }
-
-    body.win-type-body .main-play-btn {
-        background: none !important;
-        border: none !important;
-        padding: 8px !important;
-        width: unset !important;
-        height: unset !important;
-        display: unset !important;
-        align-items: unset !important;
-        -ms-flex-align: unset !important;
-        justify-content: unset !important;
-        -ms-flex-pack: unset !important;
-        transform: none !important;
-    }
-
-        body.win-type-body .main-play-btn:hover {
-            color: #c0c0c0 !important;
-        }
-
-        body.win-type-body .main-play-btn:active {
-            color: #a0a0a0 !important;
-        }
-
-    body.win-type-body .icon-btn {
-        transform: none !important;
-    }
-
-        body.win-type-body .icon-btn:hover {
-            color: #c0c0c0 !important;
-        }
-
-        body.win-type-body .icon-btn:active {
-            color: #a0a0a0 !important;
-        }
-
-    body.win-type-body #btnLoop.active {
-        color: #000000 !important;
-    }
-
-    body.win-type-body .side-pane {
-        background: #000000 !important;
-        border: none;
-        padding: 0px !important;
-        transition: right 0.5s ease-out;
-    }
-
-    body.win-type-body .page {
-        padding-top: 0px !important;
-        padding-bottom: 0px !important;
-    }
-
-    body.win-type-body .page-container {
-        padding-top: 120px;
-        padding-bottom: 103px !important;
-        transition: transform 0.4s cubic-bezier(0.39,0.58,0.57,1);
-    }
-
-    body.win-type-body .nav-arrow {
-        border: 4px solid rgba(255,255,255,0.1);
-    }
-
-    body.win-type-body .pane-header {
-        padding: 6px !important;
-        margin-bottom: 0px !important;
-    }
-
-        body.win-type-body .pane-header h2 {
-            font-size: 32px !important;
-            font-weight: 100 !important;
-        }
-
-    body.win-type-body .uwpdisable {
-        display: none !important;
-    }
-
-    body.SamsungExperience * {
-        font-family: "Roboto Condensed";
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-    }
-
-    body.SamsungExperience #body-bg {
-        filter: blur(20px);
-        opacity: 0.6;
-        animation: none;
-    }
-
-    body.SamsungExperience .app-header {
-        background: transparent;
-        padding: 12px 16px;
-    }
-
-    body.SamsungExperience .app-header h1 {
-        font-size: 25px !important;
-        margin: 0 0 8px 0;
-        font-weight: 500 !important;
-        text-transform: uppercase !important;
-    }
-
-    body.SamsungExperience .song-card {
-        padding: 8px 0 !important;
-    }
-
-    body.SamsungExperience .mini-player {
-        background: transparent !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        border-top-left-radius: 13px !important;
-        border-top-right-radius: 13px !important;
-        border-bottom-left-radius: 0px !important;
-        border-bottom-right-radius: 0px !important;
-    }
-
-    body.SamsungExperience .action-btns {
-        border-radius: 0 !important;
-        background: transparent !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-    }
-
-    body.SamsungExperience .icon-btn,
-    body.SamsungExperience .main-play-btn {
-        background: transparent !important;
-        border-radius: 0px !important;
-        display: flex !important;
-        display: -ms-flexbox !important;
-        align-items: center !important;
-        -ms-flex-align: center !important;
-        justify-content: center !important;
-        -ms-flex-pack: center !important;
-        transition: none !important;
-        scale: none !important;
-        transform: none !important;
-    }
-
-    body.SamsungExperience .page {
-        padding-top: 0px !important;
-        padding-bottom: 0px !important;
-    }
-
-    body.SamsungExperience .page-container {
-        padding-top: 96px;
-        padding-bottom: 74px !important;
-    }
-
-    body.SamsungExperience .search-pill {
-        padding: 5px 8px !important;
-    }
-
-    body.SamsungExperience .context-menu {
-        background: #ffffff !important;
-        border: none !important;
-        border-radius: 8px !important;
-    }
-
-    body.SamsungExperience .context-menu h4 {
-        color: #000000 !important;
-        font-size: 15px !important;
-        text-transform: uppercase !important;
-    }
-
-    body.SamsungExperience .context-menu li {
-        color: #000000 !important;
-        border-radius: 0px !important;
-    }
-
-        body.SamsungExperience .context-menu li:hover {
-            background: rgb(225 225 225);
-        }
-
-        body.SamsungExperience .context-actions input {
-            background: rgb(200 200 200);
-            border: none;
-        }
-
-    body.SamsungExperience .context-btn {
-        background: rgb(225 225 225);
-        color: #000000;
-    }
-
-        body.SamsungExperience .context-btn:hover {
-            background: rgb(200 200 200);
-        }
-
-    body.SamsungExperience #menuBtnStop {
-        display: none;
-    }
-
-body.SamsungExperience .side-pane {
-    background: rgb(255 255 255) !important;
-    padding: 0px !important;
-    transition: right 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+body.win-type-body * {
+    backdrop-filter: none !important;
 }
 
-body.SamsungExperience .pane-header {
-    justify-content: flex-start !important;
-    padding: 6px !important;
-    margin-bottom: 0px !important;
-    border-bottom: 1px solid #e0e0e0 !important;
+body.win-type-body .uwpdisable {
+    display: none !important;
 }
 
-    body.SamsungExperience .pane-header h2 {
-        color: black !important;
-        font-size: 20px !important;
-        font-weight: 500 !important;
-        text-transform: uppercase !important;
-    }
-
-body.SamsungExperience #btnCloseEQ {
-    color: var(--accent) !important;
-    order: -1 !important;
-    margin-right: 8px !important;
+body.SamsungExperience * {
+    font-family: "Roboto Condensed";
 }
 
-body.SamsungExperience .control-group {
-    margin-bottom: 0px !important;
-    background: rgba(255, 255, 255, 0.05) !important;
-    border-radius: 0px !important;
-    border-bottom: 1px solid #e0e0e0 !important;
+body.widgetapp .app-header {
+    padding: 0px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-    body.SamsungExperience .control-group h3 {
-        color: #999999 !important;
-        margin-bottom: 5px !important;
-        font-size: 15px !important;
-        font-weight: 500 !important;
-        text-transform: uppercase !important;
-    }
-
-    body.SamsungExperience .eq-slider-col label {
-        font-size: 13px !important;
-        color: #000000 !important;
-        margin-top: 5px !important;
-    }
-
-    body.SamsungExperience .win-switch-label {
-        color: #000000 !important;
-    }
-
-body.SamsungExperience .page::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.25) !important;
+body.widgetapp .page {
+    padding: 0px 12px 70px 12px;
 }
 
-    body.SamsungExperience .page::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.50) !important;
-    }
+body.widgetapp .app-header h1 {
+    font-size: 32px;
+    margin: 0px 0px 5px;
+}
 
-    body.widgetapp .app-header {
-        padding: 0px 10px;
-        background: rgba(255, 255, 255, 0);
-        backdrop-filter: blur(3px);
-        -webkit-backdrop-filter: blur(3px);
-        display: flex;
-        display: -ms-flexbox;
-        justify-content: space-between;
-        -ms-flex-pack: justify;
-        align-items: center;
-        -ms-flex-align: center;
-    }
+body.widgetapp .star-btn {
+    display: none;
+}
 
-        body.widgetapp .app-header h1 {
-            font-size: 32px;
-            font-weight: 100;
-            margin: 0 0 5px 0;
-        }
+body.widgetapp .context-menu {
+    display: none !important;
+}
 
-    body.widgetapp .page {
-        padding: 0 8px;
-        padding-top: 45px;
-        padding-bottom: 64px;
-    }
+body.widgetapp .nav-arrow {
+    display: none !important;
+}
 
-    body.widgetapp .star-btn {
-        display: none;
-    }
+body.widgetapp .track-info img {
+    display: none;
+}
 
-    body.widgetapp .context-menu {
-        display: none !important;
-    }
+body.widgetapp .text-group p {
+    display: none;
+}
 
-    body.widgetapp .nav-arrow {
-        display: none !important;
-    }
+body.widgetapp .mini-player {
+    left: 3px;
+    right: 3px;
+    bottom: 3px !important;
+}
 
-    body.widgetapp .track-info img {
-        display: none;
-    }
+body.widgetapp .player-controls-row {
+    padding: 0px 6px 0px 16px;
+}
 
-    body.widgetapp .text-group p {
-        display: none;
-    }
+body.widgetapp .action-btns {
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-color: transparent;
+    box-shadow: none;
+}
 
-    body.widgetapp .mini-player {
-        bottom: 0px !important;
-        border-radius: 0px;
-        left: 0px;
-        right: 0px;
-    }
+body.widgetapp .search-pill {
+    display: none;
+}
 
-    body.widgetapp .player-controls-row {
-        padding: 0px 6px 0px 16px;
-    }
+body.widgetapp .song-card {
+    border-radius: 0px;
+    padding: 2px 0px;
+}
 
-    body.widgetapp .action-btns {
-        background: transparent;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
-    }
+body.widgetapp .wigdisable {
+    display: none !important;
+}
 
-    body.widgetapp .search-pill {
-        width: 180px;
-        padding: 6px 8px;
-        margin-left: 8px;
-        -webkit-app-region: no-drag;
-    }
-
-        body.widgetapp .search-pill > * {
-            margin-right: 2px;
-        }
-
-    body.widgetapp .song-card {
-        border-radius: 0px;
-        padding: 2px 0;
-    }
-
-    body.widgetapp .wigdisable {
-        display: none !important;
-    }
-
-    body.widgetapp #window-controls {
-        right: unset;
-        left: 0;
-    }
+body.widgetapp #window-controls {
+    right: unset;
+    left: 0px;
+}
 
 #body-bg {
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 0px;
+    left: 0px;
     width: 100vw;
     height: 100vh;
-    -o-object-fit: cover;
     object-fit: cover;
-    filter: blur(67px);
+    filter: blur(20px);
     opacity: 0.5;
     transform: scale(1.05);
-    -ms-transform: scale(1.05);
     pointer-events: none;
-    animation: pulse 13s infinite;
-    transition: all 1s ease;
+    animation: 20s ease 0s infinite normal none running pulse;
+    transition: 1s;
+}
+
+.mini-player, .action-btns, .search-pill, .nav-arrow, .side-pane, .control-group, .context-menu {
+    background: color-mix(in srgb, var(--accent) 20%, color-mix(in srgb, var(--bg) 80%, transparent));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.6) 0px 10px 30px;
+    backdrop-filter: blur(5px) url("#magnifying-lens");
+}
+
+body.light .mini-player, body.light .action-btns, body.light .search-pill, body.light .nav-arrow, body.light .side-pane, body.light .control-group, body.light .context-menu {
+    background: color-mix(in srgb, var(--accent) 50%, color-mix(in srgb, var(--bg) 50%, transparent));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.6) 0px 10px 30px;
+    backdrop-filter: blur(5px) url("#magnifying-lens");
 }
 
 @keyframes fadeUp {
-    from {
+    0% {
         opacity: 0;
     }
 
-    to {
+    100% {
         opacity: 1;
     }
 }
 
 @keyframes pulse {
     0% {
+        opacity: 0.2;
+        transform: scale(1.05);
+    }
+
+    50% {
+        opacity: 0.4;
+        transform: scale(1.06);
+    }
+
+    100% {
+        opacity: 0.2;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes pulseEffect {
+    0% {
+        transform: scale(1);
         opacity: 0.5;
     }
 
     50% {
+        transform: scale(1.1);
         opacity: 0.8;
     }
 
     100% {
+        transform: scale(1);
         opacity: 0.5;
     }
 }
 
 .app-header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.10);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     z-index: 1;
-    padding: 20px 20px;
+    padding: 20px;
     -webkit-app-region: drag;
 }
 
-    .app-header h1 {
-        font-size: 45px;
-        margin: 0 0 15px 0;
-        font-weight: 700;
-    }
+.app-header h1 {
+    font-size: 45px;
+    margin: 0px 0px 15px;
+    font-weight: 700;
+}
 
-        #window-controls {
-            display: none;
-        }
+#window-controls {
+    display: none;
+}
 
-        body.win32-client #window-controls {
-            display: flex;
-            position: absolute;
-            font-family: "win10-icon";
-            font-size: 10px;
-            z-index: 9999999;
-            right: 0;
-            top: 0;
-        }
-
-        body.win32-client .btn {
-            width: 46px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: none;
-            -webkit-app-region: no-drag;
-        }
-
-            body.win32-client .btn:hover {
-                background: #191919;
-            }
-
-            body.win32-client .btn:active {
-                background: #333333;
-            }
-
-            body.win32-client .btn.close:hover {
-                background: #E81123;
-            }
-
-            body.win32-client .btn.close:active {
-                background: #f1707a;
-                color: #000;
-            }
-
-.search-pill {
-    background: rgba(255, 255, 255, 0.10);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 28px;
-    padding: 12px 16px;
+body.win32-client #window-controls {
     display: flex;
-    display: -ms-flexbox;
+    position: absolute;
+    font-family: win10-icon;
+    font-size: 10px;
+    z-index: 9999999;
+    right: 0px;
+    top: 0px;
+}
+
+body.win32-client .btn {
+    width: 46px;
+    height: 32px;
+    display: flex;
     align-items: center;
-    -ms-flex-align: center;
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    justify-content: center;
+    transition: none;
     -webkit-app-region: no-drag;
 }
 
-    .search-pill > * {
-        margin-right: 10px;
-    }
+body.win32-client .btn:hover {
+    background: rgb(25, 25, 25);
+}
 
-        .search-pill > *:last-child {
-            margin-right: 0;
-        }
+body.win32-client .btn:active {
+    background: rgb(51, 51, 51);
+}
 
-    .search-pill input {
-        background: transparent;
-        border: none;
-        color: white;
-        font-size: 16px;
-        outline: none;
-        width: 100%;
-        cursor: text !important;
-    }
+body.win32-client .btn.close:hover {
+    background: rgb(232, 17, 35);
+}
+
+body.win32-client .btn.close:active {
+    background: rgb(241, 112, 122);
+    color: rgb(0, 0, 0);
+}
+
+.search-pill {
+    border-radius: 28px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    -webkit-app-region: no-drag;
+}
+
+.search-pill > * {
+    margin-right: 10px;
+}
+
+.search-pill input {
+    background: transparent;
+    border-width: medium;
+    border-style: none;
+    border-color: currentcolor;
+    border-image: initial;
+    color: white;
+    font-size: 16px;
+    width: 100%;
+    cursor: text !important;
+}
 
 .scroll-area {
-    flex: 1;
-    -ms-flex: 1;
-    overflow-y: auto;
-    padding: 0 16px 120px;
-    overflow-x: hidden;
+    flex: 1 1 0%;
+    overflow: hidden auto;
+    padding: 0px 16px 120px;
 }
 
 .song-card {
     display: flex;
-    display: -ms-flexbox;
     align-items: center;
-    -ms-flex-align: center;
-    padding: 12px 0;
+    padding: 12px 0px;
     opacity: 0;
     transform: translateY(10px);
-    -ms-transform: translateY(10px);
-    animation: fadeUp 0.5s ease-out forwards;
+    animation: 0.5s ease-out 0s 1 normal forwards running fadeUp;
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
     border-radius: 20px;
 }
 
-    .song-card > * {
-        margin-right: 15px;
-    }
+.song-card > * {
+    margin-right: 15px;
+}
 
-        .song-card > *:last-child {
-            margin-right: 0;
-        }
+.song-card > :last-child {
+    margin-right: 0px;
+}
 
-    .song-card[style*="animation-delay"] {
-        transform: translateY(0);
-        -ms-transform: translateY(0);
-    }
+.song-card[style*="animation-delay"] {
+    transform: translateY(0px);
+}
 
-    .song-card img {
-        width: 52px;
-        height: 52px;
-        border-radius: 8px;
-        -o-object-fit: cover;
-        object-fit: cover;
-        background: rgba(255, 255, 255, 0.10);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-    }
+.song-card img {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+}
 
-    .song-card .info h4 {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 500;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.song-card .info h4 {
+    margin: 0px;
+    font-size: 16px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-    .song-card .info p {
-        margin: 4px 0 0;
-        color: #938f99;
-        color: var(--text-dim);
-        font-size: 14px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.song-card .info p {
+    margin: 4px 0px 0px;
+    color: var(--text-dim);
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .mini-player {
     position: fixed;
     bottom: 20px;
     left: 10px;
     right: 10px;
-    background: rgba(255, 255, 255, 0.10);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 20px;
     overflow: hidden;
 }
 
-    .mini-player.notplaying {
-        bottom: -82px !important;
-    }
+.mini-player.notplaying {
+    bottom: -82px !important;
+}
 
 .progress-wrapper {
     position: relative;
     width: 100%;
     height: 8px;
-    background: #333;
+    background: rgb(51, 51, 51);
     transition: height 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     z-index: 20;
 }
 
-    .progress-wrapper.seeking {
-        height: 12px;
-    }
+.progress-wrapper.seeking {
+    height: 12px;
+}
 
 #seekBar {
     position: absolute;
     top: -10px;
-    left: 0;
+    left: 0px;
     width: 100%;
     height: 24px;
     opacity: 0;
     z-index: 30;
-    margin: 0;
+    margin: 0px;
     touch-action: none;
     cursor: pointer !important;
 }
 
-    #seekBar:active,
-    .progress-wrapper.seeking #seekBar {
-        height: 60px;
-        top: -25px;
-    }
+#seekBar:active, .progress-wrapper.seeking #seekBar {
+    height: 60px;
+    top: -25px;
+}
 
 .progress-fill {
     height: 100%;
-    background: #00a0ff;
     background: var(--accent);
     width: 0%;
     transition: width 0.1s linear;
@@ -796,93 +396,78 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
 .player-controls-row {
     padding: 12px 16px;
     display: flex;
-    display: -ms-flexbox;
     justify-content: space-between;
-    -ms-flex-pack: justify;
     align-items: center;
-    -ms-flex-align: center;
     -webkit-app-region: drag;
 }
 
-    .player-controls-row > * {
-        margin-right: 12px;
-    }
+.player-controls-row > * {
+    margin-right: 12px;
+}
 
-        .player-controls-row > *:last-child {
-            margin-right: 0;
-        }
+.player-controls-row > :last-child {
+    margin-right: 0px;
+}
 
 .track-info {
     display: flex;
-    display: -ms-flexbox;
     align-items: center;
-    -ms-flex-align: center;
-    flex: 1;
-    -ms-flex: 1;
-    min-width: 0;
+    flex: 1 1 0%;
+    min-width: 0px;
 }
 
-    .track-info > * {
-        margin-right: 12px;
-    }
+.track-info > * {
+    margin-right: 12px;
+}
 
-        .track-info > *:last-child {
-            margin-right: 0;
-        }
+.track-info > :last-child {
+    margin-right: 0px;
+}
 
-    .track-info img {
-        width: 44px;
-        height: 44px;
-        border-radius: 6px;
-        background: rgba(255, 255, 255, 0.10);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-    }
+.track-info img {
+    width: 44px;
+    height: 44px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    object-fit: cover;
+}
 
 .text-group {
-    flex: 1;
-    -ms-flex: 1;
-    min-width: 0;
+    flex: 1 1 0%;
+    min-width: 0px;
     overflow: hidden;
     white-space: nowrap;
 }
 
-    .text-group h4 {
-        margin: 0;
-        font-size: 14px;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
+.text-group h4 {
+    margin: 0px;
+    font-size: 14px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
 
-    .text-group p {
-        margin: 2px 0 0;
-        font-size: 12px;
-        color: #938f99;
-        color: var(--text-dim);
-    }
+.text-group p {
+    margin: 2px 0px 0px;
+    font-size: 12px;
+    color: var(--text-dim);
+}
 
 .action-btns {
     display: flex;
-    display: -ms-flexbox;
     align-items: center;
-    -ms-flex-align: center;
     flex-shrink: 0;
-    -ms-flex-negative: 0;
-    background: rgba(255, 255, 255, 0.10);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 20px;
     padding: 3px;
     -webkit-app-region: no-drag;
 }
 
-    .action-btns > * {
-        margin-right: 2px;
-    }
+.action-btns > * {
+    margin-right: 2px;
+}
 
-        .action-btns > *:last-child {
-            margin-right: 0;
-        }
+.action-btns > :last-child {
+    margin-right: 0px;
+}
 
 .icon-btn, .main-play-btn {
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -890,149 +475,129 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
 
 .icon-btn {
     background: none;
-    border: none;
+    border-width: medium;
+    border-style: none;
+    border-color: currentcolor;
+    border-image: initial;
     color: white;
     padding: 8px;
     -webkit-app-region: no-drag;
 }
 
 .main-play-btn {
-    background: #00a0ff;
     background: var(--accent);
-    color: #fff;
-    border: 2px transparent solid;
+    color: rgb(255, 255, 255);
+    border: 2px solid transparent;
     border-radius: 12px;
     width: 44px;
     height: 44px;
     display: flex;
-    display: -ms-flexbox;
     align-items: center;
-    -ms-flex-align: center;
     justify-content: center;
-    -ms-flex-pack: center;
 }
 
-    .icon-btn:active, .main-play-btn:active {
-        transform: scale(0.8) !important;
-        -ms-transform: scale(0.8) !important;
-    }
+.icon-btn:active, .main-play-btn:active {
+    transform: scale(0.8) !important;
+}
 
 .song-card:active {
+    background: rgba(255, 255, 255, 0.1);
     transform: scale(0.94) !important;
-    -ms-transform: scale(0.94) !important;
-    background: rgba(255, 255, 255, 0.10);
 }
 
 .search-pill:focus-within {
     transform: scale(0.98);
-    -ms-transform: scale(0.98);
 }
 
 #btnLoop.active {
-    color: #00a0ff;
     color: var(--accent);
-    background: rgba(255, 255, 255, 0.10);
+    background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
 }
 
 .side-pane {
     position: fixed;
-    top: 0;
+    top: 0px;
+    border-radius: 0px !important;
     right: -800px;
     width: 100%;
     height: 100vh;
-    backdrop-filter: blur(25px);
-    -webkit-backdrop-filter: blur(25px);
-    transition: right 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border-color: transparent;
+    transition: right 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     z-index: 100;
     display: flex;
-    display: -ms-flexbox;
     flex-direction: column;
-    padding: 20px;
+    z-index: 9999;
 }
 
-    .side-pane.open {
-        right: 0;
-        -webkit-app-region: no-drag;
-    }
+.side-pane.open {
+    right: 0px;
+    -webkit-app-region: no-drag;
+}
 
 .pane-header {
     display: flex;
-    display: -ms-flexbox;
     justify-content: space-between;
-    -ms-flex-pack: justify;
     align-items: center;
-    -ms-flex-align: center;
-    margin-bottom: 30px;
     -webkit-app-region: drag;
+    padding: 10px 20px 0px;
 }
 
-    .pane-header h2 {
-        margin: 0;
-        font-size: 20px;
-        font-weight: 600;
-    }
+.pane-header h2 {
+    margin: 0px;
+    font-size: 25px;
+    font-weight: 600;
+}
 
 .pane-content {
-    flex: 1;
-    -ms-flex: 1;
+    padding: 0px 20px;
     overflow-y: auto;
-    overflow: hidden;
+    height: 100%;
+    overflow-x: hidden;
 }
 
 .control-group {
-    margin-bottom: 25px;
-    background: rgba(255, 255, 255, 0.05);
-    padding: 15px;
-    border-radius: 15px;
+    padding: 10px 15px;
+    overflow: hidden;
+    margin: 20px 0px;
 }
 
-    .control-group h3 {
-        color: #00a0ff;
-        color: var(--accent);
-        margin: 0 0 15px 0;
-    }
+.control-group h3 {
+    color: var(--on-surface);
+    margin: 0px 0px 5px;
+}
 
 .eq-sliders {
     display: flex;
-    display: -ms-flexbox;
     justify-content: space-between;
-    -ms-flex-pack: justify;
     height: 140px;
     align-items: flex-end;
-    -ms-flex-align: end;
 }
 
 .eq-slider-col {
     display: flex;
-    display: -ms-flexbox;
     flex-direction: column;
     align-items: center;
-    -ms-flex-align: center;
 }
 
-    .eq-slider-col input[type=range] {
-        writing-mode: bt-lr;
-        -webkit-appearance: slider-vertical;
-        width: 8px;
-        height: 100px;
-        padding: 0;
-        margin: 0;
-        cursor: pointer !important;
-    }
+.eq-slider-col input[type="range"] {
+    appearance: slider-vertical;
+    width: 8px;
+    height: 100px;
+    padding: 0px;
+    margin: 0px;
+    cursor: pointer !important;
+}
 
-    .eq-slider-col label {
-        font-size: 11px;
-        color: #938f99;
-        color: var(--text-dim);
-        margin-top: 10px;
-    }
+.eq-slider-col label {
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 5px;
+}
 
 .slider-row {
     display: flex;
-    display: -ms-flexbox;
     align-items: center;
-    -ms-flex-align: center;
     margin-bottom: 10px;
 }
 
@@ -1042,9 +607,7 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
 
 .playlist-grid-layout {
     display: grid;
-    display: -ms-grid;
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    grid-gap: 16px;
     gap: 16px;
     padding-top: 10px;
 }
@@ -1056,30 +619,27 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
     transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;
 }
 
-    .playlist-card:active {
-        transform: scale(0.95);
-        -ms-transform: scale(0.95);
-    }
+.playlist-card:active {
+    transform: scale(0.95);
+}
 
 .playlist-art-grid {
     display: grid;
-    display: -ms-grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
-    aspect-ratio: 1;
+    aspect-ratio: 1 / 1;
     border-radius: 8px;
     overflow: hidden;
     margin-bottom: 12px;
     background: rgba(0, 0, 0, 0.15);
 }
 
-    .playlist-art-grid img,
-    .playlist-art-grid {
-        width: 100%;
-    }
+.playlist-art-grid img, .playlist-art-grid {
+    width: 100%;
+}
 
 .playlist-card h4 {
-    margin: 0;
+    margin: 0px;
     font-size: 14px;
     white-space: nowrap;
     overflow: hidden;
@@ -1089,31 +649,27 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
 
 .playlist-card span {
     font-size: 12px;
-    color: #938f99;
     color: var(--text-dim);
 }
 
 .slider-row label {
     width: 35px;
     font-size: 13px;
-    color: #938f99;
     color: var(--text-dim);
 }
 
-.slider-row input[type=range] {
-    flex: 1;
-    -ms-flex: 1;
-    margin: 0 10px;
+.slider-row input[type="range"] {
+    flex: 1 1 0%;
+    margin: 0px 10px;
     cursor: pointer !important;
 }
 
 .page-viewport {
-    padding: 0 !important;
+    padding: 0px !important;
 }
 
 .page-container {
     display: flex;
-    display: -ms-flexbox;
     width: 300%;
     height: 100%;
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
@@ -1124,26 +680,27 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
 .page {
     width: 33.3333%;
     height: 100%;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding: 0 16px;
-    padding-top: 165px;
+    overflow: hidden auto;
+    padding: 0px 10px 100px 16px;
 }
 
 .star-btn {
     background: transparent;
-    border: none;
-    color: #fff;
+    border-width: medium;
+    border-style: none;
+    border-color: currentcolor;
+    border-image: initial;
+    color: rgb(255, 255, 255);
     padding: 8px;
     z-index: 5;
 }
 
-    .star-btn.fav-active {
-        color: #ffeb3b;
-    }
+.star-btn.fav-active {
+    color: rgb(255, 235, 59);
+}
 
 #btnFavorite.fav-active {
-    color: #ffeb3b;
+    color: rgb(255, 235, 59);
 }
 
 .material-symbols-rounded {
@@ -1152,39 +709,34 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
 
 .context-menu {
     position: fixed;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.1);
     pointer-events: none;
-    border-radius: 12px;
+    border-radius: 20px;
     padding: 15px;
     z-index: 9999;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
     min-width: 220px;
     opacity: 0;
     visibility: hidden;
     transform: translateY(15px);
-    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.25s ease;
+    transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.25s;
 }
 
 #contextMenu.show {
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
-    transform: translateY(0);
+    transform: translateY(0px);
 }
 
 .context-menu h4 {
-    margin: 0 0 10px 0;
-    color: #938f99;
+    margin: 0px 0px 10px;
     color: var(--text-dim);
     font-size: 14px;
 }
 
 .context-menu ul {
     list-style: none;
-    padding: 0;
-    margin: 0 0 10px 0;
+    padding: 0px;
+    margin: 0px 0px 10px;
     max-height: 200px;
     overflow-y: auto;
 }
@@ -1193,47 +745,49 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
     padding: 10px;
     border-radius: 6px;
     display: flex;
-    display: -ms-flexbox;
     justify-content: space-between;
     align-items: center;
 }
 
-    .context-menu li:hover {
-        background: rgba(255,255,255,0.1);
-    }
+.context-menu li:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
 
 .context-actions {
     display: flex;
-    display: -ms-flexbox;
 }
 
-    .context-actions input {
-        flex: 1;
-        -ms-flex: 1;
-        background: rgba(0,0,0,0.3);
-        border: 1px solid rgba(255,255,255,0.2);
-        color: white;
-        padding: 8px;
-        border-radius: 6px;
-        outline: none;
-        margin-right: 8px;
-    }
+.context-actions input {
+    flex: 1 1 0%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 8px;
+    border-radius: 6px;
+    outline: none;
+    margin-right: 8px;
+}
 
-    .context-actions button {
-        background: #00a0ff;
-        background: var(--accent);
-        color: white;
-        border: none;
-        padding: 8px 12px;
-        border-radius: 6px;
-    }
+.context-actions button {
+    background: var(--accent);
+    color: white;
+    border-width: medium;
+    border-style: none;
+    border-color: currentcolor;
+    border-image: initial;
+    padding: 8px 12px;
+    border-radius: 6px;
+}
 
 .context-btn {
     display: block;
     width: 100%;
     background: transparent;
     color: white;
-    border: none;
+    border-width: medium;
+    border-style: none;
+    border-color: currentcolor;
+    border-image: initial;
     padding: 10px;
     font-size: 14px;
     border-radius: 6px;
@@ -1241,13 +795,13 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
     transition: background 0.15s;
 }
 
-    .context-btn:last-child {
-        margin-bottom: 0;
-    }
+.context-btn:last-child {
+    margin-bottom: 0px;
+}
 
-    .context-btn:hover {
-        background: rgba(255,255,255,0.1);
-    }
+.context-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
 
 .page::-webkit-scrollbar {
     width: 6px;
@@ -1258,52 +812,43 @@ body.SamsungExperience .page::-webkit-scrollbar-thumb {
 }
 
 .page::-webkit-scrollbar-thumb {
-    background: #00a0ff;
-    background: var(--accent);
+    background: color-mix(in srgb, var(--accent) 50%, color-mix(in srgb, var(--bg) 50%, transparent));
     border: 2px solid transparent;
+    border-radius: 3px;
     background-clip: content-box;
 }
 
-    .page::-webkit-scrollbar-thumb:hover {
-        background: #00a0ff;
-        background: var(--accent);
-    }
+.page::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
 
 .nav-arrow {
     position: fixed;
     top: 50%;
     transform: translateY(-50%) scale(0.5);
-    -ms-transform: translateY(-50%) scale(0.5);
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
     border: 2px solid rgba(255, 255, 255, 0.1);
-    color: white;
+    color: var(--on-surface);
     width: 54px;
     height: 54px;
     border-radius: 50%;
     z-index: 1000;
     display: flex;
-    display: -ms-flexbox;
     align-items: center;
-    -ms-flex-align: center;
     justify-content: center;
-    -ms-flex-pack: center;
     opacity: 0.3;
-    transition: opacity 300ms ease, transform 300ms ease;
 }
 
-    .nav-arrow:hover {
-        opacity: 1;
-    }
+.nav-arrow:hover {
+    opacity: 1;
+}
 
-    .nav-arrow.left {
-        left: 0px;
-    }
+.nav-arrow.left {
+    left: 0px;
+}
 
-    .nav-arrow.right {
-        right: 0px;
-    }
+.nav-arrow.right {
+    right: 0px;
+}
 
 input {
     cursor: text !important;
@@ -1318,34 +863,45 @@ input {
 }
 
 #btnFavorite.fav-active, .star-btn.fav-active, #menuBtnFavorite.fav-active {
-    color: #ffeb3b !important;
+    color: rgb(255, 235, 59) !important;
 }
 
-    #btnFavorite.fav-active .material-symbols-rounded,
-    .star-btn.fav-active .material-symbols-rounded,
-    #menuBtnFavorite.fav-active .material-symbols-rounded {
-        font-variation-settings: 'FILL' 1;
-    }
+#btnFavorite.fav-active .material-symbols-rounded, .star-btn.fav-active .material-symbols-rounded, #menuBtnFavorite.fav-active .material-symbols-rounded {
+    font-variation-settings: "FILL" 1;
+}
 
 .context-menu-backdrop {
     opacity: 0;
     visibility: hidden;
     pointer-events: none;
     position: fixed;
-    top: 0;
-    left: 0;
+    top: 0px;
+    left: 0px;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.3);
     z-index: 9998;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
+    transition: opacity 0.3s, visibility 0.3s;
 }
 
-    .context-menu-backdrop.show {
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-    }
+.context-menu-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.live-waveform {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 200px;
+    width: 100%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.5;
+    animation: pulseEffect 50s ease-in-out infinite;
+}
 
 @media (max-width: 799px) {
     #btnLoop, #btnEQ, #btnStop, #btnFavorite {
@@ -1364,84 +920,60 @@ input {
         width: 212px;
     }
 
-    body.SamsungExperience .page-container {
-        padding-top: 62px !important;
-    }
-
-    body.SamsungExperience .side-pane {
-        border: none !important;
-    }
-    
     .app-header {
         display: flex;
-        display: -ms-flexbox;
         justify-content: space-between;
-        -ms-flex-pack: justify;
         align-items: center;
-        -ms-flex-align: center;
     }
 
-        .app-header h1 {
-            margin: 0 !important;
-        }
+    .app-header h1 {
+        margin: 0px !important;
+    }
 
     body.win32-client .app-header {
         padding: 10px 20px;
     }
-    
+
     body.win32-client .search-pill {
         margin-top: 30px;
     }
-    
+
     .search-pill {
         width: 280px;
-        margin-top: 0;
+        margin-top: 0px;
     }
 
     .mini-player {
-        bottom: 0px !important;
-        left: auto !important;
-        width: 100% !important;
-        right: 0px !important;
-        border-radius: 0px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        border-bottom-color: transparent;
+        border-left-color: transparent;
+        border-right-color: transparent;
+    }
+
+    .mini-player.notplaying {
+        bottom: -86px !important;
     }
 
     .scroll-area {
-        padding: 0 16px 80px;
+        padding: 0px 16px 80px;
     }
 
     .side-pane {
         width: 300px;
-        box-shadow: -5px 0 25px rgba(0,0,0,0.5);
-        border-left: 2px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .control-group {
-        padding: 10px;
-        margin-bottom: 10px;
+        border-left-color: rgba(255, 255, 255, 0.08);
+        border-top-left-radius: 20px !important;
+        border-bottom-left-radius: 20px !important;
     }
 
     .song-card {
-        padding: 6px 0;
-    }
-
-    .progress-wrapper {
-        height: 4px;
-    }
-
-    .action-btns {
-        background: transparent;
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
+        padding: 6px 0px;
     }
 
     .song-card:active {
         transform: scale(0.99) !important;
-        -ms-transform: scale(0.99) !important;
-        background: rgba(255, 255, 255, 0.10);
-    }
-
-    .page {
-        padding-top: 108px;
     }
 }

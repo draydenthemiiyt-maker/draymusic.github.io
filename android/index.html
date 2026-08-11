@@ -97,6 +97,7 @@
         <div class="player-controls-row">
             <div class="track-info" id="openFullPlayer">
                 <img id="currentArt" src="placeholder.png">
+                
                 <div class="text-group">
                     <h4 id="currentTitle">Not Playing</h4>
                     <p id="currentArtist">Select a song</p>
@@ -125,6 +126,7 @@
         <div class="pane-content">
             <div class="control-group">
                 <h3>Equalizer</h3>
+
                 <div class="eq-sliders 10-band">
                     <div class="eq-slider-col"><input type="range" class="eq-slider" id="eqSlider0" min="-12" max="12" value="0"><label>31</label></div>
                     <div class="eq-slider-col"><input type="range" class="eq-slider" id="eqSlider1" min="-12" max="12" value="0"><label>62</label></div>
@@ -161,6 +163,7 @@
                     <label>Dry</label>
                     <input type="range" id="drySlider" min="0" max="1" step="0.05" value="1">
                 </div>
+
                 <div class="slider-row">
                     <label>Wet</label>
                     <input type="range" id="wetSlider" min="0" max="1" step="0.05" value="0">
@@ -169,8 +172,12 @@
         </div>
     </div>
 
+    <canvas id="live-waveform" class="live-waveform"></canvas>
+
     <audio id="audioElement" msAudioCategory="BackgroundCapableMedia" crossorigin="anonymous"></audio>
+
     <script src="app.js"></script>
+
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
@@ -180,6 +187,7 @@
             });
         }
     </script>
+
     <script>
         const params = new URLSearchParams(window.location.search);
         const isWindowsClient = params.get('windowsclient') === '1';
