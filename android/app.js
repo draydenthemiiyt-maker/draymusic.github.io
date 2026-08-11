@@ -61,7 +61,7 @@ var pendingSeekPercent = null;
 var activeTargetSong = null;
 var activeTargetPlaylist = null;
 var currentPage = 0;
-var totalPages = 4;
+var totalPages = 3;
 var favoriteUrls = JSON.parse(localStorage.getItem('drayFavorites') || '[]');
 var userPlaylists = JSON.parse(localStorage.getItem('drayPlaylists') || '{}');
 var audioCtx = null;
@@ -176,32 +176,24 @@ function syncSongOffline(songUrl) {
             console.log('Updated offline flags for:', songUrl);
         } else {
             if (song && navigator.onLine) {
-                var xhrDownload = new XMLHttpRequest();
-                xhrDownload.open('GET', songUrl, true);
-                xhrDownload.responseType = 'blob';
-                xhrDownload.onload = function () {
-                    if (xhrDownload.status >= 200 && xhrDownload.status < 300) {
-                        var blob = xhrDownload.response;
-                        var newRecord = {
-                            url: songUrl,
-                            title: song.title,
-                            artist: song.artist,
-                            art: song.art,
-                            favorite: isFav,
-                            playlists: containingPlaylists,
-                            blob: blob
-                        };
-                        var insertTx = offlineDB.transaction(['songs'], 'readwrite');
-                        insertTx.objectStore('songs').put(newRecord);
-                        console.log('Cached new song offline:', songUrl);
-                    } else {
-                        console.error('Offline cache download failed', xhrDownload.status);
-                    }
-                };
-                xhrDownload.onerror = function (err) {
+                fetch(songUrl).then(function (res) {
+                    return res.blob();
+                }).then(function (blob) {
+                    var newRecord = {
+                        url: songUrl,
+                        title: song.title,
+                        artist: song.artist,
+                        art: song.art,
+                        favorite: isFav,
+                        playlists: containingPlaylists,
+                        blob: blob
+                    };
+                    var insertTx = offlineDB.transaction(['songs'], 'readwrite');
+                    insertTx.objectStore('songs').put(newRecord);
+                    console.log('Cached new song offline:', songUrl);
+                })['catch'](function (err) {
                     console.error('Offline cache download failed', err);
-                };
-                xhrDownload.send();
+                });
             }
         }
     };
@@ -328,10 +320,9 @@ function playSong(index) {
     if (window.audio !== DOM.audio) window.audio = DOM.audio;
     syncSongOffline(song.url);
 
-var bg = document.getElementById('body-bg');
+    var bg = document.getElementById('body-bg');
     if (bg) {
         bg.src = song.art;
-        applyDynamicAccent(song.art); // <-- Add this line
     }
 }
 
@@ -392,7 +383,7 @@ function renderList(data, container) {
         var starClass = isFav ? 'star-btn fav-active' : 'star-btn';
 
         html += '<div class="song-card" data-index="' + i + '" data-url="' + escapeHTML(song.url) + '" style="animation-delay: ' + (i * 0.05) + 's">' +
-            '<img class="glass-background" src="' + escapeHTML(song.art) + '" alt="art">' +
+            '<img src="' + escapeHTML(song.art) + '" alt="art">' +
             '<div class="info" style="flex:1;">' +
             '<h4>' + escapeHTML(song.title) + '</h4>' +
             '<p>' + escapeHTML(song.artist) + '</p>' +
@@ -921,8 +912,7 @@ function bindEvents() {
             var idx = favoriteUrls.indexOf(url);
 
             var cards = document.querySelectorAll('.song-card');
-            for (var ci = 0; ci < cards.length; ci++) {
-                var card = cards[ci];
+            cards.forEach(function (card) {
                 if (card.getAttribute('data-url') === url) {
                     var star = card.querySelector('.star-btn');
                     if (star) {
@@ -930,7 +920,7 @@ function bindEvents() {
                         else star.classList.remove('fav-active');
                     }
                 }
-            }
+            });
 
             if (idx === -1) {
                 favoriteUrls.push(url);
@@ -960,10 +950,7 @@ function bindEvents() {
             document.querySelector('.mini-player').classList.add('notplaying');
 
             var bg = document.getElementById('body-bg');
-            if (bg) {
-                bg.src = "placeholder.png";
-                document.documentElement.style.setProperty('--accent', '#00a0ff');
-            }
+            if (bg) bg.src = "placeholder.png";
         });
     }
 
@@ -1273,6 +1260,51 @@ function bootMusic() {
     updateLiveTileFromXml();
 
     try {
+        if (ViewMgmt && ViewMgmt.UISettings) {
+            var uiSettings = new ViewMgmt.UISettings();
+
+            function toHexByte(n) {
+                var s = (n || 0).toString(16);
+                return s.length === 1 ? '0' + s : s;
+            }
+
+            function winColorToHex(winColor) {
+                if (!winColor) return '#0078D7';
+                var r = winColor.r || 0;
+                var g = winColor.g || 0;
+                var b = winColor.b || 0;
+                return '#' + toHexByte(r) + toHexByte(g) + toHexByte(b);
+            }
+
+            function applyAccentFromUISettings() {
+                try {
+                    var winColor = uiSettings.getColorValue(ViewMgmt.UIColorType.accent);
+                    var hex = winColorToHex(winColor);
+                    try {
+                        document.documentElement.style.setProperty('--accent', hex);
+                        document.documentElement.classList.add('windows-uwp-accent');
+                    } catch (e) { }
+                    try { console.info('Applied Windows accent color:', hex); } catch (e) { }
+                } catch (e) {
+                    try { console.warn('Failed to read Windows accent color:', e); } catch (err) { }
+                }
+            }
+
+            applyAccentFromUISettings();
+
+            try {
+                uiSettings.addEventListener('colorvalueschanged', function () {
+                    setTimeout(applyAccentFromUISettings, 0);
+                });
+            } catch (e) {
+                try { console.info('Could not attach color change listener:', e); } catch (err) { }
+            }
+        }
+    } catch (e) {
+        try { console.warn('Accent integration failed:', e); } catch (err) { }
+    }
+
+    try {
         if (Media && Media.SystemMediaTransportControls) {
             var smtc = Media.SystemMediaTransportControls.getForCurrentView();
 
@@ -1427,186 +1459,6 @@ function bootMusic() {
     }
 })();
 
-var availableThemes = [];
-var savedTheme = localStorage.getItem('drayTheme');
-
-function applyTheme(stylesheetName, saveToStorage) {
-    var themeLink = document.getElementById('theme-stylesheet');
-    if (!themeLink) return;
-
-    if (!stylesheetName) {
-        themeLink.removeAttribute('href');
-        if (saveToStorage) localStorage.removeItem('drayTheme');
-    } else {
-        themeLink.setAttribute('href', 'themes/' + stylesheetName);
-        if (saveToStorage) localStorage.setItem('drayTheme', stylesheetName);
-    }
-}
-
-function renderThemes() {
-    var container = document.getElementById('themeListContainer');
-    if (!container) return;
-
-    var html = '<button class="theme-btn ' + (!savedTheme ? 'active-theme' : '') + '" data-sheet="">Default</button>';
-
-    for (var i = 0; i < availableThemes.length; i++) {
-        var theme = availableThemes[i];
-        var isActive = (savedTheme === theme.stylesheet) ? 'active-theme' : '';
-        html += '<button class="theme-btn ' + isActive + '" data-sheet="' + escapeHTML(theme.stylesheet) + '">' + escapeHTML(theme.name) + '</button>';
-    }
-
-    container.innerHTML = html;
-
-    var btns = container.querySelectorAll('.theme-btn');
-    for (var j = 0; j < btns.length; j++) {
-        (function(btn) {
-            btn.addEventListener('click', function() {
-                var sheet = btn.getAttribute('data-sheet');
-                applyTheme(sheet, true);
-                savedTheme = sheet; 
-                for (var k = 0; k < btns.length; k++) {
-                    btns[k].classList.remove('active-theme');
-                }
-                btn.classList.add('active-theme');
-            });
-        })(btns[j]);
-    }
-}
-
-function loadThemes() {
-    if (savedTheme) {
-        applyTheme(savedTheme, false);
-    }
-
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'themes/themes.xml?nocache=' + new Date().getTime(), true);
-    
-    xhr.onload = function () {
-        if (xhr.status >= 200 && xhr.status < 300) {
-            var xml;
-            try {
-                xml = new window.DOMParser().parseFromString(xhr.responseText, 'text/xml');
-            } catch (e) { 
-                console.error('Theme XML Parse Error', e); 
-                return; 
-            }
-
-            var items = xml.getElementsByTagName('theme');
-            availableThemes = [];
-
-            for (var i = 0; i < items.length; i++) {
-                var t = items[i];
-                var nameEl = t.getElementsByTagName('name')[0];
-                var sheetEl = t.getElementsByTagName('stylesheet')[0];
-                
-                if (nameEl && sheetEl) {
-                    availableThemes.push({
-                        name: nameEl.textContent,
-                        stylesheet: sheetEl.textContent
-                    });
-                }
-            }
-            
-            renderThemes();
-        } else {
-            console.warn('Could not load themes.xml. Status:', xhr.status);
-            renderThemes();
-        }
-    };
-    
-    xhr.onerror = function() { 
-        console.warn('Network error loading themes.xml'); 
-        renderThemes(); 
-    };
-    
-    xhr.send();
-}
-
-loadThemes();
 updateNavArrows();
 bindEvents();
 bootMusic();
-
-function applyDynamicAccent(imageSrc) {
-    if (!imageSrc || imageSrc.indexOf('placeholder.png') !== -1) {
-        document.documentElement.style.setProperty('--accent', '#00a0ff');
-        return;
-    }
-
-    var img = new Image();
-    img.crossOrigin = "Anonymous"; 
-    img.src = imageSrc;
-
-    img.onload = function() {
-        var canvas = document.createElement('canvas');
-        var ctx = canvas.getContext('2d');
-        canvas.width = img.width;
-        canvas.height = img.height;
-
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-        try {
-            var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            var data = imageData.data;
-            var r = 0, g = 0, b = 0;
-            var count = 0;
-            var step = 4 * 10;
-
-            for (var i = 0; i < data.length; i += step) {
-                if ((data[i] > 250 && data[i+1] > 250 && data[i+2] > 250) || 
-                    (data[i] < 15 && data[i+1] < 15 && data[i+2] < 15)) {
-                    continue;
-                }
-                
-                r += data[i];
-                g += data[i + 1];
-                b += data[i + 2];
-                count++;
-            }
-
-            if (count > 0) {
-                r = Math.floor(r / count);
-                g = Math.floor(g / count);
-                b = Math.floor(b / count);
-                
-                document.documentElement.style.setProperty('--accent', 'rgb(' + r + ', ' + g + ', ' + b + ')');
-            } else {
-                document.documentElement.style.setProperty('--accent', '#00a0ff');
-            }
-        } catch (e) {
-            console.warn("CORS prevented color extraction. Using default accent.");
-            document.documentElement.style.setProperty('--accent', '#00a0ff');
-        }
-    };
-}
-
-var noVfxToggle = document.getElementById('noVfxToggle');
-var savedNoVfx = localStorage.getItem('drayNoVfx') === 'true';
-var supportsBackdrop = false;
-if (window.CSS && window.CSS.supports) {
-    supportsBackdrop = window.CSS.supports('backdrop-filter', 'blur(1px)') || 
-                       window.CSS.supports('-webkit-backdrop-filter', 'blur(1px)');
-}
-
-var shouldDisableVfx = !supportsBackdrop || savedNoVfx;
-
-if (shouldDisableVfx) {
-    document.body.classList.add('novfx');
-}
-
-if (noVfxToggle) {
-    noVfxToggle.checked = shouldDisableVfx;
-    
-    if (!supportsBackdrop) {
-        noVfxToggle.disabled = true;
-    }
-
-    noVfxToggle.addEventListener('change', function () {
-        if (noVfxToggle.checked) {
-            document.body.classList.add('novfx');
-        } else {
-            document.body.classList.remove('novfx');
-        }
-        localStorage.setItem('drayNoVfx', noVfxToggle.checked ? 'true' : 'false');
-    });
-}
