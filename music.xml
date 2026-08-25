@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<music>
+<root>
   <song>
     <title>Theme - LEGO City Undercover</title>
     <artist>Simon Withenshaw and Suddi Raval</artist>
@@ -910,11 +910,4 @@
     <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/JVKE_-_golden_hour__Lyrics__-_Dan_Music_1785882124.mp3</url>
     <publisher>Unknown</publisher>
   </song>
-  <song>
-    <title>Plannet Rock</title>
-    <artist>RAYO</artist>
-    <albumArt></albumArt>
-    <url><![CDATA[https://stream-mz.hellorayo.co.uk/planetrock.aac?direct=true&listenerid=fc6805fce80a7624e9ac58a79b47185f&aw_0_1st.bauer_listenerid=fc6805fce80a7624e9ac58a79b47185f&aw_0_1st.playerid=BMUK_inpage_html5&aw_0_1st.skey=1787511117&aw_0_1st.bauer_loggedin=true&aw_0_1st.bauer_gender=male&aw_0_1st.bauer_agegroup=under18&firstname=Drayden&aw_0_1st.bauer_firstname=Drayden&user_id=2135096687&aw_0_1st.bauer_user_id=2135096687&region=GB&aw_0_req.userConsentV2=CQpZjAAQpZjAAAGABCENCtFgAP_gAEPgAAwIMHtBxG5cSTFAOCJ1YJtgaIQXw1BgYMAhBgAAAgAASJIAJJQC1EEQJACIAiACAAIAIEABAAAAEABAAAAAIIABIACEAEAAAAAAIAAAAEAAQgAAAAAMAQAAUAAAAEBUEgEggAQAYBIASMAAAgAACQAQCAAFAACAAAAAAAAAQAAAAAAAgIAAgAAAAAAAAAQAQBAAEAAAAgAAAAAAAAAAAAAAAQAAAAAAAACIAgAABAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAACCCcBcABQAFwASAAqABcAFsARwAnAByADuAIAAQgAiIBHADXgHbAP2ApABagDFgGWANoAgmAaEgTQAUABUAC4AHAAPAAggBkAGgATAAqgBvAD8AIQARIAjgBWgDnAHcAP0AgABFACMAEiAJMAT8AxQBtAD2gJpAUeAtgBeYDDQGSAMnAauA28ByYEEwLTBQAIAJAgAEAIo6BSAAuACgAKgAcABAAC6AGQAaABMACqAGIAN4AfgBEgCjAFaANEAc4A7gB-wEUARYAjABIgCTAE_AMUAbQA9oCZAE0wKPApABVgC2AF2gLzAYaAyQBk4DLAGrgNvAcmBHYeABAIiOABgBQAE4AtklATAAWABQADgATAAqgBiAESAI4AUYArQDFAKPAU0AtQBbAC8wGSAMnAbeSAAgAkKQIwAFwAUABUADgAIIAZABoAEwAKoAYgA_ACJAFGAK0AaIA5wB-gEWAIwASIAxQBtAD2gJpAUgApoBVgC2AF2gLzAYaAyQBk4DLAG3gOTAjsVABgAKAC2AfsoACACgARwhAQAAWABQAFwAVQAxABvAD8AOcAdwBFACRAGKANoAmkBVgDJy0AMAdwCmgFWAA.IMHtBxG5cSTFAOCJ1YJtgaIQXw1BgYMAhBgAAAgAASJIAJJQC1EEQJACIAiACAAIAIEABAAAIEAhAAAAAIIABIACEAEAAAAAAIAAAAEAAQgAAAAAMAQAAUAAAAEBWEgEggAQAYBIASMAAAgAACQAUCAAFAACAAAAAAAAAQAAAAAAAgIAAgAAAAAAAAAQAQBAAEAAAAgAAAAAAAAAAAAAAAQAAAAAAAACIAgAABAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAACAA.YAAAAAAAAAAA&aw_0_1st.xi_permutive=229804,237303,247411,260607,260608,260658,260659,275789&aw_0_1st.permutiveid=679d9616-ad7b-423d-8222-d4b38fa4bb87&aw_0_1st.xi_prmtvctx=cvwc%2Ccvyh%2Ccvyb%2Cdqbi%2Ccvyr%2Ccvyv%2Cepcp&aw_0_1st.xi_covatic=9999,300068,300069&awparams=preroll:0]]></url>
-    <publisher>draydenyt</publisher>
-  </song>
-</music>
+</root>
