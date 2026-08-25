@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>The Leaking Flame</title>
+    <artist>DraydenYT</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/image_9b4e4bd6-207b-4380-8e4b-6506540fadda_1787698439.jpeg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/The_Leaking_Flame_1787698439.mp3</url>
+    <publisher>draydenyt</publisher>
+  </song>
+  <song>
+    <title>Van of Fumes</title>
+    <artist>DraydenYT</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/image_ca559867-2306-451e-8688-5039fe647768_1787698486.jpeg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Van_of_Fumes_1787698486.mp3</url>
+    <publisher>draydenyt</publisher>
+  </song>
+  <song>
     <title>Nanny Cafline's Groove</title>
     <artist>Nanny Carfline</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/image_91f924fc-ceee-4c34-96f7-be998b04026d_1787698315.jpeg</albumArt>
