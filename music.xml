@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>Azuma on the East Coast Line</title>
+    <artist>DraydenYT</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/lner-charter-azuma-image-jpg_1787698650.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Azuma_on_the_East_Coast_Line_1787698650.mp3</url>
+    <publisher>draydenyt</publisher>
+  </song>
+  <song>
     <title>The Leaking Flame</title>
     <artist>DraydenYT</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/image_9b4e4bd6-207b-4380-8e4b-6506540fadda_1787698439.jpeg</albumArt>
