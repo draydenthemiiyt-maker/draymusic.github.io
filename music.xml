@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>Yorkshire Railfan - THE MUSICAL (Video Mix)</title>
+    <artist>DraydenYT</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/LNER-Digital_1787696619.png</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Yorky_at_Grantham__1__1787696619.mp3</url>
+    <publisher>draydenyt</publisher>
+  </song>
+  <song>
     <title>Yorkshire Railfan - THE MUSICAL (Radio Edit)</title>
     <artist>DraydenYT</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/LNER-Digital_1787696478.png</albumArt>
