@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>Yorkshire Railfan - THE MUSICAL (Radio Edit)</title>
+    <artist>DraydenYT</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/LNER-Digital_1787696478.png</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Yorky_at_Grantham_1787696478.mp3</url>
+    <publisher>draydenyt</publisher>
+  </song>
+  <song>
     <title>Theme - LEGO City Undercover</title>
     <artist>Simon Withenshaw and Suddi Raval</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/legocityundercover_1786053585.png</albumArt>
