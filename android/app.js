@@ -48,7 +48,12 @@ var DOM = {
     menuBtnLoop: document.getElementById('menuBtnLoop'),
     menuBtnEQ: document.getElementById('menuBtnEQ'),
     menuBtnStop: document.getElementById('menuBtnStop'),
-    menuBtnFavorite: document.getElementById('menuBtnFavorite')
+    menuBtnFavorite: document.getElementById('menuBtnFavorite'),
+    stereoWidthSlider: document.getElementById('stereoWidthSlider'),
+    centerGainSlider: document.getElementById('centerGainSlider'),
+    echoTimeSlider: document.getElementById('echoTimeSlider'),
+    echoFeedbackSlider: document.getElementById('echoFeedbackSlider'),
+    echoMixSlider: document.getElementById('echoMixSlider')
 };
 
 window.audio = DOM.audio;
@@ -266,7 +271,7 @@ function updateMediaSession(song) {
             artist: song.artist || '',
             album: song.album || 'DrayMusic',
             artwork: [
-                { src: song.art || 'placeholder.png', sizes: '512x512', type: 'image/png' }
+                { src: song.art || 'icon.png', sizes: '512x512', type: 'image/png' }
             ]
         });
 
@@ -353,7 +358,7 @@ function loadMusic() {
                     title: getT('title') || 'Unknown Title',
                     artist: getT('artist') || 'Unknown Artist',
                     url: getT('url') || '',
-                    art: getT('albumArt') || 'placeholder.png'
+                    art: getT('albumArt') || 'icon.png'
                 });
             }
 
@@ -688,18 +693,15 @@ function initAudioEngine() {
         audioCtx = new AudioContextClass();
         var source = audioCtx.createMediaElementSource(DOM.audio);
         
-        // --- 1. CREATE THE ANALYSER ---
         analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 256; // Defines how many data points you get back
-        // ------------------------------
+        analyser.fftSize = 256;
         
         var freqs = [31, 62, 125, 250, 500, 1000, 2000, 4000, 8000, 16000];
         
-        // --- 2. CONNECT SOURCE TO ANALYSER FIRST ---
         source.connect(analyser);
         var lastNode = analyser; 
-        // -------------------------------------------
 
+        // --- Equalizer Filters ---
         for (var i = 0; i < freqs.length; i++) {
             var f = audioCtx.createBiquadFilter();
             f.type = (i === 0) ? 'lowshelf' : ((i === 9) ? 'highshelf' : 'peaking');
@@ -710,6 +712,58 @@ function initAudioEngine() {
             lastNode = f;
         }
 
+        // --- Mid/Side (Stereo & Center Isolation) Nodes ---
+        splitterNode = audioCtx.createChannelSplitter(2);
+        mergerNode = audioCtx.createChannelMerger(2);
+        
+        midGainNode = audioCtx.createGain();   // Center channel control
+        sideGainNode = audioCtx.createGain();  // Stereo width control
+        
+        midGainNode.gain.value = 1;
+        sideGainNode.gain.value = 1;
+
+        // Route L/R channels to Mid/Side matrix
+        var invertGain = audioCtx.createGain();
+        invertGain.gain.value = -1;
+
+        lastNode.connect(splitterNode);
+
+        // Mid = (L + R)
+        splitterNode.connect(midGainNode, 0);
+        splitterNode.connect(midGainNode, 1);
+
+        // Side = (L - R)
+        splitterNode.connect(sideGainNode, 0);
+        splitterNode.connect(invertGain, 1);
+        invertGain.connect(sideGainNode);
+
+        // Merge back to L/R output
+        midGainNode.connect(mergerNode, 0, 0);
+        midGainNode.connect(mergerNode, 0, 1);
+        sideGainNode.connect(mergerNode, 0, 0);
+        
+        var sideInvertOut = audioCtx.createGain();
+        sideInvertOut.gain.value = -1;
+        sideGainNode.connect(sideInvertOut);
+        sideInvertOut.connect(mergerNode, 0, 1);
+
+        var processedNode = mergerNode;
+
+        // --- Echo / Delay Effect ---
+        echoDelayNode = audioCtx.createDelay(2.0);
+        echoFeedbackNode = audioCtx.createGain();
+        echoWetGainNode = audioCtx.createGain();
+
+        echoDelayNode.delayTime.value = 0.3;
+        echoFeedbackNode.gain.value = 0.3;
+        echoWetGainNode.gain.value = 0;
+
+        processedNode.connect(echoDelayNode);
+        echoDelayNode.connect(echoFeedbackNode);
+        echoFeedbackNode.connect(echoDelayNode);
+        echoDelayNode.connect(echoWetGainNode);
+
+        // --- Reverb & Master Output ---
         dryGain = audioCtx.createGain();
         wetGain = audioCtx.createGain();
         dryGain.gain.value = 1;
@@ -718,18 +772,18 @@ function initAudioEngine() {
         reverbNode = audioCtx.createConvolver();
         reverbNode.buffer = createImpulseResponse(3, 4);
 
-        lastNode.connect(dryGain);
-        lastNode.connect(reverbNode);
+        processedNode.connect(dryGain);
+        processedNode.connect(reverbNode);
         reverbNode.connect(wetGain);
+
         dryGain.connect(audioCtx.destination);
         wetGain.connect(audioCtx.destination);
+        echoWetGainNode.connect(audioCtx.destination);
         
-        // --- 3. START THE ANIMATION LOOP ---
         startLiveWaveform();
-        // -----------------------------------
 
     } catch (e) {
-        console.warn("Audio Engine Init Failed (Normal for IE11):", e);
+        console.warn("Audio Engine Init Failed:", e);
     }
 }
 
@@ -764,6 +818,43 @@ function bindEvents() {
     if (DOM.btnCloseEQ && DOM.eqPane) {
         DOM.btnCloseEQ.addEventListener('click', function () { DOM.eqPane.classList.remove('open'); });
     }
+
+    // Stereo Width & Center Isolation Sliders
+    bindLiveSlider(DOM.stereoWidthSlider, function (e) {
+        var val = parseFloat(e.target.value);
+        if (sideGainNode) sideGainNode.gain.value = val;
+        var lbl = document.getElementById('stereoWidthLabel');
+        if (lbl) lbl.textContent = val.toFixed(2);
+    });
+
+    bindLiveSlider(DOM.centerGainSlider, function (e) {
+        var val = parseFloat(e.target.value);
+        if (midGainNode) midGainNode.gain.value = val;
+        var lbl = document.getElementById('centerGainLabel');
+        if (lbl) lbl.textContent = val.toFixed(2);
+    });
+
+    // Echo Sliders
+    bindLiveSlider(DOM.echoTimeSlider, function (e) {
+        var val = parseFloat(e.target.value);
+        if (echoDelayNode) echoDelayNode.delayTime.value = val;
+        var lbl = document.getElementById('echoTimeLabel');
+        if (lbl) lbl.textContent = val.toFixed(2) + 's';
+    });
+
+    bindLiveSlider(DOM.echoFeedbackSlider, function (e) {
+        var val = parseFloat(e.target.value);
+        if (echoFeedbackNode) echoFeedbackNode.gain.value = val;
+        var lbl = document.getElementById('echoFeedbackLabel');
+        if (lbl) lbl.textContent = val.toFixed(2);
+    });
+
+    bindLiveSlider(DOM.echoMixSlider, function (e) {
+        var val = parseFloat(e.target.value);
+        if (echoWetGainNode) echoWetGainNode.gain.value = val;
+        var lbl = document.getElementById('echoMixLabel');
+        if (lbl) lbl.textContent = val.toFixed(2);
+    });
 
     if (DOM.btnPlayPause) {
         DOM.btnPlayPause.addEventListener('click', function () {
@@ -967,7 +1058,7 @@ function bindEvents() {
             document.querySelector('.mini-player').classList.add('notplaying');
 
             var bg = document.getElementById('body-bg');
-            if (bg) bg.src = "placeholder.png";
+            if (bg) bg.src = "icon.png";
         });
     }
 
@@ -1258,7 +1349,7 @@ function startLiveWaveform() {
 }
 
 function applyDynamicAccent(imageSrc) {
-    if (!imageSrc || imageSrc.indexOf('placeholder.png') !== -1) {
+    if (!imageSrc || imageSrc.indexOf('icon.png') !== -1) {
         document.documentElement.style.setProperty('--accent', '#00a0ff');
         return;
     }

@@ -653,9 +653,10 @@ body.win32-client .btn.close:active {
 }
 
 .slider-row label {
-    width: 35px;
     font-size: 13px;
     color: var(--text-dim);
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 .slider-row input[type="range"] {
