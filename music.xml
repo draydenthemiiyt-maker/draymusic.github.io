@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>Not Alone</title>
+    <artist>TheShieldTTV</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/cc656241-c96c-4a4d-a387-4c121c7c2b79_1791327963.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Not_Alone_1791327963.mp3</url>
+    <publisher>theshieldttv</publisher>
+    <copyrighted>false</copyrighted>
+  </song>
+  <song>
     <title>I Rise</title>
     <artist>TheShieldTTV</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/I_Rise__1__1791325336.jpeg</albumArt>
