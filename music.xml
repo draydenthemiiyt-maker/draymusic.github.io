@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>I Rise</title>
+    <artist>TheShieldTTV</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/I_Rise__1__1791325336.jpeg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/I_Rise_1791325336.mp3</url>
+    <publisher>theshieldttv</publisher>
+    <copyrighted>false</copyrighted>
+  </song>
+  <song>
     <title>Carry Me Slow</title>
     <artist>TheShieldTTV</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/BCO_8e4c988b-5250-42b2-bd90-7afe4bcb7119_1791325015.png</albumArt>
