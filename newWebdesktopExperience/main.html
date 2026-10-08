@@ -1,0 +1,93 @@
+<!--© DraydenYT 2026-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <title>DrayMusic</title>
+    <link rel="stylesheet" href="css/main.css">
+
+    <link rel="stylesheet" href="css/draystylepack.css">
+    <link href="assets/google.css" rel="stylesheet">
+</head>
+<body>
+    <div class="titlebar">
+        <div class="titlebar-left">
+            <img src="assets/icon.png">
+            <h1>DrayMusic</h1>
+        </div>
+        <input type="text" id="searchInput" placeholder="Search">
+    </div>
+
+    <div class="app-layout">
+        <aside id="pageSidebar" class="page-sidebar" aria-label="Main navigation">
+            <div class="sidebar-header">
+                <span class="sidebar-heading">Library</span>
+                <button id="sidebarToggle" class="icon-btn sidebar-toggle" aria-label="Collapse sidebar" title="Collapse sidebar">
+                    <span class="material-symbols-rounded">left_panel_close</span>
+                </button>
+            </div>
+            <nav class="sidebar-nav" aria-label="Pages">
+                <button class="sidebar-link active" data-page="0" aria-current="page" title="All music">
+                    <span class="material-symbols-rounded">library_music</span><span class="sidebar-label">All music</span>
+                </button>
+                <button class="sidebar-link" data-page="1" title="Favorites">
+                    <span class="material-symbols-rounded">favorite</span><span class="sidebar-label">Favorites</span>
+                </button>
+<button class="sidebar-link" data-page="666" title="Create" onclick="window.open('https://draymusic-private.onrender.com')">
+    <span class="material-symbols-rounded">add_circle</span><span class="sidebar-label">Create</span>
+</button>
+<button class="sidebar-link" data-page="667" title="Join our Discord" onclick="window.open('https://discord.gg/dHqFDVZBQg')">
+    <span class="material-symbols-rounded">forum</span><span class="sidebar-label">Join our Discord</span>
+</button>
+<button class="sidebar-link" data-page="668" title="Download DrayMusic" onclick="window.open('https://github.com/draydenthemiiyt-maker/DrayMusic-Desktop')">
+    <span class="material-symbols-rounded">download</span><span class="sidebar-label">Download DrayMusic</span>
+</button>
+            </nav>
+        </aside>
+
+        <div class="scroll-area page-viewport">
+            <div id="pageContainer" class="page-container">
+                <section class="page active" id="allMusicPage">
+                    <div class="page-title-header"><h2>All Music</h2></div>
+                    <div id="songList"></div>
+                </section>
+
+                <section class="page" id="favoritesList">
+                    <div class="page-title-header"><h2>Favorites</h2></div>
+                    <div id="favoritesContainer"></div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="player">
+            <div class="player-left">
+                <img id="currentArt" src="assets/icon.png" alt="Album Art">
+                <div class="now-playing">
+                    <h4 id="currentTitle">Not Playing</h4>
+                    <p id="currentArtist">Select a song</p>
+                </div>
+            </div>
+
+            <div class="player-main">
+                <input type="range" id="seekBar" value="0" step="0.0000000001">
+                <button id="btnFavorite" class="icon-btn wigdisable" disabled><span class="material-symbols-rounded">star</span></button>
+                <button id="btnPrev" class="icon-btn"><span class="material-symbols-rounded">skip_previous</span></button>
+                <button id="btnPlayPause" class="icon-btn"><span class="material-symbols-rounded">play_arrow</span></button>
+                <button id="btnNext" class="icon-btn"><span class="material-symbols-rounded">skip_next</span></button>
+                <button id="btnLoop" class="icon-btn wigdisable"><span class="material-symbols-rounded">repeat</span></button>
+            </div>
+
+            <div class="player-right">
+            </div>
+        </div>
+
+    <audio id="audioElement"></audio>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
