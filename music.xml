@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>Electroman Adventures</title>
+    <artist>Waterflame</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/sddefault_1791664853.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Electroman_Adventures_-_Waterflame_1791664853.mp3</url>
+    <publisher>draydenyt</publisher>
+    <copyrighted>true</copyrighted>
+  </song>
+  <song>
     <title>Resonance</title>
     <artist>HOME</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/thumb1_1791552197.jpg</albumArt>
