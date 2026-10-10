@@ -1182,7 +1182,8 @@
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Tears_For_Fears_-_Shout.jpg</albumArt>
     <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Tears%20For%20Fears%20-%20Shout.mp3</url>
     <publisher>Unknown</publisher>
-    <copyrighted>false</copyrighted>
+    <copyrighted>true</copyrighted>
+    <lyrics>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/shout.txt</lyrics>
   </song>
   <song>
     <title>Every Breath You Take</title>
