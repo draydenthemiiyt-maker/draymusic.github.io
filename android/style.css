@@ -904,6 +904,17 @@ input {
     animation: pulseEffect 50s ease-in-out infinite;
 }
 
+body.upgrade-this-shitty-app #outdated-overlay {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background: #ff0000;
+    z-index: 99999;
+    color: white;
+    transition: none;
+    display: block !important;
+}
+
 @media (max-width: 799px) {
     #btnLoop, #btnEQ, #btnStop, #btnFavorite {
         display: none !important;

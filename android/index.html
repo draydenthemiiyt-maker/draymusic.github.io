@@ -11,6 +11,10 @@
     <link href="google.css" rel="stylesheet">
 </head>
 <body>
+<div id="outdated-overlay" style="display: none;">
+    <h1>ERROR 848 CONTACT DRAYDENYT</h1>
+</div>
+
     <img id="body-bg" src="icon.png" aria-hidden="true">
     <header class="app-header">
         <h1>DrayMusic</h1>
@@ -221,27 +225,14 @@
         }
     </script>
 
-    <script>
-        const params = new URLSearchParams(window.location.search);
-        const isWindowsClient = params.get('windowsclient') === '1';
+<script>
+    const params = new URLSearchParams(window.location.search);
+    const isWindowsClient = params.get('windowsclient') === '1';
+    const isUWP = typeof Windows !== 'undefined';
 
-        if (isWindowsClient) {
-            document.body.classList.add('win32-client');
-
-            const maxBtn = document.getElementById('max-btn');
-            document.getElementById('popout-btn').onclick = () => window.api.popout();
-            document.getElementById('min-btn').onclick = () => window.api.minimize();
-            document.getElementById('max-btn').onclick = () => window.api.maximize();
-            document.getElementById('close-btn').onclick = () => window.api.close();
-
-            window.api.onMaximize(() => {
-                maxBtn.innerHTML = '&#xE923;';
-            });
-
-            window.api.onUnmaximize(() => {
-                maxBtn.innerHTML = '&#xE922;';
-            });
-        }
-    </script>
+    if (isWindowsClient || isUWP) {
+        document.body.classList.add('upgrade-this-shitty-app');
+    }
+</script>
 </body>
 </html>
