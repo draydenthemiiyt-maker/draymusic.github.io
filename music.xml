@@ -1,6 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>I'm a bastard</title>
+    <artist>Crave</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Im_a_bastard_1791668221.png</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/I_m_a_Bastard_1791668221.mp3</url>
+    <publisher>theshieldttv</publisher>
+    <copyrighted>false</copyrighted>
+  </song>
+  <song>
+    <title>Red Light</title>
+    <artist>Crave</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Red_Light_1791668258.png</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Red_Light_1791668258.mp3</url>
+    <publisher>theshieldttv</publisher>
+    <copyrighted>false</copyrighted>
+  </song>
+  <song>
+    <title>Shadows Of The Night (Remastered)</title>
+    <artist>Pat Benatar</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/23276_1791875810.png</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Shadows_Of_The_Night__Remastered__-_Pat_Benatar_1791875810.mp3</url>
+    <publisher>draydenyt</publisher>
+    <copyrighted>true</copyrighted>
+  </song>
+  <song>
     <title>Ghostbusters</title>
     <artist>Ray Parker Jr.</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/613cbaED5cL__UF894_1000_QL80__1791666298.jpg</albumArt>
@@ -1279,7 +1303,6 @@
     <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Tears%20For%20Fears%20-%20Shout.mp3</url>
     <publisher>Unknown</publisher>
     <copyrighted>true</copyrighted>
-    <lyrics>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/shout.txt</lyrics>
   </song>
   <song>
     <title>Every Breath You Take</title>
