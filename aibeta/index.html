@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://gen.pollinations.ai https://*.pollinations.ai; media-src 'self' https: http: blob:; style-src 'self'; script-src 'self'; img-src 'self' data: https:;">
+    <title>Companion</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <video id="bgA" class="bg show" src="video/default.mp4" autoplay loop muted></video>
+    <video id="bgB" class="bg" autoplay loop muted></video>
+    <div id="scrim"></div>
+
+    <div id="hint">I'm Listening</div>
+
+    <button id="interrupt">Interrupt</button>
+
+    <div id="settings">
+        <label for="nameSet">Your name</label>
+        <input id="nameSet" type="text" maxlength="30">
+        <label for="voiceSel">Voice</label>
+        <select id="voiceSel"></select>
+        <label for="rate">Speed <span id="rateVal">1.0x</span></label>
+        <input id="rate" type="range" min="0.5" max="2" step="0.1" value="1">
+    </div>
+
+    <div id="bar">
+        <div id="pill">
+            <button id="mic" class="btn" title="Mute microphone">&#xE720;</button>
+            <button id="gear" class="btn" title="Settings">&#xE713;</button>
+            <button id="quit" class="btn" title="Close">&#xE711;</button>
+        </div>
+    </div>
+
+    <div id="welcome">
+        <div class="card">
+            <h1>Welcome</h1>
+            <p>What can I call you?</p>
+            <input id="nameIn" type="text" maxlength="30">
+            <button id="nameGo">Continue</button>
+        </div>
+    </div>
+
+    <script src="renderer.js"></script>
+</body>
+</html>
