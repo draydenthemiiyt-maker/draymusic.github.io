@@ -44,7 +44,7 @@
     var hint = $("hint"), voiceSel = $("voiceSel");
     var SR = window.webkitSpeechRecognition;
     var state = "idle", muted = false, rec = null, speakId = 0, current = null;
-    var voices = [], voice = null, rate = 1;
+    var voices = [], voice = null, rate = 1, quickEnds = 0;
 
     /* ---------- UI state ---------- */
     function showHint(t) {
@@ -53,7 +53,7 @@
     }
     function setState(s) {
         state = s;
-        showHint(s === "listening" ? "I'm Listening" : "");
+        showHint(s === "listening" ? "I'm Listening" : s === "thinking" ? "Thinking" : "");
         $("interrupt").className = (s === "speaking") ? "show" : "";
     }
 
@@ -216,25 +216,38 @@
     function listen() {
         if (muted) { setState("idle"); return; }
         setState("listening");
-        var r = rec = new SR();
+        var r = rec = new SR(), startedAt = new Date().getTime(), lastErr = "", trail = [];
         r.lang = navigator.language || "en-US";
         r.continuous = false;
         r.interimResults = false;
+        r.onstart = function () { trail.push("start"); };
+        r.onaudiostart = function () { trail.push("audio"); };
+        r.onspeechstart = function () { trail.push("speech"); };
         r.onresult = function (e) {
             if (r !== rec) { return; }
             var text = clean(e.results[e.results.length - 1][0].transcript);
-            if (text) { rec = null; send(text); }
+            if (text) { rec = null; quickEnds = 0; send(text); }
         };
         r.onerror = function (e) {
             if (r !== rec) { return; }
-            if (e.error === "no-speech" || e.error === "aborted") { return; }   // onend listens again
+            if (e.error === "no-speech" || e.error === "aborted") { lastErr = e.error; return; }   // onend decides what to do
             rec = null;
             speechError(e.error);
         };
         r.onend = function () {
             if (r !== rec) { return; }
             rec = null;
-            listen();
+            if (new Date().getTime() - startedAt > 1500) { quickEnds = 0; listen(); return; }
+            // The session ended almost instantly: wait longer each time, then stop and say so
+            quickEnds++;
+            if (quickEnds >= 4) {
+                quickEnds = 0;
+                setState("idle");
+                showHint(lastErr ? "Speech error: " + lastErr :
+                    "Listening keeps stopping [" + (/Electron/.test(navigator.userAgent) ? "electron " : "browser ") + trail.join(">") + "]");
+                return;
+            }
+            setTimeout(function () { if (state === "listening" && !rec) { listen(); } }, quickEnds * 1000);
         };
         try { r.start(); } catch (err) { rec = null; speechError("start-failed"); }
     }
@@ -260,6 +273,17 @@
         });
     }
     function begin() { send(null, GREETING); }
+    // Ask for the microphone once, up front, instead of letting each listening session ask
+    function askMic(cb) {
+        navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+            var tracks = stream.getTracks();
+            for (var i = 0; i < tracks.length; i++) { tracks[i].stop(); }
+            cb();
+        }, function () {
+            setState("idle");
+            showHint("Allow microphone access");
+        });
+    }
 
     /* ---------- Settings ---------- */
     function applyVoice(uri) {
@@ -293,7 +317,7 @@
         if (!saveName($("nameIn").value)) { return; }
         $("nameSet").value = get("userName", "");
         $("welcome").className = "";
-        begin();
+        askMic(begin);
     }
 
     /* ---------- Wire up ---------- */
@@ -342,8 +366,13 @@
     var savedBg = get("bg", "");
     if (savedBg) { setBackground(savedBg); }
 
+    function startOnClick() {
+        document.removeEventListener("click", startOnClick);
+        askMic(begin);
+    }
     if (get("userName", "")) {
-        begin();
+        showHint("Click anywhere to start");
+        document.addEventListener("click", startOnClick);
     } else {
         $("welcome").className = "show";
     }
