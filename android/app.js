@@ -326,11 +326,6 @@ function playSong(index) {
     updateMediaSession(song);
     if (window.audio !== DOM.audio) window.audio = DOM.audio;
     syncSongOffline(song.url);
-
-    var bg = document.getElementById('body-bg');
-    if (bg) {
-        bg.src = song.art;
-    }
 }
 
 function loadMusic() {
@@ -1056,9 +1051,6 @@ function bindEvents() {
                 DOM.btnPlayPause.innerHTML = '<span class="material-symbols-rounded">play_arrow</span>';
 
             document.querySelector('.mini-player').classList.add('notplaying');
-
-            var bg = document.getElementById('body-bg');
-            if (bg) bg.src = "icon.png";
         });
     }
 

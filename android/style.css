@@ -222,6 +222,18 @@ body.light .mini-player, body.light .action-btns, body.light .search-pill, body.
     font-weight: 700;
 }
 
+.upgrade-notice {
+    flex: 0 0 auto;
+    margin: 0px 20px 12px;
+    padding: 10px 14px;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--accent) 14%, var(--bg) 86%);
+    color: var(--on-surface);
+    font-size: 14px;
+    text-align: center;
+}
+
 #window-controls {
     display: none;
 }
