@@ -750,4 +750,9 @@
     <user>draydenyt</user>
     <action>Saved dashboard changes / updated song queue</action>
   </entry>
+  <entry>
+    <timestamp>2026-11-03 18:23:28</timestamp>
+    <user>draydenyt</user>
+    <action>Logged in via Discord</action>
+  </entry>
 </audit>
