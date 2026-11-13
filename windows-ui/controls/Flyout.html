@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WinJS Stylesheet</title>
+  <meta content='IE=EDGE' http-equiv='X-UA-Compatible' />
+
+  <script>
+    function showFlyout()
+    {
+      document.querySelector('#confirmFlyout').winControl.show(document.body);
+    }
+  </script>
+</head>
+<body class='win-type-body'>
+
+  <button class='win-button' onclick='showFlyout()'>Show flyout</button>
+
+  <div id='confirmFlyout' data-win-control='WinJS.UI.Flyout'>
+    <div>Your account will be charged $252.</div>
+    <button class='win-button win-button-primary' id='confirmButton'>Complete Order</button>
+  </div>
+
+</body>
+</html>

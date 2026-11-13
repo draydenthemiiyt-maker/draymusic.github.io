@@ -11,8 +11,6 @@
     <div id="splashContainer">
         <div class="splashScreen" id="splash1">DraydenYT Studios</div>
         <div class="splashScreen" id="splash2">Guess the station.. UK Edition!</div>
-        <video id="splashVideo" class="splashVideo" src="data/intro.mp4"></video>
-        <div class="non-intractable-flashingText">Click anywhere to skip intro</div>
     </div>
 
     <div id="video-container">
@@ -38,7 +36,7 @@
             <div class="menu-buttons">
                 <button class="btn btn-easy" onclick="startGame('beginner')">Beginner</button>
                 <button class="btn btn-medium" onclick="startGame('intermediate')">Intermediate</button>
-                <button class="btn btn-hard" onclick="startGame('hard')">Hard Mode</button>
+                <button class="btn btn-hard" onclick="startGame('hard')">Hard</button>
                 <button class="btn btn-settings" onclick="showSettings()">Settings</button>
             </div>
         </div>
@@ -104,7 +102,7 @@
 
         <div id="game-over-screen" class="screen" style="opacity: 0; visibility: hidden; position: absolute; left: 30px; top: 30px; width: calc(100% - 60px);">
             <div class="icon-header">🏆</div>
-            <h1 id="final-title">Aww mann</h1>
+            <h1 id="final-title">Try harder mate!</h1>
             <p id="final-score"></p>
             <button class="btn btn-menu" onclick="showMenu()">Quit to menu</button>
         </div>

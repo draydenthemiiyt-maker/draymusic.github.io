@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WinJS Stylesheet</title>
+  <meta content='IE=EDGE' http-equiv='X-UA-Compatible' />
+</head>
+<body class='win-type-body'>
+
+  <style>
+    body
+    {
+      overflow-y: auto;
+    }
+
+    .section
+    {
+      margin: 20px 5px;
+    }
+
+    .section-header
+    {
+      font-size: 40px;
+      line-height: 40px;
+      margin-bottom: 15px;
+    }
+  </style>
+
+  <!--
+    Button
+  -->
+  <div class='section'>
+    <div class='section-header'>Button</div>
+
+    <button class='win-button'>Push button</button>
+    <input class='win-button' type='button' value='Push button'/>
+    <input class='win-button win-button-primary' type='submit' value='Submit button'/>
+    <input class='win-button' type='reset' value='Reset button'/>
+  </div>
+
+  <!--
+    Checkbox / Radio
+  -->
+  <div class='section'>
+    <div class='section-header'>Checkbox / Radio</div>
+
+    <div>
+      <input class='win-checkbox' type='checkbox' id='checkbox1' />
+      <label for='checkbox1'>checkbox rest state</label>
+      <br />
+      <input class='win-checkbox' type='checkbox' id='checkbox2' checked />
+      <label for='checkbox2'>checkbox checked state</label>
+      <br />
+      <input class='win-checkbox' type='checkbox' id='checkbox3' />
+      <label for='checkbox3'>checkbox indeterminate state</label>
+      <br />
+
+      <input class='win-checkbox' type='checkbox' disabled='true' id='checkbox4' />
+      <label for='checkbox4'>checkbox disabled</label>
+      <br />
+      <input class='win-checkbox' type='checkbox' disabled='true' id='checkbox5' checked />
+      <label for='checkbox5'>checkbox disabled checked</label>
+      <br />
+      <input class='win-checkbox' type='checkbox' disabled='true' id='checkbox6' />
+      <label for='checkbox6'>checkbox indeterminate state</label>
+      <br />
+
+      <script>
+        document.querySelector('#checkbox3').indeterminate = true;
+        document.querySelector('#checkbox6').indeterminate = true;
+      </script>
+    </div>
+
+    <div>
+      <input class='win-radio' type='radio' name='radiogroup1' id='radio1' />
+      <label for='radio1'>radio rest state</label>
+      <br />
+      <input class='win-radio' type='radio' name='radiogroup1' id='radio2' checked />
+      <label for='radio2'>radio checked state</label>
+      <br />
+
+      <input class='win-radio' type='radio' name='radiogroup2' disabled='true' id='radio4' />
+      <label for='radio4'>radio disabled</label>
+      <br />
+      <input class='win-radio' type='radio' name='radiogroup2' disabled='true' id='radio5' checked />
+      <label for='radio5'>radio disabled checked</label>
+    </div>
+  </div>
+
+  <!--
+    Text Box
+  -->
+  <div class='section'>
+    <div class='section-header'>Text Box</div>
+
+    <h3 class='win-h3'>text box</h3>
+    <input class='win-textbox' type='text' placeholder='Sample text' />
+
+    <h3 class='win-h3'>password box</h3>
+    <input class='win-textbox' type='password' />
+
+    <h3 class='win-h3'>text area</h3>
+    <textarea class='win-textarea'></textarea>
+  </div>
+
+  <!--
+    Select
+  -->
+  <div class='section'>
+    <div class='section-header'>Select</div>
+
+    <select class='win-dropdown' multiple='true'>
+      <option>a</option>
+      <option>b</option>
+      <option>c</option>
+      <option>d</option>
+      <option>e</option>
+      <option>f</option>
+      <option>g</option>
+    </select>
+
+    <select class='win-dropdown'>
+      <option>a</option>
+      <option>b</option>
+      <option>c</option>
+      <option>d</option>
+    </select>
+
+    <select class='win-dropdown' disabled='true'>
+      <option>a</option>
+      <option>b</option>
+      <option>c</option>
+      <option>d</option>
+    </select>
+
+    <select class='win-dropdown'>
+        <optgroup label="A">
+          <option>Alabama</option>
+          <option>Alaska</option>
+          <option>Arizona</option>
+          <option>Arkansas</option>
+        </optgroup>
+        <optgroup label="C">
+          <option>California</option>
+          <option>Colorado</option>
+          <option>Connecticut</option>
+        </optgroup>
+        <optgroup label="D" disabled>
+            <option>Delaware</option>
+        </optgroup>
+      <option>Florida</option>
+      <option>Georgia</option>
+      <option>Hawaii</option>
+      <option>Idaho</option>
+      <option>Illinois</option>
+      <option>Indiana</option>
+      <option>Iowa</option>
+      <option>Kansas</option>
+      <option>Kentucky</option>
+      <option>Louisiana</option>
+      <option>Maine</option>
+      <option>Maryland</option>
+      <option>Massachusetts</option>
+      <option>Michigan</option>
+      <option>Minnesota</option>
+      <option>Mississippi</option>
+      <option>Missouri</option>
+      <option>Montana</option>
+      <option>Nebraska</option>
+      <option>Nevada</option>
+      <option>New Hampshire</option>
+      <option>New Jersey</option>
+      <option>New Mexico</option>
+      <option>New York</option>
+      <option>North Carolina</option>
+      <option>North Dakota</option>
+      <option>Ohio</option>
+      <option>Oklahoma</option>
+      <option>Oregon</option>
+      <option>Pennsylvania</option>
+      <option>Rhode Island</option>
+      <option>South Carolina</option>
+      <option>South Dakota</option>
+      <option>Tennessee</option>
+      <option>Texas</option>
+      <option>Utah</option>
+      <option>Vermont</option>
+      <option>Virginia</option>
+      <option>Washington</option>
+      <option>West Virginia</option>
+      <option>Wisconsin</option>
+      <option>Wyoming</option>
+    </select>
+  </div>
+
+  <!--
+    Range
+  -->
+  <div class='section'>
+    <div class='section-header'>Range</div>
+
+    <input class='win-slider' type='range' />
+    <input class='win-slider' type='range' disabled='true' />
+    <br />
+    <input class='win-slider win-vertical' type='range' />
+    <input class='win-slider win-vertical' type='range' disabled='true' />
+  </div>
+
+  <!--
+    Progress
+  -->
+  <div class='section'>
+    <div class='section-header'>Progress</div>
+
+    <h3 class='win-h3'>Determinate</h3>
+    <progress class='win-progress-bar' value='0.5'></progress>
+
+    <h3 class='win-h3'>Determinate medium</h3>
+    <progress value='0.5' class='win-progress-bar win-medium'></progress>
+
+    <h3 class='win-h3'>Determinate large</h3>
+    <progress value='0.5' class='win-progress-bar win-large'></progress>
+
+    <h3 class='win-h3'>Indeterminate</h3>
+    <progress class='win-progress-bar'></progress>
+
+    <h3 class='win-h3'>Indeterminate medium</h3>
+    <progress class='win-progress-bar win-medium'></progress>
+
+    <h3 class='win-h3'>Indeterminate large</h3>
+    <progress class='win-progress-bar win-large'></progress>
+
+    <h3 class='win-h3'>Ring</h3>
+    <progress class='win-ring'></progress>
+
+    <h3 class='win-h3'>Ring medium</h3>
+    <progress class='win-ring win-medium'></progress>
+
+    <h3 class='win-h3'>Ring large</h3>
+    <progress class='win-ring win-large'></progress>
+  </div>
+
+  <!--
+    Headers
+  -->
+  <div class='section'>
+    <div class='section-header'>Headers</div>
+
+    <h1 class="win-h1">h1</h1>
+    <h2 class="win-h2">h2</h2>
+    <h3 class="win-h3">h3</h3>
+    <h4 class="win-h4">h4</h4>
+    <h5 class="win-h5">h5</h5>
+    <h6 class="win-h6">h6</h6>
+  </div>
+
+</body>
+</html>
