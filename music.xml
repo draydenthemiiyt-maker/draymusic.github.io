@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>Чистый лист</title>
+    <artist>Нэнси</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Zrzut_ekranu_2026-11-19_o_21_08_46_1795118970.png</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Y2Mate_is_-__1795118970.mp3</url>
+    <publisher>windowslock</publisher>
+    <copyrighted>true</copyrighted>
+  </song>
+  <song>
     <title>Nanny Cafline's Groove (Remix)</title>
     <artist>Nanny Carfline &amp; DraydenYT</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/image_large_210e3021-6690-48ef-a0d1-48fe282c7f7b_1794784200.jpeg</albumArt>
