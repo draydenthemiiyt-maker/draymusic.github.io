@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>Dreams</title>
+    <artist>Lost Sky</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/dreams_1795570361.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/dreams_1795570361.mp3</url>
+    <publisher>bingweather</publisher>
+    <copyrighted>true</copyrighted>
+  </song>
+  <song>
     <title>Чистый лист</title>
     <artist>Нэнси</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Zrzut_ekranu_2026-11-19_o_21_08_46_1795118970.png</albumArt>
