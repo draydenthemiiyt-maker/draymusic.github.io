@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>The Selby Rail Crash (UK 2001)</title>
+    <artist>DraydenYT</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Selby_rail_crash_aerial_side__cropped__1795725304.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/The_Selby_Rail_Crash__UK_2001__1795725304.mp3</url>
+    <publisher>draydenyt</publisher>
+    <copyrighted>true</copyrighted>
+  </song>
+  <song>
     <title>Pale Shelter</title>
     <artist>Tears For Fears</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/1900x1900-000000-80-0-0_1795723443.jpg</albumArt>
