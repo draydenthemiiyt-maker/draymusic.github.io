@@ -980,4 +980,9 @@
     <user>Google: Глеб (6ed1ed0d)</user>
     <action>Logged in via Google</action>
   </entry>
+  <entry>
+    <timestamp>2026-11-26 18:11:47</timestamp>
+    <user>draydenyt</user>
+    <action>Logged in via Discord</action>
+  </entry>
 </audit>
