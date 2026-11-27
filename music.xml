@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>Drag me with you</title>
+    <artist>Zooloo75</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/KG_1795791948.png</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/749481_1795791948.mp3</url>
+    <publisher>devotion150</publisher>
+    <copyrighted>true</copyrighted>
+  </song>
+  <song>
     <title>Tide</title>
     <artist>Home</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/thumb1_1795772417.jpg</albumArt>
