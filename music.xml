@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
   <song>
+    <title>Tide</title>
+    <artist>Home</artist>
+    <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/thumb1_1795772417.jpg</albumArt>
+    <url>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Home_-_Tides__SPOTISAVER__1795772417.mp3</url>
+    <publisher>devotion150</publisher>
+    <copyrighted>false</copyrighted>
+  </song>
+  <song>
     <title>The Selby Rail Crash (UK 2001)</title>
     <artist>DraydenYT</artist>
     <albumArt>https://raw.githubusercontent.com/draydenthemiiyt-maker/draymusic.github.io/main/Selby_rail_crash_aerial_side__cropped__1795725304.jpg</albumArt>
